@@ -1,0 +1,57 @@
+name: Validate
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  portal:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: edson
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: edson
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U edson -d edson"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://edson:ci-only-password@localhost:5432/edson
+      SESSION_SECRET: ci-only-session-secret-not-for-production-123456789
+      APP_URL: http://localhost:3000
+      S3_ENDPOINT: http://localhost:9000
+      S3_PUBLIC_ENDPOINT: http://localhost:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: edson-ci
+      S3_ACCESS_KEY: S3RVER
+      S3_SECRET_KEY: S3RVER
+      DEV_STORAGE_DIRECTORY: /tmp/edson-ci-storage
+      XDG_CACHE_HOME: /tmp/edson-ci-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --cache /tmp/npm-cache
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: npm run db:generate && npm run db:migrate && npm run db:seed
+      - run: npm run lint && npm run build
+      - name: Start and exercise production build
+        run: |
+          npm run storage:dev > /tmp/storage.log 2>&1 &
+          npm run worker > /tmp/worker.log 2>&1 &
+          npm start > /tmp/web.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:3000/api/health; then break; fi
+            sleep 1
+          done
+          npx tsx scripts/storage-init.ts
+          npm test
+          npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-results
+          path: test-results/

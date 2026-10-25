@@ -1,0 +1,1 @@
+ALTER TABLE "Course" ADD COLUMN "imageUrl" TEXT NOT NULL DEFAULT '';

@@ -1,0 +1,37 @@
+{$DOMAIN} {
+	encode zstd gzip
+	header Strict-Transport-Security "max-age=31536000"
+	request_body {
+		max_size 2MB
+	}
+	reverse_proxy web:3000
+	log {
+		output stdout
+		format filter {
+			wrap json
+			fields {
+				request>uri delete
+				request>headers>Cookie delete
+				request>headers>Authorization delete
+			}
+		}
+	}
+}
+{$STORAGE_DOMAIN} {
+	request_body {
+		max_size 210MB
+	}
+	reverse_proxy storage:9000
+	header Strict-Transport-Security "max-age=31536000"
+	log {
+		output stdout
+		format filter {
+			wrap json
+			fields {
+				request>uri delete
+				request>headers>Cookie delete
+				request>headers>Authorization delete
+			}
+		}
+	}
+}

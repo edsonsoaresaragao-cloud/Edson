@@ -1,0 +1,213 @@
+generator client {
+ provider = "prisma-client-js"
+ engineType = "client"
+}
+datasource db {
+ provider = "postgresql"
+}
+model User {
+ id String @id @default(cuid())
+ name String
+ email String @unique
+ passwordHash String
+ role String @default("STUDENT")
+ sessionVersion Int @default(0)
+ createdAt DateTime @default(now())
+ enrollments Enrollment[]
+ certificates Certificate[]
+ resets PasswordReset[]
+}
+model PasswordReset {
+ id String @id
+ userId String
+ user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+ expiresAt DateTime
+}
+model Category {
+ id String @id @default(cuid())
+ slug String @unique
+ name String
+ description String
+ parentId String?
+ parent Category? @relation("CategoryTree",fields:[parentId],references:[id])
+ children Category[] @relation("CategoryTree")
+}
+model Content {
+ id String @id @default(cuid())
+ kind String
+ visibility String @default("PUBLIC")
+ instructor String @default("")
+ difficulty String @default("BASIC")
+ slug String @unique
+ title String
+ summary String
+ body String @default("")
+ categorySlugs String[] @default([])
+ manualCategories Boolean @default(false)
+ tags String[] @default([])
+ brand String @default("")
+ vehicleModel String @default("")
+ year Int?
+ status String @default("DRAFT")
+ publishAt DateTime?
+ author String @default("Edson")
+ imageUrl String @default("")
+ sourceUrl String @default("")
+ youtubeId String? @unique
+ channelId String?
+ duration String?
+ views BigInt @default(0)
+ confidence Float @default(0)
+ externalAvailable Boolean @default(true)
+ metadata Json @default("{}")
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ media Media[]
+ @@index([kind,status,publishAt])
+ @@index([brand,vehicleModel,year])
+}
+model Course {
+ imageUrl String @default("")
+ id String @id @default(cuid())
+ slug String @unique
+ title String
+ description String
+ instructor String
+ objectives String @default("")
+ audience String @default("")
+ prerequisites String @default("")
+ hours Int @default(1)
+ passingScore Int @default(70)
+ status String @default("DRAFT")
+ categorySlugs String[] @default([])
+ createdAt DateTime @default(now())
+ modules Module[]
+ enrollments Enrollment[]
+ certificates Certificate[]
+}
+model Module {
+ id String @id @default(cuid())
+ title String
+ position Int @default(0)
+ courseId String
+ course Course @relation(fields:[courseId],references:[id],onDelete:Cascade)
+ lessons Lesson[]
+}
+model Lesson {
+ id String @id @default(cuid())
+ title String
+ body String
+ youtubeId String?
+ videoContentId String?
+ position Int @default(0)
+ moduleId String
+ module Module @relation(fields:[moduleId],references:[id],onDelete:Cascade)
+ questions Question[]
+ progress Progress[]
+ media Media[]
+}
+model Question {
+ id String @id @default(cuid())
+ lessonId String
+ lesson Lesson @relation(fields:[lessonId],references:[id],onDelete:Cascade)
+ prompt String
+ options String[]
+ correctIndex Int
+}
+model Enrollment {
+ id String @id @default(cuid())
+ userId String
+ user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+ courseId String
+ course Course @relation(fields:[courseId],references:[id],onDelete:Cascade)
+ createdAt DateTime @default(now())
+ progress Progress[]
+ @@unique([userId,courseId])
+}
+model Progress {
+ id String @id @default(cuid())
+ enrollmentId String
+ enrollment Enrollment @relation(fields:[enrollmentId],references:[id],onDelete:Cascade)
+ lessonId String
+ lesson Lesson @relation(fields:[lessonId],references:[id],onDelete:Cascade)
+ score Int
+ completedAt DateTime @default(now())
+ @@unique([enrollmentId,lessonId])
+}
+model Certificate {
+ id String @id @default(cuid())
+ code String @unique
+ userId String
+ user User @relation(fields:[userId],references:[id])
+ courseId String
+ course Course @relation(fields:[courseId],references:[id])
+ studentName String
+ courseTitle String
+ hours Int
+ issuedAt DateTime @default(now())
+ @@unique([userId,courseId])
+}
+model Contact {
+ id String @id @default(cuid())
+ name String
+ email String
+ message String
+ createdAt DateTime @default(now())
+}
+model Media {
+ id String @id @default(cuid())
+ contentId String?
+ content Content? @relation(fields:[contentId],references:[id],onDelete:SetNull)
+ lessonId String?
+ lesson Lesson? @relation(fields:[lessonId],references:[id],onDelete:SetNull)
+ objectKey String @unique
+ originalName String
+ mimeType String
+ size Int
+ status String @default("PENDING")
+ error String?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+}
+model Channel {
+ id String @id
+ title String
+ handle String
+ uploadsPlaylist String
+ nextPageToken String?
+ lastSyncAt DateTime?
+}
+model SyncRun {
+ id String @id @default(cuid())
+ status String
+ imported Int @default(0)
+ quotaUnits Int @default(0)
+ message String?
+ createdAt DateTime @default(now())
+ finishedAt DateTime?
+}
+model Job {
+ id String @id @default(cuid())
+ type String
+ payload Json
+ status String @default("PENDING")
+ attempts Int @default(0)
+ error String?
+ availableAt DateTime @default(now())
+ lockedAt DateTime?
+ createdAt DateTime @default(now())
+ @@index([status,availableAt])
+}
+model Audit {
+ id String @id @default(cuid())
+ actorId String
+ action String
+ target String
+ createdAt DateTime @default(now())
+}
+model RateLimit {
+ key String @id
+ count Int
+ expiresAt DateTime
+ @@index([expiresAt])
+}

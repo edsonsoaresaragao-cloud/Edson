@@ -1,0 +1,10 @@
+CREATE EXTENSION IF NOT EXISTS unaccent;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE FUNCTION public.immutable_unaccent(text) RETURNS text LANGUAGE sql IMMUTABLE PARALLEL SAFE STRICT AS $$ SELECT public.unaccent('public.unaccent'::regdictionary, $1) $$;
+CREATE FUNCTION public.content_search_text(text,text,text,text,text,text[]) RETURNS text LANGUAGE sql IMMUTABLE PARALLEL SAFE AS $$ SELECT lower(public.immutable_unaccent($1 || ' ' || $2 || ' ' || $3 || ' ' || $4 || ' ' || $5 || ' ' || array_to_string($6,' '))) $$;
+CREATE INDEX content_search_gin ON "Content" USING gin (public.content_search_text(title,summary,body,brand,"vehicleModel",tags) gin_trgm_ops);
+CREATE INDEX content_categories_gin ON "Content" USING gin ("categorySlugs");
+CREATE INDEX content_tags_gin ON "Content" USING gin (tags);
+ALTER TABLE "User" ADD CONSTRAINT user_role_check CHECK (role IN ('STUDENT','EDITOR','ADMIN'));
+ALTER TABLE "Content" ADD CONSTRAINT content_status_check CHECK (status IN ('DRAFT','PUBLISHED','HIDDEN','SCHEDULED'));
+ALTER TABLE "Course" ADD CONSTRAINT course_score_check CHECK ("passingScore" BETWEEN 1 AND 100 AND hours > 0);

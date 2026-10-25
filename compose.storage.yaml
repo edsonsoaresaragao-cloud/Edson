@@ -1,0 +1,21 @@
+# Optional self-hosted production S3. Use together with compose.prod.yaml.
+# The registry image could not be pulled during onboarding; validate on the target VPS.
+services:
+  storage:
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: server /data --console-address :9001
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Configure MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Configure MINIO_ROOT_PASSWORD}
+    volumes: ["media:/data"]
+    ports: ["127.0.0.1:9001:9001"]
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+  proxy:
+    environment:
+      STORAGE_DOMAIN: ${STORAGE_DOMAIN:?Configure STORAGE_DOMAIN}
+    volumes: ["./Caddyfile.with-storage:/etc/caddy/Caddyfile:ro"]
+volumes:
+  media:

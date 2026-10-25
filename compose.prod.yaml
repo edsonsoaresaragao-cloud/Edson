@@ -1,0 +1,92 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: edson
+      POSTGRES_DB: edson
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Configure POSTGRES_PASSWORD}
+    volumes: ["postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U edson -d edson"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    logging: &logging
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+  migrate:
+    build:
+      context: .
+      args: { APP_URL: "${APP_URL:?Configure APP_URL}" }
+    image: edson-oficina:local
+    command: ["npm", "run", "db:migrate"]
+    env_file: .env
+    environment:
+      { DATABASE_URL: "postgresql://edson:${POSTGRES_PASSWORD}@db:5432/edson" }
+    depends_on: { db: { condition: service_healthy } }
+    restart: "no"
+  web:
+    image: edson-oficina:local
+    build:
+      context: .
+      args: { APP_URL: "${APP_URL:?Configure APP_URL}" }
+    env_file: .env
+    environment:
+      {
+        DATABASE_URL: "postgresql://edson:${POSTGRES_PASSWORD}@db:5432/edson",
+        NODE_ENV: production,
+      }
+    restart: unless-stopped
+    depends_on: { migrate: { condition: service_completed_successfully } }
+    expose: ["3000"]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging: *logging
+  worker:
+    image: edson-oficina:local
+    command: ["npm", "run", "worker"]
+    env_file: .env
+    environment:
+      {
+        DATABASE_URL: "postgresql://edson:${POSTGRES_PASSWORD}@db:5432/edson",
+        NODE_ENV: production,
+      }
+    restart: unless-stopped
+    depends_on: { migrate: { condition: service_completed_successfully } }
+    cpus: 2
+    mem_limit: 2g
+    tmpfs: [/tmp:size=1g]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    logging: *logging
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443", "443:443/udp"]
+    environment: { DOMAIN: "${DOMAIN:?Configure DOMAIN}" }
+    volumes:
+      [
+        "./Caddyfile:/etc/caddy/Caddyfile:ro",
+        "caddy_data:/data",
+        "caddy_config:/config",
+      ]
+    depends_on: { web: { condition: service_healthy } }
+    logging: *logging
+volumes:
+  postgres:
+  caddy_data:
+  caddy_config:
