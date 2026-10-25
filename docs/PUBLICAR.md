@@ -33,3 +33,13 @@ Não existe conta administrativa padrão. Siga a criação de administrador no R
 ## Limitação deste ambiente de configuração
 
 O ambiente de nuvem não disponibiliza uma porta pública. Foram observados bloqueios de proxy HTTP 403 ao consultar Render e os serviços de túnel temporário. Criar/salvar o ambiente no ChatGPT não publica o site. A conta Render do responsável é o requisito externo para a implantação pelo painel.
+
+## Referências da configuração
+
+A estrutura do Blueprint foi conferida com [a referência oficial do Render](https://github.com/render-oss/skills/blob/main/skills/render-blueprints/references/field-reference.md) e [o exemplo oficial de web + PostgreSQL Free](https://github.com/render-oss/skills/blob/main/skills/render-deploy/assets/python-django.yaml). A validação final no provedor exige a conta/workspace do responsável e acontece no painel antes de criar recursos; não é alegada como concluída nesta preparação local.
+
+## Verificação local da preparação
+
+A imagem de produção foi construída e inicializada com o mesmo comando do Blueprint, simulando a variável de endereço externo do provedor. Foram conferidos migrations, preservação dos dados existentes, homepage, CSS, SVG, busca, cadastro, página do aluno, cookie Secure/HttpOnly e rejeição de origem indevida. O processo executou como usuário `node`, com filesystem somente leitura e sem privilégios adicionais. A conta temporária de validação foi removida.
+
+Isso valida o pacote e sua inicialização; não cria recursos no Render nem reserva um endereço público. O domínio efetivo será exibido pelo provedor após o responsável concluir a implantação.

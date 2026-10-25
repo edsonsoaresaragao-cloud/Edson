@@ -12,8 +12,12 @@ if(!process.env.SESSION_SECRET||process.env.SESSION_SECRET.length<32)throw new E
 JS
 npm run db:migrate
 node scripts/seed-if-empty.mjs
-if [ ! -f server.js ]; then
+server_entry=server.js
+if [ ! -f "$server_entry" ] && [ -f .next/standalone/server.js ]; then
+  server_entry=.next/standalone/server.js
+fi
+if [ ! -f "$server_entry" ]; then
   echo 'Artefato standalone ausente: use a imagem Docker de produção.' >&2
   exit 1
 fi
-exec node server.js
+exec node "$server_entry"
