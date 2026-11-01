@@ -139,6 +139,7 @@ export default function RootLayout({
               <h3>Institucional</h3>
               <Link href="/sobre">Quem somos</Link>
               <Link href="/contato">Contato</Link>
+              <Link href="/apoiar">Apoiar com Pix ♡</Link>
               <Link href="/privacidade">Privacidade</Link>
               <Link href="/termos">Termos de uso</Link>
               <Link href="/admin">Administração</Link>
