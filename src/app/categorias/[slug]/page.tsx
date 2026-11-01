@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
+import { SuspensionExplorer } from "@/components/suspension-explorer";
 export const dynamic = "force-dynamic";
 export default async function Category({
   params,
@@ -31,6 +32,7 @@ export default async function Category({
   return (
     <div className="container page-content">
       <PageHeading title={c.name} description={c.description} />
+      {slug === "suspensao" && <SuspensionExplorer />}
       {slug === "motor-e-componentes-internos" && (
         <Link className="engine-entry card" href="/explodedview">
           <span className="eyebrow">NOVO / ATLAS DE MOTORES</span>
