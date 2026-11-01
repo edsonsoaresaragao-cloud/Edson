@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { steeringParts, initialSteeringState } from "@/lib/steering-parts";
 import type { SteeringRenderer } from "@/lib/steering-renderer";
@@ -125,6 +126,12 @@ export function SteeringExplorer() {
             >
               Centralizar direção
             </button>
+            <Link
+              className="compressor-entry"
+              href="/categorias/direcao-hidraulica-e-eletrica/eps"
+            >
+              Explorar direção elétrica ↗
+            </Link>
           </div>
           <div className="suspension-stage">
             <div
