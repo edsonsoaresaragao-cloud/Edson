@@ -37,3 +37,30 @@ test("rejeita questionários sem alternativa correta válida e senha truncável 
     false,
   );
 });
+
+test("reconhece os 34 assuntos e evita falsos positivos por trechos de palavras", async () => {
+  const { categoryNames } = await import("../src/lib/catalog");
+  for (const name of categoryNames) {
+    assert.ok(classify(name).categories.includes(slugify(name)), name);
+  }
+  assert.ok(
+    classify("teste do alternador e pressão de óleo").categories.includes(
+      "alternador",
+    ),
+  );
+  assert.ok(
+    classify("teste do alternador e pressão de óleo").categories.includes(
+      "lubrificacao",
+    ),
+  );
+  assert.ok(
+    !classify("Um resultado absolutamente normal").categories.includes(
+      "freios-e-abs",
+    ),
+  );
+  assert.ok(
+    !classify("Oficina Brasil Oficial — teste de radiador").categories.includes(
+      "gestao-de-oficinas",
+    ),
+  );
+});

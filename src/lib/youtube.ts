@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { classify, slugify } from "./catalog";
+import { classify, slugify, CLASSIFICATION_VERSION } from "./catalog";
 import { AppError } from "./auth";
 import { z } from "zod";
 const expected = "UCkwom28UGBpkHFeTvOsLN8w";
@@ -154,6 +154,7 @@ export async function syncYouTube(mode: "latest" | "backfill" = "latest") {
           channelId: expected,
           sourceUrl: `https://www.youtube.com/watch?v=${v.id}`,
           metadata: {
+            classificationVersion: CLASSIFICATION_VERSION,
             channelTitle: channel.snippet.title,
             publishedAt: v.snippet.publishedAt,
           },

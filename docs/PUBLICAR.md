@@ -54,3 +54,11 @@ Isso valida o pacote e sua inicialização; não cria recursos no Render nem res
 6. Em `/videos`, selecione um título da lista para assistir no player da própria página. Cada vídeo mantém seu link individual do YouTube e os créditos do canal.
 
 Sem a chave, nenhum vídeo externo é importado. Uma chave inválida, quota esgotada ou restrições incompatíveis aparecem no histórico de sincronização. Vídeos privados, removidos ou sem permissão de incorporação não são reproduzidos dentro do site.
+
+## Assuntos dos vídeos e importação progressiva
+
+A classificação automática reconhece os 34 sistemas do catálogo pelos títulos e descrições, com limites de palavras para reduzir correspondências indevidas. Isso é classificação de metadados, não análise audiovisual. Ao iniciar o worker, registros de vídeos importados com classificação antiga são atualizados em lotes locais de 100; essa revisão não usa a API do YouTube. Categorias manuais são preservadas, inclusive quando alteradas durante a atualização. Uma versão de classificação no metadata evita regravações em reinícios posteriores.
+
+A importação do canal continua em páginas de 50, com intervalo mínimo de um minuto entre lotes do acervo. Cada página pública mostra até 24 itens e permite seguir por “Próxima”. Não confunda os 24 resultados da página com o total de vídeos importados. No serviço Free, a suspensão por inatividade também pausa o worker; o progresso continua do cursor salvo ao despertar. A chave válida, a quota e a permissão de incorporação de cada vídeo continuam sendo necessárias.
+
+Verificação local desta alteração: testes de classificação e de catálogo, incluindo cobertura dos 34 nomes de categorias. A revisão de categorias no PostgreSQL e o estado da importação em produção não foram verificados neste ambiente.

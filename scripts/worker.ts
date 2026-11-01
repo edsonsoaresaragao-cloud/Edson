@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { db } from "../src/lib/db";
 import { syncYouTube } from "../src/lib/youtube";
+import { refreshVideoCategories } from "../src/lib/refresh-video-categories";
 import { getObject, putObject } from "../src/lib/storage";
 import { mkdtemp, writeFile, readFile, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -177,6 +178,15 @@ async function loop() {
   console.log(
     "Worker iniciado: fila PostgreSQL, YouTube e processamento de mídia.",
   );
+  try {
+    const refreshed = await refreshVideoCategories();
+    if (refreshed)
+      console.log(`Categorias atualizadas em ${refreshed} vídeos importados.`);
+  } catch {
+    console.error(
+      "Não foi possível atualizar as categorias do acervo nesta inicialização.",
+    );
+  }
   while (!stopped) {
     try {
       const now = new Date();

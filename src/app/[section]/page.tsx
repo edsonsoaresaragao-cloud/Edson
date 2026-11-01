@@ -159,6 +159,12 @@ export default async function Catalog({
           ))}
         </section>
       )}
+      {section === "videos" && items.length > 0 && (
+        <p className="muted">
+          Página {page}: até 24 vídeos por página. Use “Próxima” para ver os
+          demais assuntos e vídeos importados.
+        </p>
+      )}
       <div className="pagination">
         {page > 1 && <Link href={url(page - 1)}>← Anterior</Link>}
         {hasNext && <Link href={url(page + 1)}>Próxima →</Link>}
