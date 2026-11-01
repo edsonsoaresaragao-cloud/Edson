@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { engines, engineParts, layoutNames } from "@/lib/engines";
-import { EngineDiagram } from "./engine-diagram";
+import { EngineVisual } from "./engine-visual";
+import visuals from "@/lib/engine-visuals.json";
 
 export function EngineCatalog() {
   const [maker, setMaker] = useState("");
@@ -75,26 +76,12 @@ export function EngineCatalog() {
           <span className="engine-chip">VISTA EXPLODIDA / DIDÁTICA</span>
         </div>
         <div className="engine-workbench">
-          <div className="engine-drawing">
-            <EngineDiagram
-              cylinders={
-                engine.layout === "I3"
-                  ? 3
-                  : engine.layout === "I6" || engine.layout === "V6"
-                    ? 6
-                    : 4
-              }
-              v={engine.layout === "V6"}
-              selected={part}
-              onSelect={setPart}
-            />
-            <p>
-              {engine.layout === "variavel"
-                ? "Arquitetura ilustrativa de quatro cilindros; a configuração real depende da versão."
-                : `Arquitetura ilustrativa: ${layoutNames[engine.layout].toLowerCase()}.`}{" "}
-              Não é um desenho específico de peças desta família.
-            </p>
-          </div>
+          <EngineVisual
+            key={engine.id}
+            engine={engine}
+            part={part}
+            onSelect={setPart}
+          />
           <div className="engine-parts">
             <span className="eyebrow">EXPLORE OS COMPONENTES</span>
             <h3>Do cabeçote ao cárter.</h3>
@@ -177,15 +164,12 @@ export function EngineCatalog() {
             >
               <span className="eyebrow">{e.maker}</span>
               <span className="engine-family-thumb" aria-hidden="true">
-                <EngineDiagram
-                  cylinders={
-                    e.layout === "I3"
-                      ? 3
-                      : e.layout === "I6" || e.layout === "V6"
-                        ? 6
-                        : 4
-                  }
-                  v={e.layout === "V6"}
+                <img
+                  src={visuals.find((v) => v.id === e.id)!.image}
+                  alt=""
+                  width={1024}
+                  height={1536}
+                  loading="lazy"
                 />
               </span>
               <span className="engine-family-name">{e.family}</span>
@@ -204,21 +188,6 @@ export function EngineCatalog() {
             Nenhum motor encontrado. Tente outra família ou limpe os filtros.
           </p>
         )}
-      </section>
-      <section className="engine-atlas-art">
-        <span className="eyebrow">ARQUITETURAS / REFERÊNCIA VISUAL</span>
-        <h2>Uma linguagem visual. Diferentes configurações.</h2>
-        <img
-          src="/images/engines/architecture-atlas.webp"
-          alt="Ilustração conceitual em vista explodida de motores de quatro cilindros em linha, seis em linha e seis em V"
-          width="1536"
-          height="1024"
-          loading="lazy"
-        />
-        <p>
-          Arte conceitual gerada por IA. Representa arquiteturas gerais; não
-          substitui um diagrama técnico do fabricante.
-        </p>
       </section>
     </>
   );

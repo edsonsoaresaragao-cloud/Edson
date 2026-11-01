@@ -1834,3 +1834,83 @@ html[data-theme="dark"] .engine-part-list button[aria-pressed="true"] {
   width: 100%;
   margin-top: -30px;
 }
+.engine-view-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+.engine-view-tabs button {
+  flex: 1;
+  background: #e1e9f1;
+  color: #234057;
+  border: 1px solid #c4d0dd;
+  border-radius: 6px;
+  padding: 10px 5px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.engine-view-tabs button[aria-selected="true"] {
+  background: #143753;
+  color: white;
+  border-color: #143753;
+}
+.engine-photo-frame {
+  margin: 0;
+}
+.engine-photo-frame img {
+  width: 100%;
+  max-height: 720px;
+  object-fit: contain;
+  display: block;
+  height: auto;
+  background: #eef2f5;
+  border-radius: 10px;
+}
+.engine-photo-frame figcaption {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  padding: 12px 0;
+  line-height: 1.6;
+}
+.engine-source {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  padding: 18px;
+  border: 1px solid #c4d0dd;
+  border-radius: 8px;
+  margin-top: 15px;
+  overflow-wrap: anywhere;
+}
+.engine-source a {
+  color: #164e7a;
+  text-decoration: underline;
+}
+.engine-source small {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.engine-enlarge {
+  display: inline-block;
+  color: #164e7a;
+  font-size: 13px;
+  margin: 8px 0;
+  text-decoration: underline;
+}
+.engine-photo-unavailable {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 25px;
+}
+.engine-family-thumb {
+  height: 230px;
+}
+.engine-family-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
