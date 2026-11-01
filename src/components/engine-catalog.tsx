@@ -63,35 +63,6 @@ export function EngineCatalog() {
           </span>
         </div>
       </div>
-      <section
-        className="engine-detail"
-        id="engine-detail"
-        aria-label="Motor selecionado"
-      >
-        <div className="engine-detail-heading">
-          <div>
-            <span className="eyebrow">{engine.maker}</span>
-            <h2>{engine.family}</h2>
-            <p>{layoutNames[engine.layout]}</p>
-          </div>
-          <span className="engine-chip">VISTA EXPLODIDA / DIDÁTICA</span>
-        </div>
-        <div className="engine-workbench engine-sheet-workbench">
-          <EngineVisual
-            key={engine.id}
-            engine={engine}
-            part={part}
-            onSelect={setPart}
-          />
-        </div>
-        {engine.note && <p className="notice">{engine.note}</p>}
-        <p className="engine-disclaimer">
-          Ilustração educativa simplificada e representativa da arquitetura. A
-          identificação exata de peças, distribuição, acessórios e procedimentos
-          exige o código completo do motor e a documentação técnica da versão.
-          As posições não indicam sequência de desmontagem ou montagem.
-        </p>
-      </section>
       <section className="engine-library" aria-label="Catálogo de motores">
         <div className="section-title">
           <div>
@@ -165,6 +136,35 @@ export function EngineCatalog() {
             Nenhum motor encontrado. Tente outra família ou limpe os filtros.
           </p>
         )}
+      </section>
+      <section
+        className="engine-detail"
+        id="engine-detail"
+        aria-label="Motor selecionado"
+      >
+        <div className="engine-detail-heading">
+          <div>
+            <span className="eyebrow">{engine.maker}</span>
+            <h2>{engine.family}</h2>
+            <p>{layoutNames[engine.layout]}</p>
+          </div>
+          <span className="engine-chip">VISTA EXPLODIDA / DIDÁTICA</span>
+        </div>
+        <div className="engine-workbench engine-sheet-workbench">
+          <EngineVisual
+            key={engine.id}
+            engine={engine}
+            part={part}
+            onSelect={setPart}
+          />
+        </div>
+        {engine.note && <p className="notice">{engine.note}</p>}
+        <p className="engine-disclaimer">
+          Ilustração educativa simplificada e representativa da arquitetura. A
+          identificação exata de peças, distribuição, acessórios e procedimentos
+          exige o código completo do motor e a documentação técnica da versão.
+          As posições não indicam sequência de desmontagem ou montagem.
+        </p>
       </section>
     </>
   );
