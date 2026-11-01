@@ -2368,3 +2368,212 @@ html[data-theme="dark"] .engine-part-list button[aria-pressed="true"] {
   margin-top: 0;
   margin-bottom: 36px;
 }
+
+/* Realistic opening illustration: animate separate assemblies, not the page. */
+.engine-hero {
+  position: relative;
+  isolation: isolate;
+  padding: 30px 0 48px;
+}
+.engine-hero-caption {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #a9bbce;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+.engine-hero-caption > span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f97316;
+  box-shadow: 0 0 13px #f9731660;
+}
+.engine-hero-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  perspective: 1000px;
+}
+.engine-hero-halo {
+  position: absolute;
+  inset: 3% 0;
+  background: radial-gradient(
+    ellipse at 55% 48%,
+    #49658040 0%,
+    #1e385c30 42%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+.engine-hero-assembly {
+  position: absolute;
+  inset: 0;
+  animation: engine-assembly-breathe 12s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+.engine-hero-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hero-visual-realistic .engine-hero-layer img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  opacity: 1;
+  user-select: none;
+}
+.engine-hero-head {
+  clip-path: inset(0 0 66.666% 0);
+  animation: engine-head-separate 12s ease-in-out infinite;
+}
+.engine-hero-block {
+  clip-path: inset(33.333% 0 37% 0);
+}
+.engine-hero-crank {
+  clip-path: inset(63% 0 0 0);
+  animation: engine-crank-separate 12s ease-in-out infinite;
+}
+.engine-hero-ground {
+  position: absolute;
+  width: 56%;
+  height: 3%;
+  bottom: -3%;
+  left: 22%;
+  background: #020a16;
+  filter: blur(10px);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: engine-ground-breathe 12s ease-in-out infinite;
+}
+.engine-animation-toggle {
+  position: absolute;
+  bottom: 8px;
+  left: 10%;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #122137;
+  border: 1px solid #40536b;
+  border-radius: 20px;
+  color: #cfdeee;
+  padding: 8px 12px;
+  font-size: 10px;
+  cursor: pointer;
+}
+.engine-animation-toggle:hover {
+  background: #1b304b;
+}
+.engine-hero-credit {
+  position: absolute;
+  bottom: -15px;
+  left: 10%;
+  color: #8499b2;
+  font-size: 9px;
+}
+.hero-visual-realistic .hero-stamp {
+  bottom: 48px;
+  right: 0;
+}
+.engine-hero-paused .engine-hero-assembly,
+.engine-hero-paused .engine-hero-layer,
+.engine-hero-paused .engine-hero-ground {
+  animation-play-state: paused;
+}
+@keyframes engine-assembly-breathe {
+  0%,
+  100% {
+    transform: translateY(4px) rotate(-0.4deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(0.4deg);
+  }
+}
+@keyframes engine-head-separate {
+  0%,
+  15%,
+  85%,
+  100% {
+    transform: translateY(0);
+  }
+  40%,
+  60% {
+    transform: translateY(-18px);
+  }
+}
+@keyframes engine-crank-separate {
+  0%,
+  15%,
+  85%,
+  100% {
+    transform: translateY(0);
+  }
+  40%,
+  60% {
+    transform: translateY(18px);
+  }
+}
+@keyframes engine-ground-breathe {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scaleX(0.9);
+  }
+}
+@media (max-width: 800px) {
+  .hero-visual-realistic {
+    opacity: 1;
+  }
+  .engine-hero {
+    padding-top: 20px;
+  }
+  .engine-hero-caption {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+  .engine-animation-toggle {
+    font-size: 9px;
+    padding: 7px 10px;
+  }
+  .hero-visual-realistic .hero-stamp {
+    bottom: 48px;
+    font-size: 6px;
+  }
+  .engine-hero-credit {
+    font-size: 8px;
+    bottom: -8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .engine-hero-assembly,
+  .engine-hero-layer,
+  .engine-hero-ground {
+    animation: none !important;
+    transform: none !important;
+  }
+  .engine-animation-toggle {
+    display: none;
+  }
+}
+.engine-hero-stage {
+  aspect-ratio: 1;
+}
+@media (max-width: 800px) {
+  .engine-hero-stage {
+    max-width: 390px;
+    margin: 0 auto;
+  }
+}

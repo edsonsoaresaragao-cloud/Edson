@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { EngineHero } from "@/components/engine-hero";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -81,14 +81,8 @@ export default async function Home() {
               </span>
             </div>
           </div>
-          <div className="hero-visual">
-            <Image
-              src="/engine.svg"
-              alt="Ilustração original de um motor automotivo com detalhes técnicos"
-              width={760}
-              height={620}
-              priority
-            />
+          <div className="hero-visual hero-visual-realistic">
+            <EngineHero />
             <div className="hero-stamp">
               <span className="orange">●</span> CONHECER. DIAGNOSTICAR. EVOLUIR.
             </div>
