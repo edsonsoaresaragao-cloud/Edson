@@ -1914,3 +1914,332 @@ html[data-theme="dark"] .engine-part-list button[aria-pressed="true"] {
   height: 100%;
   object-fit: contain;
 }
+
+/* Reference-poster standard: component index / exploded engine / details. */
+.engine-sheet-workbench {
+  display: block;
+}
+.engine-view-generated {
+  background: white;
+  padding: 0;
+}
+.engine-view-generated > .engine-view-tabs {
+  padding: 16px;
+  margin: 0;
+}
+.engine-view-generated > [role="tabpanel"] {
+  overflow-x: auto;
+}
+.engine-sheet {
+  min-width: 980px;
+  background: #fff;
+  color: #14283b;
+  border: 1px solid #bacadd;
+  font-family: Arial, sans-serif;
+}
+.sheet-header {
+  display: grid;
+  grid-template-columns: 24% 76%;
+  min-height: 90px;
+  border-bottom: 1px solid #b7c9df;
+}
+.sheet-brand {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+.sheet-brand span {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #355778;
+}
+.sheet-brand strong {
+  font-size: 25px;
+  line-height: 1.1;
+}
+.sheet-title {
+  padding: 17px 28px;
+  color: white;
+  background: linear-gradient(115deg, #083b64, #06244a);
+  clip-path: polygon(3% 0, 100% 0, 100% 100%, 0 100%);
+}
+.sheet-title h3 {
+  font-size: 27px;
+  margin: 0 0 6px;
+  color: white;
+  line-height: 1.1;
+}
+.sheet-title h3 span {
+  font-size: 20px;
+}
+.sheet-title p {
+  margin: 0 0 4px;
+  color: #fff;
+  font-size: 15px;
+}
+.sheet-title small {
+  color: #d9e7f4;
+  font-size: 12px;
+}
+.sheet-body {
+  display: grid;
+  grid-template-columns: 22% 53% 25%;
+  align-items: start;
+  padding: 10px;
+  gap: 0;
+}
+.sheet-left {
+  padding-right: 10px;
+}
+.sheet-panel {
+  border: 1px solid #a8bed8;
+  border-radius: 9px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.sheet-panel h4,
+.sheet-subassembly h4,
+.sheet-right > h3 {
+  margin: 0;
+  padding: 7px 9px;
+  background: linear-gradient(100deg, #08466c, #072b59);
+  color: white;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.sheet-component-list {
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+}
+.sheet-component-list li:nth-child(odd) {
+  background: #e4eaf1;
+}
+.sheet-component-list button {
+  display: flex;
+  gap: 7px;
+  padding: 7px 5px;
+  width: 100%;
+  border: 0;
+  color: #14283b;
+  background: transparent;
+  border-radius: 0;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.2;
+}
+.sheet-component-list button > span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 23px;
+  height: 20px;
+  border-radius: 3px;
+  background: #073d66;
+  color: white;
+  font-weight: bold;
+}
+.sheet-component-list button[aria-pressed="true"] {
+  background: #cee0f1;
+  box-shadow: inset 3px 0 #075189;
+}
+.sheet-component-list button[aria-pressed="true"] > span {
+  background: #1465a0;
+}
+.sheet-panel-note {
+  padding: 8px;
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #4b6074;
+}
+.sheet-specs dl {
+  margin: 0;
+}
+.sheet-specs dl > div {
+  padding: 9px;
+  border-bottom: 1px solid #d1dce7;
+}
+.sheet-specs dt {
+  font-size: 10px;
+  font-weight: bold;
+  color: #3d536a;
+}
+.sheet-specs dd {
+  margin: 4px 0 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.sheet-selected {
+  background: #eff4f9;
+  border-left: 3px solid #0b4b79;
+  padding: 10px;
+  font-size: 12px;
+}
+.sheet-selected p {
+  font-size: 11px;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+.sheet-main {
+  margin: 0;
+}
+.sheet-engine-image {
+  position: relative;
+}
+.sheet-engine-image > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sheet-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: #075087;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 1px 5px #29476280;
+  cursor: pointer;
+  padding: 0;
+}
+.sheet-marker[aria-pressed="true"] {
+  background: #072c53;
+  outline: 2px solid #428bc1;
+}
+.sheet-main figcaption {
+  font-size: 10px;
+  line-height: 1.5;
+  text-align: center;
+  color: #455c70;
+  padding: 8px;
+}
+.sheet-right {
+  padding-left: 10px;
+}
+.sheet-right > h3 {
+  font-size: 18px;
+  border-radius: 9px 9px 0 0;
+}
+.sheet-subassembly {
+  border: 1px solid #a8bed8;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 0 8px;
+  background: linear-gradient(#fff, #f0f4f9);
+}
+.sheet-subassembly h4 {
+  font-size: 12px;
+  padding: 5px 8px;
+}
+.sheet-subassembly p {
+  font-size: 10px;
+  line-height: 1.35;
+  padding: 4px 8px 7px;
+  margin: 0;
+}
+.sheet-subassembly-art {
+  width: 115px;
+  height: 115px;
+  margin: 2px auto;
+  background-image: url("/images/engines/subassemblies.webp");
+  background-size: 300% 200%;
+  background-repeat: no-repeat;
+}
+.sheet-art-0 {
+  background-position: 0 0;
+}
+.sheet-art-1 {
+  background-position: 50% 0;
+}
+.sheet-art-2 {
+  background-position: 100% 0;
+}
+.sheet-art-3 {
+  background-position: 0 100%;
+}
+.sheet-art-4 {
+  background-position: 50% 100%;
+}
+.sheet-art-5 {
+  background-position: 100% 100%;
+}
+.sheet-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #bdcfe1;
+  color: #405a73;
+  font-size: 9px;
+  padding: 10px 14px;
+}
+.sheet-print {
+  margin: 15px;
+}
+.engine-view-generated > .engine-source {
+  margin: 15px;
+}
+@media print {
+  @page {
+    size: A3 landscape;
+    margin: 8mm;
+  }
+  body :not(:has(.engine-sheet)):not(.engine-sheet):not(.engine-sheet *) {
+    display: none !important;
+  }
+  html,
+  body,
+  main,
+  .container,
+  .page-content,
+  .engine-detail,
+  .engine-drawing,
+  .engine-sheet-workbench {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    border: 0 !important;
+  }
+  .engine-sheet {
+    min-width: 0;
+    width: 100%;
+    break-inside: avoid;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .sheet-body {
+    grid-template-columns: 22% 53% 25%;
+  }
+  .sheet-subassembly-art {
+    width: 27mm;
+    height: 27mm;
+  }
+  .sheet-title h3 {
+    font-size: 20pt;
+  }
+  .sheet-footer {
+    font-size: 7pt;
+  }
+}
+@media print {
+  .sheet-engine-image {
+    height: 220mm;
+  }
+  .sheet-engine-image > img {
+    height: 100%;
+    object-fit: contain;
+  }
+}

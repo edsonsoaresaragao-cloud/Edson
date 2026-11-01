@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { engines, engineParts, layoutNames } from "@/lib/engines";
+import { engines, layoutNames } from "@/lib/engines";
 import { EngineVisual } from "./engine-visual";
 import visuals from "@/lib/engine-visuals.json";
 
@@ -75,37 +75,13 @@ export function EngineCatalog() {
           </div>
           <span className="engine-chip">VISTA EXPLODIDA / DIDÁTICA</span>
         </div>
-        <div className="engine-workbench">
+        <div className="engine-workbench engine-sheet-workbench">
           <EngineVisual
             key={engine.id}
             engine={engine}
             part={part}
             onSelect={setPart}
           />
-          <div className="engine-parts">
-            <span className="eyebrow">EXPLORE OS COMPONENTES</span>
-            <h3>Do cabeçote ao cárter.</h3>
-            <p>Selecione um conjunto para conhecer sua função.</p>
-            <div className="engine-part-list">
-              {engineParts.map((p, i) => (
-                <button
-                  key={p.name}
-                  type="button"
-                  aria-pressed={part === i}
-                  onClick={() => setPart(i)}
-                >
-                  <span>{String(i + 1).padStart(2, "0")}</span>
-                  {p.name}
-                  <span aria-hidden="true">↗</span>
-                </button>
-              ))}
-            </div>
-            <div className="engine-part-description" aria-live="polite">
-              <span className="eyebrow">{engineParts[part].system}</span>
-              <h4>{engineParts[part].name}</h4>
-              <p>{engineParts[part].text}</p>
-            </div>
-          </div>
         </div>
         {engine.note && <p className="notice">{engine.note}</p>}
         <p className="engine-disclaimer">

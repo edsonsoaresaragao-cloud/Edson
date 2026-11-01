@@ -3,6 +3,7 @@ import { useState } from "react";
 import { type Engine } from "@/lib/engines";
 import visuals from "@/lib/engine-visuals.json";
 import { EngineDiagram } from "./engine-diagram";
+import { EngineSheet } from "./engine-sheet";
 
 export function EngineVisual({
   engine,
@@ -20,7 +21,7 @@ export function EngineVisual({
   const visual = visuals.find((v) => v.id === engine.id)!;
   const panelId = `visual-${engine.id}`;
   return (
-    <div className="engine-drawing">
+    <div className={`engine-drawing engine-view-${view}`}>
       <div
         className="engine-view-tabs"
         role="tablist"
@@ -66,7 +67,9 @@ export function EngineVisual({
         ))}
       </div>
       <div id={panelId} role="tabpanel" aria-labelledby={`${panelId}-${view}`}>
-        {view === "diagram" ? (
+        {view === "generated" ? (
+          <EngineSheet engine={engine} selected={part} onSelect={onSelect} />
+        ) : view === "diagram" ? (
           <EngineDiagram
             cylinders={visual.cylinders}
             v={engine.layout === "V6"}
@@ -89,28 +92,29 @@ export function EngineVisual({
             ) : (
               <img
                 key={view}
-                src={view === "generated" ? visual.image : visual.photoUrl}
-                alt={
-                  view === "generated"
-                    ? `Vista explodida gerada de ${engine.maker} ${engine.family}, referência ${visual.referenceVersion}`
-                    : `Imagem publicada como ${engine.maker} ${engine.family} pela fonte consultada`
-                }
+                src={visual.photoUrl}
+                alt={`Imagem publicada como ${engine.maker} ${engine.family} pela fonte consultada`}
                 width={1024}
                 height={1536}
-                referrerPolicy={view === "photo" ? "no-referrer" : undefined}
-                onError={
-                  view === "photo" ? () => setPhotoFailed(true) : undefined
-                }
+                referrerPolicy="no-referrer"
+                onError={() => setPhotoFailed(true)}
               />
             )}
             <figcaption>
-              {view === "generated"
-                ? "ILUSTRAÇÃO GERADA POR IA · NÃO É FOTOGRAFIA"
-                : "IMAGEM DA FONTE · DIREITOS DO RESPECTIVO TITULAR"}
+              IMAGEM DA FONTE · DIREITOS DO RESPECTIVO TITULAR
             </figcaption>
           </figure>
         )}
       </div>
+      {view === "generated" && (
+        <button
+          className="sheet-print button"
+          type="button"
+          onClick={() => window.print()}
+        >
+          Imprimir ficha / salvar PDF
+        </button>
+      )}
       {view === "generated" && (
         <a
           className="engine-enlarge"
@@ -118,7 +122,7 @@ export function EngineVisual({
           target="_blank"
           rel="noopener noreferrer"
         >
-          Ampliar vista explodida ↗
+          Abrir ilustração sem a ficha ↗
         </a>
       )}
       <div className="engine-source">

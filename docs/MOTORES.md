@@ -15,3 +15,11 @@ Publicação: enviar o código para main e iniciar no Render `Manual Deploy → 
 Cada uma das 31 entradas agora possui uma ilustração explodida gerada individualmente em WebP e uma referência externa de imagem com procedência registrada em `src/lib/engine-visuals.json`. A página oferece as abas **Vista gerada**, **Referência** e **Esquema**, além de ampliação da vista. As miniaturas do catálogo usam a imagem individual do motor. Fotografias e imagens de divulgação externas ficam nos servidores originais; há fallback para o link da fonte caso o carregamento falhe.
 
 As versões amplas possuem recorte explícito: EcoBoost 1.0, Kappa 1.0 MPI e Smartstream G2.0 CVVL, por exemplo. Esses recortes não representam todas as versões da família. A pesquisa e seus limites estão em `docs/REFERENCIAS-MOTORES.md`. As imagens geradas não são validadas como documentação de montagem e não são apresentadas como fotografias reais.
+
+## Padrão de ficha ilustrada
+
+A vista principal de cada uma das 31 entradas usa a ficha branca e azul inspirada na referência enviada: índice numerado de componentes à esquerda, identificação do motor, ilustração central com regiões indicativas e painéis funcionais à direita. O cabeçalho e o conteúdo de identificação acompanham o motor selecionado. Não foram copiados valores de potência, torque ou cilindrada da referência Mercedes para outros motores.
+
+Os números sobre as imagens indicam regiões aproximadas e se vinculam à descrição do componente. Os subconjuntos laterais são exemplos funcionais genéricos gerados por IA; a legenda deixa claro que não são peças medidas ou desenhos específicos do motor. A área Turbo aparece apenas nas famílias selecionadas com turbo. As abas Referência e Esquema continuam disponíveis.
+
+O botão “Imprimir ficha / salvar PDF” aciona a impressão do navegador. A folha de estilo isola a ficha e sugere papel A3 em paisagem. Não houve verificação visual em navegador neste ambiente; a tipagem e os testes existentes passaram. A imagem original do motor continua acessível separadamente, sem a composição da ficha.
