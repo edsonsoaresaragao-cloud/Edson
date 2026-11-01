@@ -22,7 +22,7 @@ As migrations são aplicadas antes de iniciar o servidor. O seed roda somente em
 
 A configuração cria somente web e PostgreSQL. Navegação, CMS, contas, cursos, matrículas, progresso, contatos e certificados utilizam o banco real. Não publica o emulador S3rver nem abre as portas do banco à Internet.
 
-YouTube ao vivo precisa de chave válida e worker; uploads e transcodificação precisam de S3 de produção e worker; recuperação de senha precisa de SMTP. Nenhuma dessas integrações é anunciada como funcionando só porque o web ficou acessível. O processo de worker deve ser publicado separadamente quando houver infraestrutura apropriada; não está incluído silenciosamente como recurso pago no Blueprint gratuito.
+YouTube ao vivo precisa de chave válida e worker; uploads e transcodificação precisam de S3 de produção e worker; recuperação de senha precisa de SMTP. Nenhuma dessas integrações é anunciada como funcionando só porque o web ficou acessível. O comando de inicialização executa web e worker no mesmo serviço gratuito, com encerramento conjunto se um deles falhar. Não cria um serviço pago adicional. No plano gratuito, ambos pausam quando o serviço web é suspenso por inatividade; tarefas voltam a ser processadas quando ele desperta. Para execução contínua, use infraestrutura apropriada.
 
 Confira os limites atuais em [serviços gratuitos do Render](https://render.com/docs/free), inclusive suspensão por inatividade e prazo do PostgreSQL gratuito. A configuração gratuita é para avaliação, não uma promessa de hospedagem permanente ou de banco sem prazo. Antes de usar dados importantes, configure retenção, backup externo e uma infraestrutura durável.
 
@@ -43,3 +43,13 @@ A estrutura do Blueprint foi conferida com [a referência oficial do Render](htt
 A imagem de produção foi construída e inicializada com o mesmo comando do Blueprint, simulando a variável de endereço externo do provedor. Foram conferidos migrations, preservação dos dados existentes, homepage, CSS, SVG, busca, cadastro, página do aluno, cookie Secure/HttpOnly e rejeição de origem indevida. O processo executou como usuário `node`, com filesystem somente leitura e sem privilégios adicionais. A conta temporária de validação foi removida.
 
 Isso valida o pacote e sua inicialização; não cria recursos no Render nem reserva um endereço público. O domínio efetivo será exibido pelo provedor após o responsável concluir a implantação.
+
+## Ativar os vídeos do YouTube
+
+1. No Google Cloud, habilite **YouTube Data API v3** e crie uma chave de API restrita a essa API.
+2. No Render, abra o serviço **edson-oficina → Environment** e configure `YOUTUBE_API_KEY` com essa chave. Não publique a chave no código ou no chat.
+3. Salve e implante a versão atualizada do repositório. Os logs devem mostrar “Worker iniciado”.
+4. Entre como administrador em `/admin/youtube` e use **Atualizar vídeos recentes**. A importação inicial também é enfileirada automaticamente pelo worker quando há uma chave configurada.
+5. Use **Continuar importação do acervo** para carregar páginas anteriores (até 50 vídeos por tarefa). Confira a última sincronização no painel.
+
+Sem a chave, nenhum vídeo externo é importado. Uma chave inválida, quota esgotada ou restrições incompatíveis aparecem no histórico de sincronização. Vídeos privados, removidos ou sem permissão de incorporação não são reproduzidos dentro do site.

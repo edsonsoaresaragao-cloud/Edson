@@ -20,4 +20,4 @@ if [ ! -f "$server_entry" ]; then
   echo 'Artefato standalone ausente: use a imagem Docker de produção.' >&2
   exit 1
 fi
-exec node "$server_entry"
+exec node scripts/run-render-services.mjs "$server_entry"
