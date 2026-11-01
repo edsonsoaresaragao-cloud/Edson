@@ -2577,3 +2577,21 @@ html[data-theme="dark"] .engine-part-list button[aria-pressed="true"] {
     margin: 0 auto;
   }
 }
+.engine-running-stage {
+  aspect-ratio: 720 / 490;
+}
+.engine-running-stage > svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.engine-running-stage .engine-hero-ground {
+  animation: none;
+}
+@media (max-width: 800px) {
+  .engine-running-stage {
+    max-width: 100%;
+  }
+}

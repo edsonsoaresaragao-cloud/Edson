@@ -1,9 +1,13 @@
-# Motor animado na abertura
+# Motor em funcionamento na abertura
 
-A homepage substitui o SVG esquemático por uma ilustração realista original gerada por IA, sem associação a um fabricante específico. A arte mostra um motor de quatro cilindros em vista explodida. Três faixas transparentes são animadas por transformações CSS: cabeçote, bloco e conjunto inferior. É movimento ilustrativo de separação; não simula combustão nem o ciclo mecânico em funcionamento.
+A abertura mostra um motor genérico de quatro cilindros em corte, com pistões, bielas, virabrequim, válvulas, roda de comando e volante em movimento. O SVG tem acabamento metálico com gradientes e uma representação didática do ciclo de quatro tempos. A animação não abre ou separa conjuntos.
 
-O componente `EngineHero` inclui descrição acessível, pausa/reprodução e suporte a `prefers-reduced-motion`. A animação reduzida fica estática e o controle de movimento é ocultado nessa preferência. Não usa WebGL, vídeo externo nem novos pacotes. As três camadas reutilizam o mesmo endereço de imagem e as versões responsivas são selecionadas pelo navegador.
+O movimento usa um mecanismo biela-manivela: o pino do virabrequim gira, a posição do pistão é calculada pela restrição de comprimento constante da biela e os cilindros 1/4 e 2/3 se movimentam em pares. As fases seguem a ordem de ignição 1–3–4–2 neste exemplo. As válvulas acompanham admissão e escape, o volante gira na velocidade do eixo e a roda de comando na metade. O desenho simplifica geometria, distribuição e transmissão; não é procedimento de manutenção nem simulação de um modelo comercial específico.
 
-Arquivos WebP com transparência: 1024×1024 (176.920 bytes) e 640×640 (80.410 bytes). Foram verificadas as linhas de separação transparentes nas duas versões, a tipagem do componente e sua renderização em servidor com descrição e controle. Não houve verificação visual da animação em navegador neste ambiente.
+Uma volta dura aproximadamente quatro segundos (velocidade didática, não marcha lenta real). Cor e rótulo distinguem admissão, compressão, combustão/expansão e escape. O texto da interface indica câmera lenta.
 
-Publicação no Render: implantar o último commit da branch main quando Auto-Deploy estiver desativado. Não requer migrações nem variáveis de ambiente novas.
+O componente atualiza diretamente os elementos SVG via requestAnimationFrame e interrompe o movimento quando pausado ou quando o usuário solicita movimento reduzido, incluindo alterações dessa preferência durante a visita. O tempo é preservado ao pausar; não há grandes saltos ao retornar de uma aba oculta. Não usa WebGL nem novos pacotes.
+
+Verificação: tipagem do componente, invariantes do comprimento das bielas em vários ângulos, sincronismo dos pares, pontos mortos e ordem de ignição. Não houve teste visual em navegador neste ambiente.
+
+Publicação: implantar a versão mais recente no Render. Não requer novas variáveis de ambiente nem migrações.
