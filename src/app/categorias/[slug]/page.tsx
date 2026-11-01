@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
+import { CoolingExplorer } from "@/components/cooling-explorer";
 import { AlternatorExplorer } from "@/components/alternator-explorer";
 import { HvacExplorer } from "@/components/hvac-explorer";
 import { SuspensionExplorer } from "@/components/suspension-explorer";
@@ -37,6 +38,7 @@ export default async function Category({
       {slug === "suspensao" && <SuspensionExplorer />}
       {slug === "ar-condicionado" && <HvacExplorer />}
       {slug === "alternador" && <AlternatorExplorer />}
+      {slug === "arrefecimento" && <CoolingExplorer />}
       {slug === "motor-e-componentes-internos" && (
         <Link className="engine-entry card" href="/explodedview">
           <span className="eyebrow">NOVO / ATLAS DE MOTORES</span>
