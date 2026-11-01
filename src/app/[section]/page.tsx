@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { kindPaths, kindLabels, normalize } from "@/lib/catalog";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
+import { YouTubeGallery } from "@/components/youtube-gallery";
 import { SearchBox } from "@/components/forms";
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
@@ -122,10 +123,25 @@ export default async function Catalog({
           chave válida da YouTube Data API v3. Nenhuma importação é simulada.
         </p>
       )}
+      {section === "videos" && (
+        <YouTubeGallery
+          videos={items
+            .filter((c) => !!c.youtubeId)
+            .map((c) => ({
+              id: c.id,
+              youtubeId: c.youtubeId!,
+              title: c.title,
+              author: c.author,
+              imageUrl: c.imageUrl,
+            }))}
+        />
+      )}
       <div className="grid three">
-        {items.map((c) => (
-          <ContentCard key={c.id} item={c} />
-        ))}
+        {items
+          .filter((c) => section !== "videos" || !c.youtubeId)
+          .map((c) => (
+            <ContentCard key={c.id} item={c} />
+          ))}
       </div>
       {!items.length && (
         <Empty

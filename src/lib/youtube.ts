@@ -218,7 +218,7 @@ export async function syncYouTube(mode: "latest" | "backfill" = "latest") {
       where: { id: expected },
       data: {
         lastSyncAt: new Date(),
-        ...(mode === "backfill" || !saved.nextPageToken
+        ...(mode === "backfill" || !saved.lastSyncAt
           ? { nextPageToken: page.nextPageToken || null }
           : {}),
       },

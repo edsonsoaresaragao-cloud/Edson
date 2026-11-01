@@ -50,6 +50,7 @@ Isso valida o pacote e sua inicialização; não cria recursos no Render nem res
 2. No Render, abra o serviço **edson-oficina → Environment** e configure `YOUTUBE_API_KEY` com essa chave. Não publique a chave no código ou no chat.
 3. Salve e implante a versão atualizada do repositório. Os logs devem mostrar “Worker iniciado”.
 4. Entre como administrador em `/admin/youtube` e use **Atualizar vídeos recentes**. A importação inicial também é enfileirada automaticamente pelo worker quando há uma chave configurada.
-5. Use **Continuar importação do acervo** para carregar páginas anteriores (até 50 vídeos por tarefa). Confira a última sincronização no painel.
+5. O worker continua automaticamente pelas páginas anteriores, em lotes de até 50 vídeos com intervalo mínimo de um minuto, até concluir o acervo. **Continuar importação do acervo** também permite solicitar uma página manualmente. Confira a última sincronização no painel.
+6. Em `/videos`, selecione um título da lista para assistir no player da própria página. Cada vídeo mantém seu link individual do YouTube e os créditos do canal.
 
 Sem a chave, nenhum vídeo externo é importado. Uma chave inválida, quota esgotada ou restrições incompatíveis aparecem no histórico de sincronização. Vídeos privados, removidos ou sem permissão de incorporação não são reproduzidos dentro do site.

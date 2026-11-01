@@ -202,17 +202,23 @@ async function loop() {
             where: { type: "YOUTUBE" },
             orderBy: { createdAt: "desc" },
           });
+          const channel = await tx.channel.findUnique({
+            where: { id: "UCkwom28UGBpkHFeTvOsLN8w" },
+          });
+          const mode = channel?.nextPageToken ? "backfill" : "latest";
           const interval =
-            Math.max(
-              15,
-              Number(process.env.YOUTUBE_SYNC_INTERVAL_MINUTES || 360),
-            ) * 60000;
+            mode === "backfill"
+              ? 60000
+              : Math.max(
+                  15,
+                  Number(process.env.YOUTUBE_SYNC_INTERVAL_MINUTES || 360),
+                ) * 60000;
           if (
             !pending &&
             (!last || last.createdAt.getTime() < Date.now() - interval)
           )
             await tx.job.create({
-              data: { type: "YOUTUBE", payload: { mode: "latest" } },
+              data: { type: "YOUTUBE", payload: { mode } },
             });
         });
       }
