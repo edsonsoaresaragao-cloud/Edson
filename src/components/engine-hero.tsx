@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Pause, Play } from "lucide-react";
-import { RunningEngine } from "./running-engine";
+import { RealisticEngine } from "./realistic-engine";
 
 export function EngineHero() {
   const [paused, setPaused] = useState(false);
@@ -12,7 +12,7 @@ export function EngineHero() {
       </div>
       <div className="engine-hero-stage engine-running-stage">
         <div className="engine-hero-halo" />
-        <RunningEngine paused={paused} />
+        <RealisticEngine paused={paused} />
         <div className="engine-hero-ground" />
       </div>
       <button
@@ -32,7 +32,7 @@ export function EngineHero() {
         {paused ? "Reproduzir" : "Pausar animação"}
       </button>
       <span className="engine-hero-credit">
-        Corte ilustrativo · ciclo em câmera lenta
+        Motor em corte · ciclo em câmera lenta
       </span>
     </div>
   );

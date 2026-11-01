@@ -2595,3 +2595,23 @@ html[data-theme="dark"] .engine-part-list button[aria-pressed="true"] {
     max-width: 100%;
   }
 }
+.engine-realistic-view {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 720 / 490;
+}
+.engine-webgl-host {
+  position: absolute;
+  inset: 0;
+}
+.engine-webgl-host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.engine-realistic-view > svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+}
