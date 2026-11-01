@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { engines, layoutNames } from "@/lib/engines";
+import { componentDefinitions } from "@/lib/engine-specs";
 import { EngineVisual } from "./engine-visual";
 import visuals from "@/lib/engine-visuals.json";
 
@@ -58,7 +59,7 @@ export function EngineCatalog() {
             <strong>{makers.length}</strong> grupos de fabricantes
           </span>
           <span>
-            <strong>07</strong> conjuntos principais
+            <strong>{componentDefinitions.length}</strong> componentes no índice
           </span>
         </div>
       </div>

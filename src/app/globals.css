@@ -2243,3 +2243,124 @@ html[data-theme="dark"] .engine-part-list button[aria-pressed="true"] {
     object-fit: contain;
   }
 }
+.sheet-component-static {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 1.2;
+  min-height: 24px;
+}
+.sheet-component-static > span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 22px;
+  height: 18px;
+  border-radius: 3px;
+  background: #073d66;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+}
+.sheet-component-list button {
+  font-size: 11px;
+  min-height: 24px;
+  padding: 3px 5px;
+  gap: 6px;
+}
+.sheet-component-list button > span {
+  flex-basis: 22px;
+  height: 18px;
+  font-size: 11px;
+}
+.sheet-component-not-applicable {
+  color: #647587;
+}
+.sheet-component-not-applicable small {
+  font-size: 8px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.sheet-component-variable sup {
+  color: #355d80;
+}
+.sheet-spec-application {
+  margin: 0;
+  padding: 8px;
+  font-size: 10px;
+  line-height: 1.45;
+  background: #f0f5fa;
+  border-bottom: 1px solid #b7c9dd;
+}
+.sheet-technical-specs .sheet-spec-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3px;
+  padding: 7px 8px;
+}
+.sheet-technical-specs dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #103d63;
+}
+.sheet-technical-specs dd {
+  margin: 0 0 0 22px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.sheet-spec-pending {
+  color: #65788b;
+  font-style: italic;
+}
+.sheet-spec-general {
+  color: #3e617f;
+}
+.sheet-technical-source {
+  display: block;
+  padding: 8px;
+  border-top: 1px solid #c5d6e5;
+  color: #174e7c;
+  text-decoration: underline;
+  font-size: 10px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+@media print {
+  .sheet-component-list button,
+  .sheet-component-static {
+    min-height: 0;
+    padding: 1px 3px;
+    font-size: 7pt;
+  }
+  .sheet-component-list button > span,
+  .sheet-component-static > span {
+    height: 13px;
+    flex-basis: 19px;
+    font-size: 7pt;
+  }
+  .sheet-technical-specs .sheet-spec-row {
+    padding: 3px 5px;
+    gap: 1px;
+  }
+  .sheet-technical-specs dt,
+  .sheet-technical-specs dd {
+    font-size: 7pt;
+  }
+  .sheet-spec-application,
+  .sheet-technical-source,
+  .sheet-panel-note {
+    font-size: 6pt;
+    padding: 4px;
+  }
+  .sheet-selected {
+    font-size: 7pt;
+    padding: 5px;
+  }
+  .sheet-selected p {
+    font-size: 6pt;
+  }
+}

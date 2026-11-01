@@ -23,3 +23,9 @@ A vista principal de cada uma das 31 entradas usa a ficha branca e azul inspirad
 Os números sobre as imagens indicam regiões aproximadas e se vinculam à descrição do componente. Os subconjuntos laterais são exemplos funcionais genéricos gerados por IA; a legenda deixa claro que não são peças medidas ou desenhos específicos do motor. A área Turbo aparece apenas nas famílias selecionadas com turbo. As abas Referência e Esquema continuam disponíveis.
 
 O botão “Imprimir ficha / salvar PDF” aciona a impressão do navegador. A folha de estilo isola a ficha e sugere papel A3 em paisagem. Não houve verificação visual em navegador neste ambiente; a tipagem e os testes existentes passaram. A imagem original do motor continua acessível separadamente, sem a composição da ficha.
+
+## Componentes e especificações
+
+A ficha agora lista 24 componentes, preservando os marcadores existentes apenas para regiões ilustradas. Itens variáveis recebem asterisco e turbo/intercooler aparecem como não aplicáveis nas referências aspiradas. Capa de acabamento e tampa de válvulas são diferenciadas na descrição da região superior.
+
+O painel técnico contém configuração, cilindrada, potência, torque, alimentação, distribuição, arrefecimento e lubrificação. Há valores documentados para 13 aplicações; outras medições ficam como “A confirmar” quando não foi definida uma versão técnica suficiente. Características gerais são distinguidas de valores confirmados. Consulte [Especificações de referência](ESPECIFICACOES-MOTORES.md) para os critérios e fontes.

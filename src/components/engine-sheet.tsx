@@ -1,9 +1,15 @@
 "use client";
 import { engineParts, type Engine } from "@/lib/engines";
 import visuals from "@/lib/engine-visuals.json";
+import { getEngineComponents } from "@/lib/engine-specs";
+import { EngineSpecificationPanel } from "./engine-specification-panel";
 
 const sheetParts = [
-  { number: 1, label: "Tampa de válvulas", part: 0 },
+  {
+    number: 1,
+    label: "Região superior: capa / tampa conforme versão",
+    part: 0,
+  },
   { number: 6, label: "Cabeçote e válvulas", part: 1 },
   { number: 7, label: "Junta do cabeçote", part: 2 },
   { number: 8, label: "Bloco do motor", part: 3 },
@@ -67,6 +73,7 @@ export function EngineSheet({
 }) {
   const visual = visuals.find((v) => v.id === engine.id)!;
   const points = engine.layout === "V6" ? vRegions : regions;
+  const components = getEngineComponents(engine);
   const turbo = [
     "EA888",
     "CSS Prime",
@@ -122,55 +129,58 @@ export function EngineSheet({
           <section className="sheet-panel">
             <h4>Componentes principais</h4>
             <ol className="sheet-component-list">
-              {sheetParts.map((p, i) => (
-                <li key={p.number}>
-                  <button
-                    type="button"
-                    aria-pressed={selected === p.part}
-                    onClick={() => onSelect(p.part)}
+              {components.map((component) => {
+                const match = sheetParts.find(
+                  (p) => p.number === component.number,
+                );
+                return (
+                  <li
+                    key={component.number}
+                    className={`sheet-component-${component.status}`}
+                    title={component.note}
                   >
-                    <span>{p.number}</span>
-                    {p.label}
-                  </button>
-                </li>
-              ))}
+                    {match ? (
+                      <button
+                        type="button"
+                        aria-pressed={selected === match.part}
+                        onClick={() => onSelect(match.part)}
+                      >
+                        <span>{component.number}</span>
+                        {component.label}
+                        {component.status === "variable" && <sup>*</sup>}
+                      </button>
+                    ) : (
+                      <div className="sheet-component-static">
+                        <span>{component.number}</span>
+                        {component.label}
+                        {component.status === "variable" && <sup>*</sup>}
+                        {component.status === "not-applicable" && (
+                          <small>N/A</small>
+                        )}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ol>
             <p className="sheet-panel-note">
-              A numeração identifica regiões aproximadas da ilustração. Não
-              representa ordem de desmontagem.
+              * Conforme versão/veículo. N/A: não se aplica à referência
+              selecionada. Apenas os componentes marcados na imagem têm
+              indicação de região; a lista não é ordem de desmontagem.
             </p>
           </section>
-          <section className="sheet-panel sheet-specs">
-            <h4>Identificação da referência</h4>
-            <dl>
-              <div>
-                <dt>Fabricante</dt>
-                <dd>{engine.maker}</dd>
-              </div>
-              <div>
-                <dt>Família</dt>
-                <dd>{engine.family}</dd>
-              </div>
-              <div>
-                <dt>Versão ilustrada</dt>
-                <dd>{visual.referenceVersion}</dd>
-              </div>
-              <div>
-                <dt>Configuração</dt>
-                <dd>
-                  {visual.cylinders} cilindros{" "}
-                  {engine.layout === "V6" ? "em V" : "em linha"}
-                </dd>
-              </div>
-            </dl>
-            <p className="sheet-panel-note">
-              Cilindrada, potência, torque e procedimentos devem ser conferidos
-              na documentação do código e ano do motor.
-            </p>
-          </section>
+          <EngineSpecificationPanel engine={engine} />
           <div className="sheet-selected" aria-live="polite">
-            <strong>{engineParts[selected].name}</strong>
-            <p>{engineParts[selected].text}</p>
+            <strong>
+              {selected === 0
+                ? "Capa e tampa superior"
+                : engineParts[selected].name}
+            </strong>
+            <p>
+              {selected === 0
+                ? "Capa de acabamento e tampa de válvulas são peças diferentes. A capa pode ser opcional; a tampa veda o cabeçote. A marcação identifica a região superior da ilustração."
+                : engineParts[selected].text}
+            </p>
           </div>
         </aside>
         <figure className="sheet-main">

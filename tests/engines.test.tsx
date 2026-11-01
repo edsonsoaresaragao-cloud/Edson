@@ -116,3 +116,58 @@ test("os 31 arquivos de vistas explodidas existem e não repetem a mesma imagem"
   }
   assert.equal(hashes.size, engines.length);
 });
+
+test("as especificações não misturam a potência do híbrido nem copiam o M264 para outras famílias", async () => {
+  const { getEngineSpecs } = await import("../src/lib/engine-specs");
+  const m264 = getEngineSpecs(engines.find((e) => e.family === "M264")!);
+  const m274 = getEngineSpecs(engines.find((e) => e.family === "M274")!);
+  const ap = getEngineSpecs(engines.find((e) => e.family === "AP 1.6")!);
+  const t200 = getEngineSpecs(engines.find((e) => e.family === "GSE T200")!);
+  assert.match(m264.fields.power.value, /258 cv/);
+  assert.match(m274.fields.power.value, /211 cv/);
+  assert.match(m274.fields.torque.value, /350 Nm/);
+  assert.doesNotMatch(m274.fields.power.value, /320/);
+  assert.equal(ap.fields.power.status, "pending");
+  assert.doesNotMatch(ap.fields.power.value, /258/);
+  assert.match(t200.fields.power.value, /125 cv.*130 cv/);
+  assert.match(t200.fields.torque.value, /200 Nm/);
+});
+
+test("os 24 componentes distinguem itens da versão e opcionais, sem GPF universal", async () => {
+  const { getEngineComponents } = await import("../src/lib/engine-specs");
+  const ap = getEngineComponents(engines.find((e) => e.family === "AP 1.6")!);
+  const m264 = getEngineComponents(engines.find((e) => e.family === "M264")!);
+  assert.deepEqual(
+    ap.map((c) => c.number),
+    Array.from({ length: 24 }, (_, i) => i + 1),
+  );
+  assert.equal(ap[15].status, "not-applicable");
+  assert.equal(ap[18].status, "not-applicable");
+  assert.notEqual(m264[15].status, "not-applicable");
+  assert.equal(m264[17].status, "variable");
+  assert.match(m264[17].note, /GPF.*não equivale a DPF/);
+});
+
+test("cada ficha oferece oito campos e vincula valores confirmados a fonte técnica", async () => {
+  const { getEngineSpecs, specLabels } =
+    await import("../src/lib/engine-specs");
+  const { EngineSpecificationPanel } =
+    await import("../src/components/engine-specification-panel");
+  let documented = 0;
+  for (const engine of engines) {
+    const specs = getEngineSpecs(engine);
+    assert.equal(Object.keys(specs.fields).length, 8);
+    if (specs.sources.length) documented++;
+    for (const value of Object.values(specs.fields))
+      if (value.status === "confirmed") {
+        assert.ok(value.source?.url);
+        assert.equal(new URL(value.source.url).protocol, "https:");
+      }
+    const html = renderToStaticMarkup(
+      createElement(EngineSpecificationPanel, { engine }),
+    );
+    for (const label of Object.values(specLabels))
+      assert.ok(html.includes(label), `${engine.family}: ${label}`);
+  }
+  assert.equal(documented, 13);
+});
