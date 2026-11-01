@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
+import { AlternatorExplorer } from "@/components/alternator-explorer";
 import { HvacExplorer } from "@/components/hvac-explorer";
 import { SuspensionExplorer } from "@/components/suspension-explorer";
 export const dynamic = "force-dynamic";
@@ -35,6 +36,7 @@ export default async function Category({
       <PageHeading title={c.name} description={c.description} />
       {slug === "suspensao" && <SuspensionExplorer />}
       {slug === "ar-condicionado" && <HvacExplorer />}
+      {slug === "alternador" && <AlternatorExplorer />}
       {slug === "motor-e-componentes-internos" && (
         <Link className="engine-entry card" href="/explodedview">
           <span className="eyebrow">NOVO / ATLAS DE MOTORES</span>
