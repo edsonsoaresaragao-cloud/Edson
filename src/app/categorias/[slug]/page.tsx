@@ -31,6 +31,17 @@ export default async function Category({
   return (
     <div className="container page-content">
       <PageHeading title={c.name} description={c.description} />
+      {slug === "motor-e-componentes-internos" && (
+        <Link className="engine-entry card" href="/explodedview">
+          <span className="eyebrow">NOVO / ATLAS DE MOTORES</span>
+          <h2>Motores em vista explodida ↗</h2>
+          <p>
+            Explore famílias nacionais e importadas, seus conjuntos e
+            componentes em um catálogo visual interativo.
+          </p>
+          <span className="button">Explorar motores</span>
+        </Link>
+      )}
       {c.children.map((child) => (
         <Link
           key={child.id}
