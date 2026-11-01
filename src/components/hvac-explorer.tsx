@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { hvacParts, initialHvacState } from "@/lib/hvac-parts";
 import type { HvacRenderer } from "@/lib/hvac-renderer";
@@ -96,6 +97,12 @@ export function HvacExplorer() {
             >
               Restaurar câmera
             </button>
+            <Link
+              className="compressor-entry"
+              href="/categorias/ar-condicionado/compressor"
+            >
+              Explorar compressor ↗
+            </Link>
           </div>
           <div className="suspension-stage">
             <div
