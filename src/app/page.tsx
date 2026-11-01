@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { RecentVideos } from "@/components/recent-videos";
+import { recentContentOrder } from "@/lib/video-presentation";
 import { EngineHero } from "@/components/engine-hero";
 import {
   ArrowRight,
@@ -24,8 +26,8 @@ export default async function Home() {
   const [videos, parts, diagnoses, articles, courses] = await Promise.all([
     db.content.findMany({
       where: { ...publicWhere, kind: "VIDEO" },
-      take: 3,
-      orderBy: { createdAt: "desc" },
+      take: 12,
+      orderBy: recentContentOrder,
     }),
     db.content.findMany({ where: { ...publicWhere, kind: "PART" }, take: 3 }),
     db.content.findMany({
@@ -125,7 +127,7 @@ export default async function Home() {
         <section className="section">
           <SectionTitle
             eyebrow="APERTE O PLAY. AMPLIE SEU REPERTÓRIO."
-            title="Na bancada: vídeos técnicos"
+            title="Novidades na bancada"
             href="/videos"
           />
           {!process.env.YOUTUBE_API_KEY && (
@@ -136,11 +138,19 @@ export default async function Home() {
             </p>
           )}
           {videos.length ? (
-            <div className="grid three">
-              {videos.map((v) => (
-                <ContentCard key={v.id} item={v} />
-              ))}
-            </div>
+            <RecentVideos
+              videos={videos.map((v) => ({
+                id: v.id,
+                slug: v.slug,
+                title: v.title,
+                summary: v.summary,
+                author: v.author,
+                imageUrl: v.imageUrl,
+                categories: v.categorySlugs,
+                duration: v.duration,
+                metadata: v.metadata,
+              }))}
+            />
           ) : (
             <Empty
               title="Uma biblioteca técnica está a caminho"

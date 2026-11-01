@@ -147,6 +147,7 @@ export async function syncYouTube(mode: "latest" | "backfill" = "latest") {
             v.snippet.thumbnails.high?.url ||
             v.snippet.thumbnails.default?.url ||
             "",
+          publishedAt: new Date(v.snippet.publishedAt),
           duration: v.contentDetails.duration,
           views: BigInt(v.statistics?.viewCount || "0"),
           externalAvailable:

@@ -77,6 +77,7 @@ test(
       });
       assert.ok(video.categorySlugs.includes("injecao-eletronica"));
       assert.equal(video.views, 10n);
+      assert.equal(video.publishedAt.toISOString(), "2026-01-01T00:00:00.000Z");
       await db.content.update({
         where: { id: video.id },
         data: {

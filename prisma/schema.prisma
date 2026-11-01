@@ -53,6 +53,7 @@ model Content {
  author String @default("Edson")
  imageUrl String @default("")
  sourceUrl String @default("")
+ publishedAt DateTime @default(now())
  youtubeId String? @unique
  channelId String?
  duration String?
@@ -64,6 +65,7 @@ model Content {
  updatedAt DateTime @updatedAt
  media Media[]
  @@index([kind,status,publishAt])
+ @@index([kind,status,publishedAt])
  @@index([brand,vehicleModel,year])
 }
 model Course {

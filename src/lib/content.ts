@@ -1,3 +1,4 @@
+import { recentContentOrder } from "./video-presentation";
 import { db } from "./db";
 import { normalize, searchTerms, kindPaths } from "./catalog";
 import type { Content } from "@prisma/client";
@@ -50,14 +51,14 @@ export async function searchContent({
     >`SELECT id FROM "Content" WHERE ${expanded} AND EXISTS (SELECT 1 FROM unnest(${tokens}::text[]) term WHERE public.content_search_text(title,summary,body,brand,"vehicleModel",tags) LIKE '%' || term || '%') OR (NOT ${expanded} AND NOT EXISTS (SELECT 1 FROM unnest(${tokens}::text[]) term WHERE public.content_search_text(title,summary,body,brand,"vehicleModel",tags) NOT LIKE '%' || term || '%'))`;
     data = await db.content.findMany({
       where: { ...where, id: { in: ids.map((i) => i.id) } },
-      orderBy: { createdAt: "desc" },
+      orderBy: recentContentOrder,
       skip: (page - 1) * 24,
       take: 25,
     });
   } else
     data = await db.content.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      orderBy: recentContentOrder,
       skip: (page - 1) * 24,
       take: 25,
     });

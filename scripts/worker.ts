@@ -1,3 +1,4 @@
+import { youtubeSyncMode } from "../src/lib/youtube-schedule";
 import "dotenv/config";
 import { db } from "../src/lib/db";
 import { syncYouTube } from "../src/lib/youtube";
@@ -215,14 +216,26 @@ async function loop() {
           const channel = await tx.channel.findUnique({
             where: { id: "UCkwom28UGBpkHFeTvOsLN8w" },
           });
-          const mode = channel?.nextPageToken ? "backfill" : "latest";
-          const interval =
-            mode === "backfill"
-              ? 60000
-              : Math.max(
-                  15,
-                  Number(process.env.YOUTUBE_SYNC_INTERVAL_MINUTES || 360),
-                ) * 60000;
+          const lastLatest = await tx.job.findFirst({
+            where: {
+              type: "YOUTUBE",
+              status: "DONE",
+              payload: { path: ["mode"], equals: "latest" },
+            },
+            orderBy: { createdAt: "desc" },
+          });
+          const mode = youtubeSyncMode(
+            !!channel?.nextPageToken,
+            lastLatest?.createdAt || null,
+            Date.now(),
+            Number(process.env.YOUTUBE_SYNC_INTERVAL_MINUTES || 360),
+          );
+          const interval = channel?.nextPageToken
+            ? 60000
+            : Math.max(
+                15,
+                Number(process.env.YOUTUBE_SYNC_INTERVAL_MINUTES || 360),
+              ) * 60000;
           if (
             !pending &&
             (!last || last.createdAt.getTime() < Date.now() - interval)
