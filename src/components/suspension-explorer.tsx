@@ -63,6 +63,25 @@ export function SuspensionExplorer() {
         </div>
         <span className="suspension-count">20 componentes</span>
       </div>
+      <div className="suspension-subsystems" aria-label="Explorar conjuntos">
+        <span>Explorar:</span>
+        {[
+          { name: "Módulo dianteiro", id: 1 },
+          { name: "Suspensão", id: 11 },
+          { name: "Transmissão e diferencial", id: 2 },
+          { name: "Sistema de freio", id: 9 },
+          { name: "Direção", id: 17 },
+        ].map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            aria-pressed={state.selected === item.id}
+            onClick={() => setState((s) => ({ ...s, selected: item.id }))}
+          >
+            {item.name}
+          </button>
+        ))}
+      </div>
       <div className="suspension-layout">
         <div>
           <div className="suspension-toolbar">

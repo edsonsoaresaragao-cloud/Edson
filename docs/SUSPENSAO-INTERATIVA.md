@@ -12,3 +12,9 @@ Inserido somente em `/categorias/suspensao`, acima dos filtros e vídeos existen
 Validação: testes de geometria finita nos 20 grupos, rotação disco/pinça, compressão, separação, limites dos controles e renderização HTML no servidor; TypeScript direcionado aos novos módulos. Sem validação visual de GPU/navegador nesta sessão. Build completo depende de geração do Prisma, cujo download está bloqueado no ambiente.
 
 Publicação: o push atualiza o código no GitHub; o Render exige **Manual Deploy → Deploy latest commit** porque o deploy automático está desativado.
+
+## Refinamento visual
+
+Carcaça de câmbio com perfil de revolução, flanges, nervuras e parafusos; agregado curvo com pontos de fixação; pinças arredondadas com pistões e mangueira; discos com duas pistas e canais de ventilação; bandejas com reforços, manga de eixo e assento de mola. As 20 etiquetas clicáveis possuem linhas projetadas a partir das peças e acompanham a câmera e o movimento. Os atalhos de conjunto selecionam seu componente principal, mantendo a descrição disponível.
+
+A organização dos atalhos toma como referência o painel enviado na conversa. A imagem original não foi adicionada aos arquivos: não havia um arquivo do anexo disponível no workspace. Estes elementos são uma interpretação procedural, não uma animação da fotografia. Novamente, a validação visual em navegador com GPU permanece pendente.

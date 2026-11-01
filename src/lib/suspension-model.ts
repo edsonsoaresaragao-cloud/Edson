@@ -92,14 +92,84 @@ export function buildSuspensionModel() {
     object.scale.y = delta.length();
     object.quaternion.setFromUnitVectors(up, delta.normalize());
   }
-  // Agregado e transmissão transversal, com abertura visual para o diferencial.
-  box(1, 4.1, 0.22, 0.3, 0, 0, -0.65);
-  box(1, 3.8, 0.22, 0.3, 0, 0, 0.65);
-  for (const side of [-1, 1]) box(1, 0.25, 0.22, 1.5, side * 1.75, 0, 0);
-  box(2, 1.25, 0.9, 1.05, 0, 0.75, -0.12);
-  cyl(2, 0.61, 0.4, 0.5, 0.75, -0.12).rotation.z = Math.PI / 2;
-  for (let i = 0; i < 6; i++)
-    box(2, 0.04, 0.72, 1.07, -0.5 + i * 0.18, 0.75, -0.12);
+  // Peças fundidas e estampadas com perfis curvos, flanges e fixações.
+  function tube(id: number, points: number[][], radius: number) {
+    return mesh(
+      id,
+      new T.TubeGeometry(
+        new T.CatmullRomCurve3(
+          points.map((p) => new T.Vector3(...(p as [number, number, number]))),
+        ),
+        48,
+        radius,
+        12,
+        false,
+      ),
+    );
+  }
+  for (const side of [-1, 1]) {
+    tube(
+      1,
+      [
+        [side * 0.12, 0, -0.62],
+        [side * 1.2, 0.04, -0.75],
+        [side * 1.85, 0.02, -0.45],
+        [side * 1.85, 0, 0.55],
+        [side * 1.3, 0, 0.72],
+        [side * 0.12, 0, 0.62],
+      ],
+      0.13,
+    );
+    for (const z of [-0.65, 0.65]) {
+      const flange = mesh(1, new T.TorusGeometry(0.19, 0.055, 10, 32));
+      flange.rotation.x = Math.PI / 2;
+      flange.position.set(side * 1.75, 0.05, z);
+      cyl(1, 0.095, 0.14, side * 1.75, 0.04, z);
+    }
+    tube(
+      1,
+      [
+        [side * 0.5, 0, -0.62],
+        [side * 0.85, -0.06, 0],
+        [side * 1.35, 0, 0.65],
+      ],
+      0.095,
+    );
+  }
+  const profile = [
+    [-0.7, 0.23],
+    [-0.65, 0.4],
+    [-0.45, 0.48],
+    [-0.12, 0.5],
+    [0.2, 0.55],
+    [0.45, 0.62],
+    [0.65, 0.58],
+    [0.8, 0.42],
+  ].map(([y, r]) => new T.Vector2(r, y));
+  const housing = mesh(2, new T.LatheGeometry(profile, 48));
+  housing.rotation.z = -Math.PI / 2;
+  housing.position.set(0, 0.8, -0.12);
+  for (let i = 0; i < 6; i++) {
+    const ring = mesh(2, new T.TorusGeometry(0.46 + i * 0.018, 0.025, 8, 48));
+    ring.rotation.y = Math.PI / 2;
+    ring.position.set(-0.58 + i * 0.21, 0.8, -0.12);
+  }
+  for (let i = 0; i < 12; i++) {
+    const a = (i * Math.PI) / 6;
+    const rib = tube(
+      2,
+      [
+        [-0.6, 0.8 + Math.cos(a) * 0.4, -0.12 + Math.sin(a) * 0.4],
+        [0, 0.8 + Math.cos(a) * 0.53, -0.12 + Math.sin(a) * 0.53],
+        [0.7, 0.8 + Math.cos(a) * 0.57, -0.12 + Math.sin(a) * 0.57],
+      ],
+      0.025,
+    );
+    rib.name = "Nervura da carcaça";
+    const bolt = mesh(2, new T.CylinderGeometry(0.045, 0.045, 0.09, 6));
+    bolt.rotation.z = Math.PI / 2;
+    bolt.position.set(0.72, 0.8 + Math.cos(a) * 0.5, -0.12 + Math.sin(a) * 0.5);
+  }
   const differential = cyl(3, 0.3, 0.72, 0, 0.57, 0.3);
   differential.rotation.z = Math.PI / 2;
   for (let i = 0; i < 18; i++) {
@@ -170,7 +240,14 @@ export function buildSuspensionModel() {
     const disc = new T.Group();
     disc.name = `disc-${side}`;
     groups[7].add(disc);
-    const rotor = cyl(8, 0.62, 0.095, 0, 0, 0, disc);
+    const rotor = cyl(8, 0.62, 0.035, -0.035, 0, 0, disc);
+    cyl(8, 0.62, 0.035, 0.035, 0, 0, disc).rotation.z = Math.PI / 2;
+    for (let v = 0; v < 32; v++) {
+      const a = (v * Math.PI) / 16;
+      const vane = mesh(8, new T.BoxGeometry(0.06, 0.19, 0.018), mats[7], disc);
+      vane.position.set(0, Math.cos(a) * 0.47, Math.sin(a) * 0.47);
+      vane.rotation.x = a;
+    }
     rotor.rotation.z = Math.PI / 2;
     const holesMat = material(8, 0x263a49, 0.6, 0.35);
     for (let i = 0; i < 20; i++) {
@@ -189,11 +266,32 @@ export function buildSuspensionModel() {
     groups[8].add(caliper);
     const cp = mesh(
       9,
-      new RoundedBoxGeometry(0.28, 0.48, 0.29, 3, 0.06),
+      new RoundedBoxGeometry(0.34, 0.52, 0.32, 5, 0.12),
       mats[8],
       caliper,
     );
     cp.position.z = 0.48;
+    for (const y of [-0.13, 0.13]) {
+      const piston = cyl(9, 0.105, 0.36, 0, y, 0.46, caliper);
+      piston.rotation.z = Math.PI / 2;
+    }
+    const hose = mesh(
+      9,
+      new T.TubeGeometry(
+        new T.CatmullRomCurve3([
+          new T.Vector3(0, 0.2, 0.5),
+          new T.Vector3(-0.1, 0.4, 0.4),
+          new T.Vector3(-0.2, 0.5, 0.25),
+        ]),
+        16,
+        0.018,
+        8,
+        false,
+      ),
+      material(9, 0x20252b, 0.1, 0.7),
+      caliper,
+    );
+    hose.name = "Mangueira de freio";
     const support = new T.Group();
     groups[9].add(support);
     const bracket = mesh(
@@ -248,6 +346,40 @@ export function buildSuspensionModel() {
     spring.name = `spring-${side}`;
     const mount = cyl(13, 0.31, 0.12, side * 2.05, 2.65, 0);
     const arms = [segment(14, 0.075), segment(14, 0.075)];
+    for (const arm of arms) {
+      const plate = new T.Mesh(
+        new RoundedBoxGeometry(0.19, 1, 0.11, 3, 0.04),
+        mats[13],
+      );
+      plate.castShadow = true;
+      arm.add(plate);
+    }
+    const seat = mesh(
+      11,
+      new T.CylinderGeometry(0.3, 0.28, 0.06, 32),
+      mats[10],
+      damper,
+    );
+    seat.position.y = 0.48;
+    const knuckle = mesh(
+      7,
+      new T.CapsuleGeometry(0.11, 0.35, 6, 16),
+      mats[6],
+      hub,
+    );
+    knuckle.position.set(-side * 0.13, 0.15, 0);
+    for (let i = 0; i < 3; i++) {
+      const nut = cyl(
+        13,
+        0.035,
+        0.07,
+        Math.cos((i * Math.PI * 2) / 3) * 0.22,
+        0.09,
+        Math.sin((i * Math.PI * 2) / 3) * 0.22,
+        mount,
+      );
+      nut.name = "Fixação superior";
+    }
     const ball = mesh(15, new T.SphereGeometry(0.13, 16, 12));
     const tie = segment(16, 0.038),
       link = segment(19, 0.026);

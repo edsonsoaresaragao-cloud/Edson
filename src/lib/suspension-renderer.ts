@@ -2,7 +2,7 @@ import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { buildSuspensionModel } from "./suspension-model";
-import type { SuspensionState } from "./suspension-parts";
+import { suspensionParts, type SuspensionState } from "./suspension-parts";
 
 export function createSuspensionRenderer(
   host: HTMLDivElement,
@@ -31,7 +31,7 @@ export function createSuspensionRenderer(
   controls.touches.ONE = T.TOUCH.ROTATE;
   renderer.domElement.style.touchAction = "pan-y";
   function resetView() {
-    camera.position.set(7, 5, 10);
+    camera.position.set(6.5, 4.7, 9.5);
     controls.target.set(0, 1.4, 0);
     controls.update();
   }
@@ -64,6 +64,49 @@ export function createSuspensionRenderer(
   }
   const model = buildSuspensionModel();
   scene.add(model.group);
+  const overlay = document.createElement("div");
+  overlay.className = "suspension-annotations";
+  const lines = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  overlay.append(lines);
+  const labels = suspensionParts.map((part) => {
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    lines.append(line);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.title = part.name;
+    button.innerText = `${part.id} · ${part.name}`;
+    button.onclick = () => onSelect(part.id);
+    overlay.append(button);
+    return { line, button, part };
+  });
+  host.append(overlay);
+  const anchor = new T.Vector3(),
+    bounds = new T.Box3();
+  function annotate() {
+    const width = host.clientWidth,
+      height = host.clientHeight;
+    labels.forEach(({ line, button, part }, i) => {
+      const object = model.group.children[i].children[0];
+      bounds.setFromObject(object);
+      bounds.getCenter(anchor);
+      anchor.project(camera);
+      const labelWidth = width < 550 ? 80 : 140;
+      const left = i < 10,
+        x = left ? 8 : width - labelWidth - 8,
+        y = 48 + ((i % 10) * (height - 90)) / 10;
+      button.style.left = `${x}px`;
+      button.style.top = `${y}px`;
+      button.dataset.selected = String(state.selected === part.id);
+      line.setAttribute(
+        "x1",
+        String(left ? labelWidth + 8 : width - labelWidth - 8),
+      );
+      line.setAttribute("y1", String(y + 12));
+      line.setAttribute("x2", String(((anchor.x + 1) * width) / 2));
+      line.setAttribute("y2", String(((1 - anchor.y) * height) / 2));
+      line.setAttribute("opacity", state.selected === part.id ? "1" : ".22");
+    });
+  }
   let state = { ...initial },
     paused = false,
     disposed = false,
@@ -76,6 +119,7 @@ export function createSuspensionRenderer(
     if (disposed) return;
     model.update(time, state);
     renderer.render(scene, camera);
+    annotate();
   }
   function tick(now: number) {
     if (disposed) return;
@@ -161,6 +205,7 @@ export function createSuspensionRenderer(
     reflection.dispose();
     renderer.dispose();
     renderer.domElement.remove();
+    overlay.remove();
   }
   try {
     resize();
