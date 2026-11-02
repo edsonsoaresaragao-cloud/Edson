@@ -1,3 +1,5 @@
+import { confirmedPixBeneficiary } from "./pix-beneficiary";
+
 export type PixBeneficiary = { phone: string; name: string; city: string };
 /** Brazilian mobile Pix keys use E.164 (+55 + DDD + nine-digit mobile). */
 export function normalizePixPhone(input: string) {
@@ -60,6 +62,8 @@ export function getPixBeneficiary(
   const phone = env.PIX_PHONE?.trim(),
     name = env.PIX_BENEFICIARY?.trim(),
     city = env.PIX_CITY?.trim();
+  if (!phone && !name && !city) return { ...confirmedPixBeneficiary };
+  // An environment override must identify a complete recipient; never mix accounts.
   if (!phone || !name || !city) return null;
   try {
     const result = { phone: normalizePixPhone(phone), name, city };

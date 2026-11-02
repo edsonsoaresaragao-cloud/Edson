@@ -116,3 +116,34 @@ test("QR é gerado localmente e HTML oferece chave, código e beneficiário sem 
   assert.ok(html.includes('aria-live="polite"'));
   assert.ok(!html.includes("Pagamento confirmado"));
 });
+
+test("destinatário confirmado ativa a página sem exigir variáveis no Render", async () => {
+  const actual = getPixBeneficiary({});
+  assert.deepEqual(actual, {
+    phone: "+5585981408606",
+    name: "Edson Aragão",
+    city: "Fortaleza",
+  });
+  assert.deepEqual(
+    getPixBeneficiary({ PIX_PHONE: "", PIX_BENEFICIARY: " ", PIX_CITY: "" }),
+    actual,
+  );
+  const payload = createPixPayload(actual!);
+  const data = fields(payload);
+  assert.equal(fields(data.get("26")!).get("01"), "+5585981408606");
+  assert.equal(data.get("59"), "EDSON ARAGAO");
+  assert.equal(data.get("60"), "FORTALEZA");
+  assert.equal(data.get("63"), pixCrc(payload.slice(0, -4)));
+  const qrDataUrl = await QRCode.toDataURL(payload, {
+    errorCorrectionLevel: "M",
+    margin: 4,
+    width: 560,
+  });
+  const html = renderToStaticMarkup(
+    createElement(PixDonation, { beneficiary: actual!, payload, qrDataUrl }),
+  );
+  assert.ok(html.includes("Edson Aragão"));
+  assert.ok(html.includes("+5585981408606"));
+  assert.ok(html.includes(payload));
+  assert.ok(qrDataUrl.startsWith("data:image/png;base64,"));
+});
