@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
   ignitionParts,
@@ -141,6 +142,9 @@ export function IgnitionExplorer() {
             >
               Restaurar câmera
             </button>
+            <Link className="compressor-entry" href="/categorias/ignicao/atual">
+              Explorar ignição atual ↗
+            </Link>
           </div>
           <div className="suspension-stage">
             <div
