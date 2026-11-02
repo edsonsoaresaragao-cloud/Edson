@@ -6,6 +6,7 @@ import {
   MessageCircle,
   UserRound,
   Menu,
+  Heart,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/forms";
 import "./globals.css";
@@ -27,6 +28,7 @@ const nav = [
   ["/diagnostico", "Diagnóstico"],
   ["/artigos", "Conteúdos"],
   ["/academy", "Academy"],
+  ["/apoiar", "Doar via Pix"],
 ];
 export default function RootLayout({
   children,
@@ -88,7 +90,12 @@ export default function RootLayout({
             </Link>
             <nav className="desktop-nav" aria-label="Principal">
               {nav.map(([href, label]) => (
-                <Link key={href} href={href}>
+                <Link
+                  key={href}
+                  href={href}
+                  className={href === "/apoiar" ? "nav-donate" : undefined}
+                >
+                  {href === "/apoiar" && <Heart size={14} aria-hidden="true" />}
                   {label}
                   {label === "Academy" && <span className="new-dot" />}
                 </Link>
@@ -105,7 +112,14 @@ export default function RootLayout({
                 </summary>
                 <nav>
                   {nav.map(([href, label]) => (
-                    <Link key={href} href={href}>
+                    <Link
+                      key={href}
+                      href={href}
+                      className={href === "/apoiar" ? "nav-donate" : undefined}
+                    >
+                      {href === "/apoiar" && (
+                        <Heart size={14} aria-hidden="true" />
+                      )}
                       {label}
                     </Link>
                   ))}
