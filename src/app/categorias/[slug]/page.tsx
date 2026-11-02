@@ -11,6 +11,7 @@ import { CoolingExplorer } from "@/components/cooling-explorer";
 import { AlternatorExplorer } from "@/components/alternator-explorer";
 import { HvacExplorer } from "@/components/hvac-explorer";
 import { SuspensionExplorer } from "@/components/suspension-explorer";
+import { SensorActuatorCatalog } from "@/components/sensor-actuator-catalog";
 export const dynamic = "force-dynamic";
 export default async function Category({
   params,
@@ -39,6 +40,7 @@ export default async function Category({
   return (
     <div className="container page-content">
       <PageHeading title={c.name} description={c.description} />
+      {slug === "sensores-e-atuadores" && <SensorActuatorCatalog />}
       {slug === "suspensao" && <SuspensionExplorer />}
       {slug === "ar-condicionado" && <HvacExplorer />}
       {slug === "alternador" && <AlternatorExplorer />}
@@ -67,6 +69,9 @@ export default async function Category({
           {child.name}
         </Link>
       ))}
+      {slug === "sensores-e-atuadores" && (
+        <h2>Conteúdos e vídeos relacionados</h2>
+      )}
       <form className="filters">
         <label>
           Pesquisar
