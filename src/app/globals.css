@@ -2732,3 +2732,22 @@ html[data-theme="dark"] .sensor-actuator-catalog {
   .component-reference-visual { height: 240px; }
   .component-reference-illustration { width: 240px; }
 }
+
+.parts-reference-area { margin: 0 0 24px; }
+.parts-reference-area > h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.parts-reference-area > p { font-size: .8rem; line-height: 1.7; }
+.parts-reference-card { display: grid; grid-template-columns: 250px minmax(0, 1fr); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg); margin-top: 16px; }
+.parts-reference-card .component-reference { border-bottom: 0; border-right: 1px solid var(--border); }
+.parts-reference-card > div { padding: 22px; }
+.parts-reference-label { color: var(--parts-accent); font-size: .65rem; font-weight: 700; letter-spacing: .06em; }
+.parts-reference-card h4 { font-size: 1.2rem; font-weight: 700; margin: 12px 0; }
+.parts-reference-card p { font-size: .8rem; line-height: 1.7; margin-bottom: 12px; }
+.parts-reference-card p.parts-fitment-note { font-size: .75rem; }
+.parts-reference-links { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+.parts-reference-links a { color: var(--parts-accent); font-size: .75rem; font-weight: 700; min-height: 36px; display: inline-flex; align-items: center; }
+.parts-reference-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 640px) {
+  .parts-reference-card { grid-template-columns: minmax(0, 1fr); }
+  .parts-reference-card .component-reference { border-right: 0; border-bottom: 1px solid var(--border); }
+  .parts-reference-card > div { padding: 18px; }
+}

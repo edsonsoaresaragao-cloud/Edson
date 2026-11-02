@@ -53,6 +53,7 @@ export type PartsResult = {
   page: number;
   query: string;
   cached: boolean;
+  publicSearch?: boolean;
 };
 export function normalizePartText(value: string) {
   return value
@@ -63,13 +64,19 @@ export function normalizePartText(value: string) {
     .trim();
 }
 export function buildPartsQuery(q: PartsQuery) {
-  return [q.q, q.code, q.brand, q.model, q.year, q.engine]
+  return [correctPartName(q.q), q.code, q.brand, q.model, q.year, q.engine]
     .filter(Boolean)
     .join(" ")
     .replace(/\s+/g, " ")
     .trim();
 }
-/** Public HTTPS targets only. No server-side fetching of merchant or image URLs. */
+export function correctPartName(value: string) {
+  return value.replace(
+    /\b(senso|senor|sensro)\b(?=\s+(maf|map|ckp|cmp|tps|iat|ect|abs|app|tpms)\b)/gi,
+    "sensor",
+  );
+}
+/** Public HTTPS targets only. Merchant fetches additionally require a fixed allowlist. */
 export function publicHttps(value: unknown): string | null {
   if (typeof value !== "string" || value.length > 3000) return null;
   try {
@@ -124,7 +131,7 @@ export function isProductPage(url: string, structured = false) {
     return false;
   if (
     /^\/$/.test(path) ||
-    /\/(search|busca|buscar|lista|category|categorias|blog|noticias|artigos)(\/|$)/i.test(
+    /\/(search|busca|buscar|lista|category|categorias|blog|noticias|artigos|login|captcha|challenge)(\/|$)/i.test(
       path,
     ) ||
     ["q", "search", "busca", "s"].some((k) => u.searchParams.has(k))
@@ -133,7 +140,8 @@ export function isProductPage(url: string, structured = false) {
   if (structured) return true;
   return (
     /\/(dp|gp\/product|produto[s]?|product[s]?|item|p)\//i.test(path) ||
-    /\/(MLB-?\d+|[^/]+\/p)(\/|$)/i.test(path) ||
+    /\/MLB-?\d+(?:[-/]|$)/i.test(path) ||
+    /\/[^/]+\/p(?:\/|$)/i.test(path) ||
     /\/produto\.aspx$/i.test(path)
   );
 }

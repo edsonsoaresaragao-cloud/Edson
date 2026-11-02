@@ -36,6 +36,11 @@ export default function Terms() {
           antes de comprar. A pesquisa não garante cobertura de todas as lojas
           da internet.
         </p>
+        <p>
+          Referências do catálogo técnico são identificadas separadamente dos
+          anúncios. Fotos de referência e ilustrações didáticas não comprovam
+          aplicação no veículo, preço ou estoque de uma loja.
+        </p>
         <h2>Disponibilidade e contato</h2>
         <p>
           Conteúdos externos podem ser removidos pelos titulares ou ficar

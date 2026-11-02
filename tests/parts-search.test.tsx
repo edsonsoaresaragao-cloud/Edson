@@ -22,7 +22,10 @@ import {
 } from "../src/lib/parts/service";
 import { createPartsSearchHandler } from "../src/lib/parts/handler";
 import { PartsMarketplace } from "../src/components/parts-marketplace";
-const env = { PARTS_SERPAPI_KEY: "private-test-key" },
+const env = {
+    PARTS_SERPAPI_KEY: "private-test-key",
+    PARTS_PUBLIC_SEARCH_ENABLED: "false",
+  },
   q = partsQuerySchema.parse({
     q: "Pastilha de freio",
     code: "TEST-123",
@@ -122,7 +125,7 @@ test("normalização preserva foto, descrição, origem e distinção entre anú
     "https://images.test-store.com.br/sensor.jpg",
   );
 });
-test("sem API não há ofertas fabricadas nem requisições externas", async () => {
+test("busca pública desativada explicitamente e sem API não gera ofertas nem requisições", async () => {
   let calls = 0;
   const service = createPartsSearchService({
     fetcher: async () => {
@@ -130,7 +133,9 @@ test("sem API não há ofertas fabricadas nem requisições externas", async () 
       throw new Error("unexpected");
     },
   });
-  const result = await service.search(q, {});
+  const result = await service.search(q, {
+    PARTS_PUBLIC_SEARCH_ENABLED: "false",
+  });
   assert.equal(result.status, "not_configured");
   assert.deepEqual(result.offers, []);
   assert.equal(calls, 0);

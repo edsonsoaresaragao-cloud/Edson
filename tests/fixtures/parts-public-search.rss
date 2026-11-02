@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture. These URLs are never production catalog entries. -->
+<rss version="2.0"><channel><title>Busca de teste</title>
+<item><title>Sensor MAF para Chevrolet — exemplo de teste</title><link>https://www.karhub.com.br/sensor-maf-fixture/p?utm_source=feed</link><description><![CDATA[<b>Medidor de massa de ar</b> com conector. Informação de teste; conferir aplicação.]]></description></item>
+<item><title>Sensor MAF — outra loja de teste</title><link>https://loja.test-store.com.br/produto/sensor-maf</link><description>Sensor MAF de referência na fixture.</description><enclosure url="https://images.test-store.com.br/maf.jpg" type="image/jpeg"/></item>
+<item><title>Sensor MAF — busca de teste</title><link>https://www.karhub.com.br/busca?q=sensor+maf</link><description>Categoria.</description></item>
+<item><title>Sensor MAF — artigo</title><link>https://oficina.test-store.com.br/blog/sensor-maf</link><description>Como inspecionar.</description></item>
+<item><title>Sensor MAP</title><link>https://loja.test-store.com.br/produto/sensor-map</link><description>Outro sensor que não corresponde ao termo MAF.</description></item>
+<item><title>Sensor MAF — URL insegura</title><link>https://127.0.0.1/produto/sensor-maf</link><description>Não carregar.</description></item>
+</channel></rss>

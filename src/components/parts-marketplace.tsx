@@ -1,5 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { ComponentReferenceImage } from "./component-reference-image";
+import { matchingPartReferences } from "@/lib/parts/references";
 import {
   Search,
   ArrowUpRight,
@@ -11,6 +14,7 @@ import {
   partsQuerySchema,
   buildPartsQuery,
   externalPartsSearches,
+  correctPartName,
   type PartsQuery,
   type PartsResult,
   type Offer,
@@ -177,6 +181,7 @@ export function PartsMarketplace({
     : [draft.q, draft.code, draft.brand, draft.model, draft.year, draft.engine]
         .filter(Boolean)
         .join(" ");
+  const references = active ? matchingPartReferences(active) : [];
   const stores = Array.from(
     new Set(data?.offers.map((o) => o.store) || []),
   ).sort();
@@ -326,6 +331,55 @@ export function PartsMarketplace({
         ))}
       </div>
       <div ref={results} className="parts-offers-area" aria-busy={busy}>
+        {active && correctPartName(active.q) !== active.q && (
+          <p className="parts-fitment-note">
+            Pesquisando por “{correctPartName(active.q)}” com os dados do
+            veículo informado.
+          </p>
+        )}
+        {references.length > 0 && (busy || !data?.offers.length) && (
+          <div className="parts-reference-area">
+            <h3>Referência da peça pesquisada</h3>
+            <p>
+              Identificação técnica para ajudar na pesquisa. Esta ficha não é um
+              anúncio e não confirma aplicação no veículo informado.
+            </p>
+            {references.map((item) => (
+              <article className="parts-reference-card" key={item.id}>
+                <ComponentReferenceImage item={item} />
+                <div>
+                  <span className="parts-reference-label">
+                    CATÁLOGO TÉCNICO · {item.system}
+                  </span>
+                  <h4>{item.name}</h4>
+                  <p>{item.function}</p>
+                  <p>
+                    <strong>Inspeção básica:</strong> {item.inspection}
+                  </p>
+                  <p className="parts-fitment-note">
+                    Confirme código, ano, motor e conectores com o vendedor.
+                    Preço e estoque não foram consultados nesta ficha.
+                  </p>
+                  <div className="parts-reference-links">
+                    <a
+                      href={externalPartsSearches(searchText)[0].url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                    >
+                      Buscar esta peça no Mercado Livre ↗
+                    </a>
+                    <Link
+                      href="/categorias/sensores-e-atuadores"
+                      prefetch={false}
+                    >
+                      Ver catálogo técnico →
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
         {busy && (
           <div className="parts-search-status" role="status">
             <Search size={24} />
@@ -354,14 +408,14 @@ export function PartsMarketplace({
               <div>
                 <h3>
                   {data.status === "not_configured"
-                    ? "Continue sua pesquisa nas lojas"
+                    ? "Continue a pesquisa nas lojas abaixo"
                     : data.status === "unavailable"
                       ? "As fontes estão indisponíveis no momento"
                       : `${data.offers.length} ofertas nesta página`}
                 </h3>
                 <p>
                   {data.status === "not_configured"
-                    ? "A busca integrada ainda não está ativa. Os atalhos abaixo abrem sua pesquisa nos sites indicados."
+                    ? "Não recebemos anúncios nesta consulta. A referência técnica e os links de pesquisa continuam disponíveis."
                     : data.status === "unavailable"
                       ? "Você pode tentar novamente ou abrir a mesma pesquisa nos sites abaixo."
                       : `Pesquisa: ${data.query}`}
@@ -401,6 +455,13 @@ export function PartsMarketplace({
               <p className="parts-fitment-note">
                 Exibindo as fontes que responderam; parte da consulta está
                 indisponível.
+              </p>
+            )}
+            {data.publicSearch && data.offers.length > 0 && (
+              <p className="parts-fitment-note">
+                Produtos encontrados em páginas públicas. Fotos e preços
+                aparecem quando informados pelas fontes; confirme os dados na
+                loja.
               </p>
             )}
             {data.offers.length > 0 && (

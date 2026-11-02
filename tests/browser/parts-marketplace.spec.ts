@@ -1,5 +1,8 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { readFileSync } from "node:fs";
+import { createPartsSearchService } from "../../src/lib/parts/service";
+import { createPartsSearchHandler } from "../../src/lib/parts/handler";
 import fixture from "../fixtures/parts-search.json" with { type: "json" };
 import {
   partsQuerySchema,
@@ -34,6 +37,7 @@ function result(overrides: Partial<PartsResult> = {}): PartsResult {
   };
 }
 test.beforeEach(async ({ page }) => {
+  await page.route("https://images.openai.com/**", (route) => route.abort());
   await page.route("https://images.test-store.com.br/**", (route) =>
     route.fulfill({
       status: 200,
@@ -120,31 +124,134 @@ test("pesquisa, ordenação, filtros, paginação e acessibilidade", async ({
   );
   await expect(page).not.toHaveURL(/buy=/);
 });
-test("sem API mostra pesquisa externa e nunca cartões fictícios", async ({
+test("falha das fontes mantém referência visual MAF e busca completa nas lojas", async ({
   page,
-}) => {
-  await page.route("**/api/parts-search?**", (route) =>
-    route.fulfill({
+}, info) => {
+  const completed = Promise.withResolvers<void>();
+  await page.route("**/api/parts-search?**", async (route) => {
+    await completed.promise;
+    return route.fulfill({
       status: 503,
       json: result({
-        status: "not_configured",
+        status: "unavailable",
+        publicSearch: true,
         offers: [],
         sources: [],
         hasNext: false,
       }),
-    }),
-  );
+    });
+  });
   await page.goto(path);
   const root = page.locator(".parts-marketplace");
-  await root.getByLabel("Peça ou código para pesquisar").fill("Bobina");
+  await root.getByLabel("Peça ou código para pesquisar").fill("senso maf");
+  await root.getByLabel("Marca do veículo").fill("chevrolet");
+  await root.getByLabel("Modelo", { exact: true }).fill("onix");
+  await root.getByLabel("Ano", { exact: true }).fill("2022");
+  await root.getByLabel("Motor / versão").fill("1.0");
   await root.getByRole("button", { name: "Buscar ofertas" }).click();
+  await expect(root.locator(".parts-reference-card")).toHaveCount(1);
   await expect(
-    root.getByText("A busca integrada ainda não está ativa.", { exact: false }),
+    root.getByRole("heading", { name: "Sensor MAF", exact: true }),
+  ).toBeVisible();
+  await expect(
+    root.getByText("Esta ficha não é um anúncio", { exact: false }),
+  ).toBeVisible();
+  completed.resolve();
+  await expect(
+    root.getByRole("heading", {
+      name: "As fontes estão indisponíveis no momento",
+    }),
   ).toBeVisible();
   await expect(root.locator(".parts-offer")).toHaveCount(0);
   await expect(
-    root.getByRole("link", { name: "Mercado Livre" }),
-  ).toHaveAttribute("href", /Bobina/);
+    root.getByRole("link", { name: "Mercado Livre", exact: true }),
+  ).toHaveAttribute("href", /sensor-maf-chevrolet-onix-2022-1.0/);
+  await expect(root.locator(".parts-reference-card figcaption")).toHaveText(
+    "Ilustração didática gerada",
+  );
+  await expect(
+    root.getByRole("link", { name: "Buscar esta peça no Mercado Livre" }),
+  ).toHaveAttribute("href", /sensor-maf-chevrolet-onix-2022-1.0/);
+  const accessibility = await new AxeBuilder({ page })
+    .include(".parts-marketplace")
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .analyze();
+  expect(
+    accessibility.violations.map((violation) => ({
+      id: violation.id,
+      nodes: violation.nodes.map((node) => node.target),
+    })),
+  ).toEqual([]);
+  await page.screenshot({
+    path: `test-results/parts-maf-reference-${info.project.name}.png`,
+    fullPage: true,
+  });
+  await root.getByRole("button", { name: "Limpar busca de ofertas" }).click();
+  await expect(root.locator(".parts-reference-card")).toHaveCount(0);
+});
+
+test("consulta pública sem chave atravessa serviço, handler e interface", async ({
+  page,
+}, info) => {
+  const rss = readFileSync("tests/fixtures/parts-public-search.rss", "utf8");
+  const html = readFileSync("tests/fixtures/parts-public-search.html", "utf8");
+  const product = readFileSync(
+    "tests/fixtures/parts-merchant-product.html",
+    "utf8",
+  );
+  const service = createPartsSearchService({
+    fetcher: async (input) => {
+      const host = new URL(String(input)).hostname;
+      if (host === "www.bing.com") return new Response(rss);
+      if (host === "html.duckduckgo.com") return new Response(html);
+      if (host === "www.karhub.com.br")
+        return new Response(product, {
+          headers: { "content-type": "text/html" },
+        });
+      throw new Error("unexpected fixture destination");
+    },
+  });
+  const handler = createPartsSearchHandler({
+    search: (query) => service.search(query, {}),
+  });
+  await page.route("**/api/parts-search?**", async (route) => {
+    const response = await handler(new Request(route.request().url()));
+    return route.fulfill({
+      status: response.status,
+      contentType: "application/json",
+      body: await response.text(),
+    });
+  });
+  await page.goto(path);
+  const root = page.locator(".parts-marketplace");
+  await root.getByLabel("Peça ou código para pesquisar").fill("senso maf");
+  await root.getByLabel("Marca do veículo").fill("chevrolet");
+  await root.getByLabel("Modelo", { exact: true }).fill("onix");
+  await root.getByLabel("Ano", { exact: true }).fill("2022");
+  await root.getByLabel("Motor / versão").fill("1.0");
+  await root.getByRole("button", { name: "Buscar ofertas" }).click();
+  await expect(root.locator(".parts-offer")).toHaveCount(2);
+  await expect(root.locator(".parts-offer").first()).toContainText("R$ 249,90");
+  await expect(root.locator(".parts-source-list")).toContainText(
+    "Bing · páginas públicas",
+  );
+  await expect(
+    root.getByText("Pesquisando por “sensor maf”", { exact: false }),
+  ).toBeVisible();
+  await expect(
+    root
+      .locator(".parts-offer")
+      .first()
+      .getByRole("link", { name: "Ver anúncio na loja" }),
+  ).toHaveAttribute("href", "https://www.karhub.com.br/sensor-maf-fixture/p");
+  await expect(
+    root.locator(".parts-offer").first().locator("img"),
+  ).toBeVisible();
+  await expect(root.locator(".parts-reference-card")).toHaveCount(0);
+  await page.screenshot({
+    path: `test-results/parts-maf-public-${info.project.name}.png`,
+    fullPage: true,
+  });
 });
 test("consulta antiga não substitui a pesquisa mais recente", async ({
   page,

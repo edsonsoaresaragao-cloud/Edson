@@ -44,11 +44,7 @@ const service = createPartsSearchService({
 });
 export const GET = createPartsSearchHandler({
   async guard() {
-    if (
-      process.env.PARTS_SERPAPI_KEY?.trim() ||
-      process.env.PARTS_BRAVE_API_KEY?.trim()
-    )
-      await rateLimit("parts:search:minute", 120, 60);
+    await rateLimit("parts:search:minute", 60, 60);
   },
   search: (q) => service.search(q, process.env),
 });

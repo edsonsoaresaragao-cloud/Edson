@@ -26,6 +26,7 @@ export type Provider = {
   label: string;
   url: URL;
   headers: Record<string, string>;
+  format?: "json" | "rss" | "html";
 };
 export type ProviderPage = { offers: Offer[]; hasNext: boolean };
 export function providerJobs(
@@ -33,8 +34,12 @@ export function providerJobs(
   page: number,
   env: Record<string, string | undefined>,
 ): Provider[] {
-  const serp = env.PARTS_SERPAPI_KEY?.trim(),
-    brave = env.PARTS_BRAVE_API_KEY?.trim();
+  const serp = (
+      env.PARTS_SERPAPI_KEY ||
+      env.SERPAPI_API_KEY ||
+      env.SERPAPI_KEY
+    )?.trim(),
+    brave = (env.PARTS_BRAVE_API_KEY || env.BRAVE_SEARCH_API_KEY)?.trim();
   const jobs: Provider[] = [];
   if (serp) {
     const url = new URL("https://serpapi.com/search.json");
@@ -90,7 +95,39 @@ export function providerJobs(
       headers: { accept: "application/json" },
     });
   }
-  return jobs;
+  return jobs.length ? jobs : publicProviderJobs(query, page, env);
+}
+export function publicProviderJobs(
+  query: string,
+  page: number,
+  env: Record<string, string | undefined>,
+): Provider[] {
+  if (env.PARTS_PUBLIC_SEARCH_ENABLED === "false") return [];
+  const bing = new URL("https://www.bing.com/search");
+  bing.searchParams.set("q", query + " comprar peça automotiva");
+  bing.searchParams.set("format", "rss");
+  bing.searchParams.set("mkt", "pt-BR");
+  bing.searchParams.set("first", String((page - 1) * 10 + 1));
+  const duck = new URL("https://html.duckduckgo.com/html/");
+  duck.searchParams.set("q", query + " comprar peça automotiva");
+  duck.searchParams.set("kl", "br-pt");
+  if (page > 1) duck.searchParams.set("s", String((page - 1) * 30));
+  return [
+    {
+      id: "public-bing",
+      label: "Bing · páginas públicas",
+      url: bing,
+      headers: { accept: "application/rss+xml, application/xml, text/xml" },
+      format: "rss",
+    },
+    {
+      id: "public-duckduckgo",
+      label: "DuckDuckGo · páginas públicas",
+      url: duck,
+      headers: { accept: "text/html" },
+      format: "html",
+    },
+  ];
 }
 export function offerFromRow(
   value: unknown,

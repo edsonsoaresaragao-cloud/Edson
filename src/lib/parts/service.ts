@@ -8,11 +8,14 @@ import {
 } from "./catalog";
 import {
   providerJobs,
+  publicProviderJobs,
   parseProviderPage,
   mergeOffers,
   type Provider,
 } from "./providers";
-export class PartsQuotaError extends Error {}
+import { parsePublicSearch, enrichPublicOffers } from "./public-search";
+import { PartsQuotaError, readPartsResponse } from "./http";
+export { PartsQuotaError } from "./http";
 export function boundedSetting(
   value: string | undefined,
   fallback: number,
@@ -29,41 +32,6 @@ type Dependencies = {
   now?: () => number;
   beforeCall?: (provider: Provider) => Promise<void>;
 };
-async function readJson(response: Response) {
-  if (response.status === 429) {
-    await response.body?.cancel();
-    throw new PartsQuotaError();
-  }
-  if (!response.ok) {
-    await response.body?.cancel();
-    throw new Error("upstream_failed");
-  }
-  if (Number(response.headers.get("content-length") || 0) > 2_000_000) {
-    await response.body?.cancel();
-    throw new Error("oversized_response");
-  }
-  if (!response.body) throw new Error("invalid_response");
-  const reader = response.body.getReader(),
-    decoder = new TextDecoder();
-  let size = 0,
-    text = "";
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      size += value.byteLength;
-      if (size > 2_000_000) {
-        await reader.cancel();
-        throw new Error("oversized_response");
-      }
-      text += decoder.decode(value, { stream: true });
-    }
-    text += decoder.decode();
-    return JSON.parse(text);
-  } finally {
-    reader.releaseLock();
-  }
-}
 export function createPartsSearchService(deps: Dependencies = {}) {
   const fetcher = deps.fetcher || fetch,
     now = deps.now || Date.now;
@@ -91,6 +59,7 @@ export function createPartsSearchService(deps: Dependencies = {}) {
         JSON.stringify({
           q,
           jobs: jobs.map((j) => [j.id, j.url.href, j.headers]),
+          publicSearch: env.PARTS_PUBLIC_SEARCH_ENABLED !== "false",
         }),
       )
       .digest("hex");
@@ -104,51 +73,81 @@ export function createPartsSearchService(deps: Dependencies = {}) {
     const inflight = pending.get(key);
     if (inflight) return { ...(await inflight), cached: true };
     const task = (async () => {
-      const results = await Promise.all(
-        jobs.map(async (provider) => {
-          try {
-            await deps.beforeCall?.(provider);
-            const response = await fetcher(provider.url, {
-              headers: provider.headers,
-              signal: AbortSignal.timeout(8000),
-              cache: "no-store",
-              redirect: "error",
-            });
-            const data = await readJson(response);
-            const page = parseProviderPage(data, provider, q);
-            return {
-              source: {
-                id: provider.id,
-                label: provider.label,
-                state: "ok",
-              } as SourceStatus,
-              page,
-            };
-          } catch (error) {
-            return {
-              source: {
-                id: provider.id,
-                label: provider.label,
-                state:
-                  error instanceof PartsQuotaError ? "limited" : "unavailable",
-              } as SourceStatus,
-              page: null,
-            };
-          }
-        }),
+      async function consult(batch: Provider[]) {
+        return Promise.all(
+          batch.map(async (provider) => {
+            try {
+              if (!provider.format || provider.format === "json")
+                await deps.beforeCall?.(provider);
+              const response = await fetcher(provider.url, {
+                headers: provider.headers,
+                signal: AbortSignal.timeout(
+                  provider.format && provider.format !== "json" ? 6000 : 8000,
+                ),
+                cache: "no-store",
+                redirect: "error",
+              });
+              const body = await readPartsResponse(response);
+              const page =
+                provider.format && provider.format !== "json"
+                  ? parsePublicSearch(body, provider, q)
+                  : parseProviderPage(JSON.parse(body), provider, q);
+              return {
+                source: {
+                  id: provider.id,
+                  label: provider.label,
+                  state: "ok",
+                } as SourceStatus,
+                page,
+              };
+            } catch (error) {
+              return {
+                source: {
+                  id: provider.id,
+                  label: provider.label,
+                  state:
+                    error instanceof PartsQuotaError
+                      ? "limited"
+                      : "unavailable",
+                } as SourceStatus,
+                page: null,
+              };
+            }
+          }),
+        );
+      }
+      const results = await consult(jobs);
+      let usedPublic = jobs.some(
+        (job) => job.format === "rss" || job.format === "html",
       );
+      // A missing key, exhausted paid quota or empty paid response must not
+      // prevent the public sources from being queried.
+      if (
+        !usedPublic &&
+        !results.some((result) => result.page?.offers.length)
+      ) {
+        const fallback = publicProviderJobs(query, q.page, env);
+        if (fallback.length) {
+          usedPublic = true;
+          results.push(...(await consult(fallback)));
+        }
+      }
       const successful = results.filter((r) => r.page);
       const status =
-        successful.length === jobs.length
+        successful.length === results.length
           ? "ready"
           : successful.length
             ? "partial"
             : "unavailable";
+      let offers = mergeOffers(results.flatMap((r) => r.page?.offers || []));
+      if (usedPublic && offers.length)
+        offers = await enrichPublicOffers(offers, q, fetcher);
       const result: PartsResult = {
         ...base,
         status,
         queriedAt: new Date(now()).toISOString(),
-        offers: mergeOffers(results.flatMap((r) => r.page?.offers || [])),
+        offers,
+        publicSearch: usedPublic,
         hasNext: q.page < 5 && results.some((r) => r.page?.hasNext),
         sources: results.map((r) => r.source),
       };
