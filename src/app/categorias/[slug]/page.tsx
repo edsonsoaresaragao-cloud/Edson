@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
+import { IgnitionExplorer } from "@/components/ignition-explorer";
 import { InjectionExplorer } from "@/components/injection-explorer";
 import { AbsExplorer } from "@/components/abs-explorer";
 import { SteeringExplorer } from "@/components/steering-explorer";
@@ -44,6 +45,7 @@ export default async function Category({
       {slug === "arrefecimento" && <CoolingExplorer />}
       {slug === "freios-e-abs" && <AbsExplorer />}
       {slug === "injecao-eletronica" && <InjectionExplorer />}
+      {slug === "ignicao" && <IgnitionExplorer />}
       {slug === "direcao-hidraulica-e-eletrica" && <SteeringExplorer />}
       {slug === "motor-e-componentes-internos" && (
         <Link className="engine-entry card" href="/explodedview">
