@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Content } from "@prisma/client";
 import { Play, ArrowUpRight, Wrench, BookOpen, ArrowRight } from "lucide-react";
-import { contentUrl } from "@/lib/content";
+import { contentUrl } from "@/lib/catalog";
 export function SectionTitle({
   eyebrow,
   title,

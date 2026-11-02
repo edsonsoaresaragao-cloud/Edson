@@ -299,3 +299,7 @@ export const kindPaths: Record<string, string> = {
   ARTICLE: "artigos",
   VEHICLE: "veiculos",
 };
+
+export function contentUrl(c: { kind: string; slug: string }) {
+  return `/${kindPaths[c.kind] || "artigos"}/${c.slug}`;
+}

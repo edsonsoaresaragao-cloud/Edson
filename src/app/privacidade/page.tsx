@@ -31,6 +31,16 @@ export default function Privacy() {
           provedor S3 configurado pelo responsável. O envio de e-mails depende
           do provedor SMTP contratado.
         </p>
+        <h2>Pesquisa de ofertas de peças</h2>
+        <p>
+          Os termos de peça, código e veículo informados são enviados aos
+          provedores de busca configurados, como SerpApi (Google Shopping e
+          busca web) ou Brave Search, para atender à pesquisa. Resultados podem
+          ser mantidos em cache local limitado para reduzir consultas repetidas.
+          As fotos são carregadas dos endereços fornecidos pelas fontes. Ao
+          abrir um anúncio ou atalho de pesquisa, você acessa um serviço
+          externo, sujeito às políticas desse serviço.
+        </p>
         <h2>Retenção, segurança e direitos</h2>
         <p>
           Os dados são mantidos enquanto necessários à prestação do serviço,

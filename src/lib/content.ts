@@ -1,15 +1,13 @@
 import { recentContentOrder } from "./video-presentation";
 import { db } from "./db";
-import { normalize, searchTerms, kindPaths } from "./catalog";
+import { normalize, searchTerms } from "./catalog";
 import type { Content } from "@prisma/client";
 export const publicWhere = {
   status: "PUBLISHED",
   visibility: "PUBLIC",
   externalAvailable: true,
 };
-export function contentUrl(c: { kind: string; slug: string }) {
-  return `/${kindPaths[c.kind] || "artigos"}/${c.slug}`;
-}
+export { contentUrl } from "./catalog";
 export async function searchContent({
   q = "",
   kind = "",

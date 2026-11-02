@@ -27,6 +27,15 @@ export default function Terms() {
           Oficina Brasil Oficial. É proibido enviar material sem autorização ou
           usar a plataforma para distribuir conteúdo ilegal ou malicioso.
         </p>
+        <h2>Ofertas e compras em sites externos</h2>
+        <p>
+          A busca de peças reúne informações das fontes conectadas. A compra, o
+          pagamento, o atendimento e a entrega são realizados no site de origem
+          e pelo respectivo vendedor. Preços, frete e disponibilidade podem
+          mudar; confirme a aplicação da peça pelo código, veículo, ano e motor
+          antes de comprar. A pesquisa não garante cobertura de todas as lojas
+          da internet.
+        </p>
         <h2>Disponibilidade e contato</h2>
         <p>
           Conteúdos externos podem ser removidos pelos titulares ou ficar

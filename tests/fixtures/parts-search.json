@@ -1,0 +1,23 @@
+{
+  "shopping": {
+    "shopping_results": [
+      {"title":"Pastilha de freio código TEST-123", "source":"Loja de Teste", "link":"https://loja.test-store.com.br/produto/pastilha?utm_source=shopping", "thumbnail":"https://images.test-store.com.br/peca.jpg", "price":"R$ 129,90", "delivery":"Frete informado na loja"},
+      {"title":"Bobina de teste", "source":"Anunciante de teste", "product_link":"https://www.google.com/shopping/product/12345", "thumbnail":"https://images.test-store.com.br/bobina.jpg", "price":"R$ 240,00"},
+      {"title":"Alvo inválido", "link":"javascript:alert(1)", "price":"R$ 1,00"}
+    ],
+    "serpapi_pagination":{"next":"https://serpapi.com/search.json?api_key=fixture-key&start=20"}
+  },
+  "web": {
+    "organic_results": [
+      {"title":"Pastilha de freio TEST-123", "link":"https://loja.test-store.com.br/produto/pastilha", "snippet":"Descrição fornecida na página de teste: conjunto de pastilhas.", "pagemap":{"cse_image":[{"src":"https://images.test-store.com.br/peca.jpg"}]}},
+      {"title":"Página da loja, não anúncio", "link":"https://outra.test-store.com.br/"},
+      {"title":"Artigo não é oferta", "link":"https://revista.test-store.com.br/blog/manutencao"},
+      {"title":"Produto sem imagem", "link":"https://outra.test-store.com.br/product/bobina", "snippet":"Descrição de teste da bobina."}
+    ],
+    "serpapi_pagination":{"next":"https://serpapi.com/search.json?start=10"}
+  },
+  "brave": {
+    "web":{"results":[{"title":"Anúncio de teste", "url":"https://pecas.test-store.com.br/produto/sensor", "description":"Sensor demonstrativo da resposta controlada.", "thumbnail":{"src":"https://images.test-store.com.br/sensor.jpg"}}]},
+    "query":{"more_results_available":true}
+  }
+}

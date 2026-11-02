@@ -5,6 +5,7 @@ import { kindPaths, kindLabels, normalize } from "@/lib/catalog";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
+import { PartsMarketplace } from "@/components/parts-marketplace";
 import { SearchBox } from "@/components/forms";
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
@@ -14,7 +15,14 @@ export async function generateMetadata({
 }) {
   const { section } = await params;
   const kind = Object.keys(kindPaths).find((k) => kindPaths[k] === section);
-  return { title: kind ? kindLabels[kind] : "Busca" };
+  return {
+    title:
+      section === "pecas"
+        ? "Buscar e comparar peças automotivas"
+        : kind
+          ? kindLabels[kind]
+          : "Busca",
+  };
 }
 export default async function Catalog({
   params,
@@ -58,15 +66,36 @@ export default async function Catalog({
   return (
     <div className="container page-content">
       <PageHeading
-        title={kind ? kindLabels[kind] : "Pesquisa inteligente"}
+        title={
+          section === "pecas"
+            ? "Encontre ofertas de peças"
+            : kind
+              ? kindLabels[kind]
+              : "Pesquisa inteligente"
+        }
         description={
-          section === "videos"
-            ? "Vídeos próprios e incorporações oficiais. Cada conteúdo externo preserva sua autoria."
-            : section === "diagnostico"
-              ? "Causas possíveis e verificações educativas. A confirmação de falhas exige avaliação e testes profissionais."
-              : "Explore conteúdos técnicos por sistema, peça, veículo e palavra-chave."
+          section === "pecas"
+            ? "Busque peças por nome, código e veículo. Consulte ofertas e continue explorando a biblioteca técnica abaixo."
+            : section === "videos"
+              ? "Vídeos próprios e incorporações oficiais. Cada conteúdo externo preserva sua autoria."
+              : section === "diagnostico"
+                ? "Causas possíveis e verificações educativas. A confirmação de falhas exige avaliação e testes profissionais."
+                : "Explore conteúdos técnicos por sistema, peça, veículo e palavra-chave."
         }
       />
+      {section === "pecas" && (
+        <>
+          <PartsMarketplace initial={s} />
+          <div className="parts-library-heading" id="biblioteca-tecnica">
+            <span className="eyebrow">CONHECIMENTO / BIBLIOTECA TÉCNICA</span>
+            <h2>Entenda a peça antes de escolher.</h2>
+            <p>
+              Os filtros abaixo pesquisam os conteúdos educativos do Edson
+              Oficina.
+            </p>
+          </div>
+        </>
+      )}
       <SearchBox />
       {s.q && (
         <p>
