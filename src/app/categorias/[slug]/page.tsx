@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
+import { AbsExplorer } from "@/components/abs-explorer";
 import { SteeringExplorer } from "@/components/steering-explorer";
 import { CoolingExplorer } from "@/components/cooling-explorer";
 import { AlternatorExplorer } from "@/components/alternator-explorer";
@@ -40,6 +41,7 @@ export default async function Category({
       {slug === "ar-condicionado" && <HvacExplorer />}
       {slug === "alternador" && <AlternatorExplorer />}
       {slug === "arrefecimento" && <CoolingExplorer />}
+      {slug === "freios-e-abs" && <AbsExplorer />}
       {slug === "direcao-hidraulica-e-eletrica" && <SteeringExplorer />}
       {slug === "motor-e-componentes-internos" && (
         <Link className="engine-entry card" href="/explodedview">
