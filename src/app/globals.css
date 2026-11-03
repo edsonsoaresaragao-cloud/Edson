@@ -2876,7 +2876,7 @@ html[data-theme="dark"] .visual-reference-catalog { --reference-accent:#ffb175; 
 .technical-catalog-library { margin-top:26px; }
 .technical-catalog-library > h2 { font-size:24px; margin-bottom:12px; }
 .technical-catalog-intro { font-size:13px; margin-bottom:20px; }
-.technical-catalog-choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.technical-catalog-choices { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
 .technical-catalog-choices > button { display:flex; align-items:center; min-width:0; gap:20px; padding:16px; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--text); text-align:left; }
 .technical-catalog-choices > button[aria-pressed=true] { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
 .technical-catalog-choices .reference-catalog-overview { flex-shrink:0; width:100px; }
@@ -2896,7 +2896,6 @@ html[data-theme="dark"] .visual-reference-catalog { --reference-accent:#ffb175; 
 .reference-catalog-context dt { font-weight:700; font-size:13px; margin-bottom:6px; }
 .reference-catalog-context dd { margin:0; }
 @media(max-width:760px) { .technical-catalog-choices { grid-template-columns:1fr; }.reference-catalog-context { grid-template-columns:1fr; }.reference-catalog-context dl { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media(min-width:761px) and (max-width:1100px) { .technical-catalog-choices > button { flex-direction:column; align-items:flex-start; gap:12px; } }
 @media(max-width:380px) { .technical-catalog-choices > button { gap:12px; padding:12px; }.technical-catalog-choices .reference-catalog-overview { width:76px; }.technical-catalog-choices .reference-catalog-overview img { height:76px; } }
 .reference-articles-heading { padding-top:28px; border-top:1px solid var(--border); margin:0 0 24px; }
 .reference-articles-heading h2 { font-size:27px; margin-bottom:10px; }

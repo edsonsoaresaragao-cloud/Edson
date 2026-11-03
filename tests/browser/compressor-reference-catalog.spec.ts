@@ -107,7 +107,7 @@ test("fichas distinguem fluxo de peça física, ampliam imagens e relacionam con
   await expect(dialog).toContainText("14. Conexões de sucção e descarga");
 });
 
-test("três catálogos, imagens locais, URL, responsividade e acessibilidade", async ({
+test("catálogos, imagens locais, URL, responsividade e acessibilidade", async ({
   page,
 }, info) => {
   const failures: string[] = [];
@@ -122,7 +122,7 @@ test("três catálogos, imagens locais, URL, responsividade e acessibilidade", a
     library
       .getByRole("group", { name: "Escolher catálogo técnico" })
       .getByRole("button"),
-  ).toHaveCount(3);
+  ).toHaveCount(4);
   await expect(root.locator(".reference-catalog-card")).toHaveCount(16);
   await page.screenshot({
     path: `test-results/compressor-catalog-${info.project.name}-overview.png`,

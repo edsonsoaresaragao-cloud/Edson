@@ -1,6 +1,6 @@
 # Catálogo do compressor de ar-condicionado
 
-A biblioteca de `/artigos` passa a oferecer três catálogos: **Compressor de ar-condicionado**, **Módulo Dianteiro** e **Mercedes-Benz**. O compressor é a escolha inicial e também pode ser aberto por `/artigos?catalog=compressor`. Os demais continuam disponíveis por seleção e pelos parâmetros `modulo-dianteiro` e `mercedes`.
+Na biblioteca de `/artigos`, selecione **Compressor de ar-condicionado** ou abra `/artigos?catalog=compressor`. Os outros catálogos e a escolha inicial são definidos em `src/lib/technical-catalogs.ts`.
 
 ## Conteúdo e numeração
 
@@ -31,9 +31,9 @@ O arranjo visual não define sequência de desmontagem/montagem, ajuste de folga
 
 ## Implementação
 
-Dados: `src/lib/compressor-reference-catalog.ts`. Registro dos três catálogos, escolha inicial e validação do parâmetro: `src/lib/technical-catalogs.ts`.
+Dados: `src/lib/compressor-reference-catalog.ts`. Registro dos catálogos, escolha inicial e validação do parâmetro: `src/lib/technical-catalogs.ts`.
 
-A interface compartilhada `src/components/visual-reference-catalog.tsx` admite identificações de contexto e nomes de contagem apropriados, preservando o comportamento dos catálogos anteriores. A biblioteca mantém os demais parâmetros da URL ao trocar de catálogo. O seletor foi ajustado para três opções em desktop e apresentação vertical no celular. Sem alteração de banco, API, credenciais ou modelo 3D.
+A interface compartilhada `src/components/visual-reference-catalog.tsx` admite identificações de contexto e nomes de contagem apropriados, preservando o comportamento dos catálogos anteriores. A biblioteca mantém os demais parâmetros da URL ao trocar de catálogo. O seletor apresenta os catálogos disponíveis em desktop e celular. Sem alteração de banco, API, credenciais ou modelo 3D.
 
 ## Validação
 

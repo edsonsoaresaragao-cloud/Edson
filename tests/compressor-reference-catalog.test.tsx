@@ -18,6 +18,7 @@ import { compressorParts } from "../src/lib/compressor-parts";
 import {
   technicalCatalogs,
   resolveTechnicalCatalogId,
+  defaultTechnicalCatalog,
 } from "../src/lib/technical-catalogs";
 import { TechnicalCatalogLibrary } from "../src/components/technical-catalog-library";
 
@@ -112,8 +113,10 @@ test("atlas locais têm posição única e cada identificação recebe imagem pr
       "WEBP",
     );
 });
-test("biblioteca inicial mostra o compressor, preserva três catálogos e valida seleção", () => {
-  const markup = renderToStaticMarkup(createElement(TechnicalCatalogLibrary));
+test("biblioteca preserva o compressor e valida a seleção entre catálogos", () => {
+  const markup = renderToStaticMarkup(
+    createElement(TechnicalCatalogLibrary, { initialCatalog: "compressor" }),
+  );
   assert.equal(
     (markup.match(/class="reference-catalog-card"/g) || []).length,
     16,
@@ -123,12 +126,12 @@ test("biblioteca inicial mostra o compressor, preserva três catálogos e valida
   assert.match(markup, /Explorar compressor interativo/);
   assert.match(markup, /Ilustração didática gerada/);
   assert.match(markup, /Pontos de atenção/);
-  assert.equal(Object.keys(technicalCatalogs).length, 3);
+  assert.ok(Object.hasOwn(technicalCatalogs, "compressor"));
   for (const id of ["compressor", "modulo-dianteiro", "mercedes"] as const) {
     assert.equal(resolveTechnicalCatalogId(id), id);
     assert.equal(technicalCatalogs[id].id, id);
     assert.ok(markup.includes(`Abrir catálogo ${technicalCatalogs[id].name}`));
   }
   for (const value of [undefined, "", "inexistente", "__proto__", "toString"])
-    assert.equal(resolveTechnicalCatalogId(value), "compressor");
+    assert.equal(resolveTechnicalCatalogId(value), defaultTechnicalCatalog);
 });

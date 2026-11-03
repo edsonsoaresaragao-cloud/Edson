@@ -1,6 +1,6 @@
 # Catálogo visual Mercedes-Benz em Notícias e artigos
 
-O catálogo é exibido em `/artigos`, logo após o título da página e antes da busca de artigos. Na biblioteca atual, selecione **Mercedes-Benz** ou abra `/artigos?catalog=mercedes`; o catálogo do compressor é a escolha inicial e o módulo dianteiro também está disponível. Os conteúdos, filtros, paginação e consultas ao banco existentes permanecem na seção “Notícias e artigos publicados”. Não há mudança de esquema, cadastro de artigo simulado ou API adicional.
+O catálogo é exibido em `/artigos`, logo após o título da página e antes da busca de artigos. Selecione **Mercedes-Benz** ou abra `/artigos?catalog=mercedes`; os outros catálogos e a escolha inicial são definidos em `src/lib/technical-catalogs.ts`. Os conteúdos, filtros, paginação e consultas ao banco existentes permanecem na seção “Notícias e artigos publicados”. Não há mudança de esquema, cadastro de artigo simulado ou API adicional.
 
 ## Organização
 
@@ -11,7 +11,7 @@ O catálogo é exibido em `/artigos`, logo após o título da página e antes da
 - Ampliação em diálogo nativo com imagem, função, observação de aplicação, fechamento por botão/Escape e retorno de foco. Fichas de componentes oferecem ligação para a busca de peças; subconjuntos mostram a correspondência com os números principais.
 - Ligação para o atlas de motores existente, sem exigir que o visitante saia do catálogo para consultar suas imagens.
 
-Dados: `src/lib/mercedes-reference-catalog.ts`. O componente público `src/components/mercedes-reference-catalog.tsx` utiliza a configuração `src/lib/mercedes-visual-catalog.ts` e a interface compartilhada `src/components/visual-reference-catalog.tsx`. A biblioteca `src/components/technical-catalog-library.tsx` e o registro `src/lib/technical-catalogs.ts` organizam a escolha entre os três catálogos. Integração apenas na condição `section === "artigos"` em `src/app/[section]/page.tsx`. Veja também `docs/CATALOGO-MODULO-DIANTEIRO-ARTIGOS.md` e `docs/CATALOGO-COMPRESSOR-ARTIGOS.md`.
+Dados: `src/lib/mercedes-reference-catalog.ts`. O componente público `src/components/mercedes-reference-catalog.tsx` utiliza a configuração `src/lib/mercedes-visual-catalog.ts` e a interface compartilhada `src/components/visual-reference-catalog.tsx`. A biblioteca `src/components/technical-catalog-library.tsx` e o registro `src/lib/technical-catalogs.ts` organizam a escolha entre os catálogos disponíveis. Integração apenas na condição `section === "artigos"` em `src/app/[section]/page.tsx`. Veja também `docs/CATALOGO-MODULO-DIANTEIRO-ARTIGOS.md` e `docs/CATALOGO-COMPRESSOR-ARTIGOS.md`.
 
 ## Imagens e referência técnica
 

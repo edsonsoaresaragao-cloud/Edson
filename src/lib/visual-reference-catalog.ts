@@ -145,6 +145,7 @@ export function visualArtworkStyle(artwork: VisualArtwork, cell: number) {
     backgroundImage: `url('${artwork.src}')`,
     backgroundSize: `${artwork.columns * 100}% ${100 / height}%`,
     backgroundPosition: `${artwork.columns === 1 ? 0 : (column / (artwork.columns - 1)) * 100}% ${height === 1 ? 0 : (top / (1 - height)) * 100}%`,
-    aspectRatio: artwork.aspectRatio,
+    // Preserve the source proportions even when atlas rows have unequal heights.
+    aspectRatio: artwork.aspectRatio / (height * artwork.rows),
   };
 }
