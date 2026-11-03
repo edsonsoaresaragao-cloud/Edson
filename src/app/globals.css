@@ -2844,6 +2844,7 @@ html[data-theme="dark"] .visual-reference-catalog { --reference-accent:#ffb175; 
 .reference-catalog-grid > li { display:flex; min-width:0; }
 .reference-catalog-card { display:flex; flex-direction:column; width:100%; min-width:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface); }
 .reference-catalog-picture { margin:0; background:#fff; }
+.cooling-reference-catalog .reference-catalog-card .reference-catalog-picture { display:grid; grid-template-rows:240px auto; }
 .reference-catalog-art { width:100%; aspect-ratio:1; background-repeat:no-repeat; }
 .reference-catalog-card .reference-catalog-art { max-width:220px; margin:auto; }
 .reference-catalog-card-body { display:flex; flex-direction:column; flex:1; padding:18px; }

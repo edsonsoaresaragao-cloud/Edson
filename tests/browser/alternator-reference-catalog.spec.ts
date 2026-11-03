@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { technicalCatalogs } from "../../src/lib/technical-catalogs";
 
 const path =
   process.env.ALTERNATOR_CATALOG_PREVIEW_PATH || "/artigos?catalog=alternador";
@@ -94,7 +95,7 @@ test("fichas ampliam imagens, contextualizam a tensão e relacionam conjuntos", 
   await expect(dialog).toContainText("Seta dourada: saída CC");
 });
 
-test("quatro catálogos, URL, imagens locais, responsividade e acessibilidade", async ({
+test("catálogos, URL, imagens locais, responsividade e acessibilidade", async ({
   page,
 }, info) => {
   const failures: string[] = [];
@@ -109,7 +110,7 @@ test("quatro catálogos, URL, imagens locais, responsividade e acessibilidade", 
     library
       .getByRole("group", { name: "Escolher catálogo técnico" })
       .getByRole("button"),
-  ).toHaveCount(4);
+  ).toHaveCount(Object.keys(technicalCatalogs).length);
   await expect(root.locator(".reference-catalog-card")).toHaveCount(16);
   await page.screenshot({
     path: `test-results/alternator-catalog-${info.project.name}-overview.png`,

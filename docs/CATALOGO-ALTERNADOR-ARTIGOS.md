@@ -1,6 +1,6 @@
 # Catálogo do alternador automotivo
 
-Disponível na biblioteca de `/artigos` e diretamente em `/artigos?catalog=alternador`. O alternador passa a ser a escolha inicial. Os quatro catálogos — alternador, compressor, módulo dianteiro e Mercedes-Benz — permanecem selecionáveis, com acesso direto por seu parâmetro `catalog`.
+Disponível na biblioteca de `/artigos` e diretamente em `/artigos?catalog=alternador`. Os outros catálogos e a escolha inicial são definidos em `src/lib/technical-catalogs.ts`, com seleção e acesso direto por seu parâmetro `catalog`.
 
 ## Conteúdo
 
@@ -37,7 +37,7 @@ Ilustrações didáticas geradas com base no cartaz, identificadas nas legendas 
 
 Os limites reais das linhas estão registrados na configuração. O posicionamento e a proporção das imagens levam em conta as alturas desiguais do atlas, mantendo a região de cada componente sem deformação. O mesmo tratamento melhora a apresentação dos atlas anteriores com linhas desiguais.
 
-Dados em `src/lib/alternator-reference-catalog.ts`; registro e seleção em `src/lib/technical-catalogs.ts`; interface compartilhada nos componentes existentes. O seletor apresenta quatro catálogos em duas colunas no desktop e uma no celular. Sem alteração de banco, API, credenciais ou modelo 3D.
+Dados em `src/lib/alternator-reference-catalog.ts`; registro e seleção em `src/lib/technical-catalogs.ts`; interface compartilhada nos componentes existentes. O seletor apresenta os catálogos disponíveis em duas colunas no desktop e uma no celular. Sem alteração de banco, API, credenciais ou modelo 3D.
 
 ## Validação
 

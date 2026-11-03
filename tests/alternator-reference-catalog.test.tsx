@@ -18,6 +18,7 @@ import { alternatorParts } from "../src/lib/alternator-parts";
 import {
   technicalCatalogs,
   resolveTechnicalCatalogId,
+  defaultTechnicalCatalog,
 } from "../src/lib/technical-catalogs";
 import { TechnicalCatalogLibrary } from "../src/components/technical-catalog-library";
 
@@ -122,8 +123,10 @@ test("atlas locais usam regiões únicas sem deformar as linhas de alturas difer
       "WEBP",
     );
 });
-test("HTML inicial entrega o alternador e mantém os quatro catálogos disponíveis", () => {
-  const markup = renderToStaticMarkup(createElement(TechnicalCatalogLibrary));
+test("HTML preserva o alternador e os catálogos anteriores", () => {
+  const markup = renderToStaticMarkup(
+    createElement(TechnicalCatalogLibrary, { initialCatalog: "alternador" }),
+  );
   assert.equal(
     (markup.match(/class="reference-catalog-card"/g) || []).length,
     16,
@@ -132,7 +135,7 @@ test("HTML inicial entrega o alternador e mantém os quatro catálogos disponív
   assert.match(markup, /Ilustração didática gerada/);
   assert.match(markup, /Tensão de referência e aplicação/);
   assert.match(markup, /Pontos de atenção/);
-  assert.equal(Object.keys(technicalCatalogs).length, 4);
+  assert.ok(Object.hasOwn(technicalCatalogs, "alternador"));
   for (const id of [
     "alternador",
     "compressor",
@@ -144,5 +147,5 @@ test("HTML inicial entrega o alternador e mantém os quatro catálogos disponív
     assert.ok(markup.includes(`Abrir catálogo ${technicalCatalogs[id].name}`));
   }
   for (const value of [undefined, "", "inexistente", "__proto__", "toString"])
-    assert.equal(resolveTechnicalCatalogId(value), "alternador");
+    assert.equal(resolveTechnicalCatalogId(value), defaultTechnicalCatalog);
 });
