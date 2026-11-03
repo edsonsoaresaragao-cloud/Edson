@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-const path = process.env.MERCEDES_CATALOG_PREVIEW_PATH || "/artigos";
+const path =
+  process.env.MERCEDES_CATALOG_PREVIEW_PATH || "/artigos?catalog=mercedes";
 
 test("catálogo pesquisa, filtra e ordena as 24 peças, preservando números", async ({
   page,

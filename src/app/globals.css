@@ -2814,8 +2814,8 @@ html[data-theme="dark"] .sensor-actuator-catalog {
 .starter-table-scroll:focus-visible { outline:2px solid #ffad5c; outline-offset:3px; }
 
 /* Catálogo visual da referência Mercedes-Benz na seção de artigos. */
-.mercedes-reference-catalog { --reference-accent:#a24308; margin:24px 0 50px; }
-html[data-theme="dark"] .mercedes-reference-catalog { --reference-accent:#ffb175; }
+.visual-reference-catalog { --reference-accent:#a24308; margin:24px 0 50px; }
+html[data-theme="dark"] .visual-reference-catalog { --reference-accent:#ffb175; }
 .reference-catalog-hero { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:32px; align-items:center; padding:30px; background:linear-gradient(115deg,var(--soft),var(--surface)); border:1px solid var(--border); border-radius:14px; }
 .reference-catalog-eyebrow { color:var(--reference-accent); font-size:10px; font-weight:800; letter-spacing:.1em; }
 .reference-catalog-hero h2 { margin:14px 0; font-size:clamp(26px,3.4vw,38px); }
@@ -2845,8 +2845,6 @@ html[data-theme="dark"] .mercedes-reference-catalog { --reference-accent:#ffb175
 .reference-catalog-card { display:flex; flex-direction:column; width:100%; min-width:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface); }
 .reference-catalog-picture { margin:0; background:#fff; }
 .reference-catalog-art { width:100%; aspect-ratio:1; background-repeat:no-repeat; }
-.reference-catalog-art-part { background-image:url('/images/mercedes-reference/components.webp'); background-size:400% 600%; }
-.reference-catalog-art-assembly { background-image:url('/images/engines/subassemblies.webp'); background-size:300% 200%; }
 .reference-catalog-card .reference-catalog-art { max-width:220px; margin:auto; }
 .reference-catalog-card-body { display:flex; flex-direction:column; flex:1; padding:18px; }
 .reference-catalog-card-meta { display:flex; align-items:center; gap:9px; font-size:10px; color:var(--muted); margin-bottom:14px; }
@@ -2875,6 +2873,30 @@ html[data-theme="dark"] .mercedes-reference-catalog { --reference-accent:#ffb175
 .reference-catalog-dialog-body ul { padding-left:18px; }
 .reference-catalog-dialog-body a { display:inline-block; margin:14px 0; color:var(--reference-accent); font-size:13px; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
 .reference-catalog-dialog-body p.reference-catalog-dialog-note { border-top:1px solid var(--border); padding-top:14px; margin-top:16px; font-size:11px; }
+.technical-catalog-library { margin-top:26px; }
+.technical-catalog-library > h2 { font-size:24px; margin-bottom:12px; }
+.technical-catalog-intro { font-size:13px; margin-bottom:20px; }
+.technical-catalog-choices { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.technical-catalog-choices > button { display:flex; align-items:center; min-width:0; gap:20px; padding:16px; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--text); text-align:left; }
+.technical-catalog-choices > button[aria-pressed=true] { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+.technical-catalog-choices .reference-catalog-overview { flex-shrink:0; width:100px; }
+.technical-catalog-choices .reference-catalog-overview img { height:100px; }
+.technical-catalog-choices figcaption { display:none; }
+.technical-catalog-choice-text { display:flex; flex-direction:column; gap:8px; font-size:12px; line-height:1.5; }
+.technical-catalog-choice-text strong { font-size:17px; }
+.technical-catalog-choice-text > span { color:var(--muted); }
+.technical-catalog-choice-action { font-weight:700; }
+.reference-catalog-context { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; margin-top:30px; }
+.reference-catalog-context > section { padding:24px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+.reference-catalog-context > section:last-child { grid-column:1 / -1; }
+.reference-catalog-context h3 { font-size:19px; margin-bottom:14px; }
+.reference-catalog-context p,.reference-catalog-context li,.reference-catalog-context dd { font-size:12px; line-height:1.85; color:var(--muted); }
+.reference-catalog-context ul { padding-left:18px; margin:0; }
+.reference-catalog-context dl { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin:18px 0 0; }
+.reference-catalog-context dt { font-weight:700; font-size:13px; margin-bottom:6px; }
+.reference-catalog-context dd { margin:0; }
+@media(max-width:760px) { .technical-catalog-choices { grid-template-columns:1fr; }.reference-catalog-context { grid-template-columns:1fr; }.reference-catalog-context dl { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:380px) { .technical-catalog-choices > button { gap:12px; padding:12px; }.technical-catalog-choices .reference-catalog-overview { width:76px; }.technical-catalog-choices .reference-catalog-overview img { height:76px; } }
 .reference-articles-heading { padding-top:28px; border-top:1px solid var(--border); margin:0 0 24px; }
 .reference-articles-heading h2 { font-size:27px; margin-bottom:10px; }
 .reference-articles-heading p { font-size:13px; }

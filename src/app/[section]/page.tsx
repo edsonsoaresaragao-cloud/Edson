@@ -6,7 +6,7 @@ import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
 import { PartsMarketplace } from "@/components/parts-marketplace";
-import { MercedesReferenceCatalog } from "@/components/mercedes-reference-catalog";
+import { TechnicalCatalogLibrary } from "@/components/technical-catalog-library";
 import { SearchBox } from "@/components/forms";
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
@@ -99,7 +99,12 @@ export default async function Catalog({
       )}
       {section === "artigos" && (
         <>
-          <MercedesReferenceCatalog />
+          <TechnicalCatalogLibrary
+            key={s.catalog}
+            initialCatalog={
+              s.catalog === "mercedes" ? "mercedes" : "modulo-dianteiro"
+            }
+          />
           <div className="reference-articles-heading">
             <h2>Notícias e artigos publicados</h2>
             <p>Pesquise os conteúdos do portal nos filtros abaixo.</p>

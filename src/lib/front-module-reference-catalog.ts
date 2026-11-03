@@ -1,0 +1,347 @@
+import type {
+  VisualArtwork,
+  VisualAssembly,
+  VisualCatalog,
+  VisualPart,
+} from "./visual-reference-catalog";
+
+export const frontModuleSystems = [
+  { id: "estrutura", name: "Estrutura e fixação" },
+  { id: "transmissao", name: "Transmissão e diferencial" },
+  { id: "freios-rodas", name: "Freios e rodas" },
+  { id: "suspensao", name: "Suspensão" },
+  { id: "direcao", name: "Direção" },
+] as const;
+type FrontSystem = (typeof frontModuleSystems)[number]["id"];
+const part = (
+  number: number,
+  name: string,
+  system: FrontSystem,
+  description: string,
+  note: string,
+  aliases: string[] = [],
+): VisualPart => ({
+  number,
+  name,
+  system,
+  description,
+  note,
+  aliases,
+  imageCell: number - 1,
+});
+
+/** Same 1–20 numbering as the chart and the existing suspension interactive. */
+export const frontModuleParts: readonly VisualPart[] = [
+  part(
+    1,
+    "Subchassi / agregado",
+    "estrutura",
+    "Sustenta e conecta os pontos de fixação do conjunto dianteiro à carroceria, conforme o projeto.",
+    "Inspecione fixações, deformações e buchas quando existentes. Geometria, material, torque e procedimento de montagem são específicos do veículo.",
+    ["berço", "quadro", "subframe"],
+  ),
+  part(
+    2,
+    "Transmissão (câmbio)",
+    "transmissao",
+    "Transmite o torque do motor às rodas por relações de marcha adequadas às condições de uso.",
+    "O exemplo é um conjunto transversal. Câmbio manual, automático e outras arquiteturas têm componentes e procedimentos diferentes.",
+    ["caixa de marchas", "transaxle"],
+  ),
+  part(
+    3,
+    "Diferencial dianteiro",
+    "transmissao",
+    "Distribui torque aos semieixos e permite que as rodas motrizes girem a velocidades diferentes nas curvas.",
+    "Em muitos conjuntos transversais, o diferencial é integrado à transmissão. A imagem separada é didática e não indica uma carcaça externa independente.",
+    ["satélites", "planetárias", "coroa"],
+  ),
+  part(
+    4,
+    "Semieixos esquerdo e direito",
+    "transmissao",
+    "Conduzem o torque do diferencial aos cubos, acomodando os movimentos de suspensão e direção pelas juntas.",
+    "Comprimento, estrias e posição das juntas variam entre lados e versões. Inspecione coifas, fixações e sinais de perda de graxa.",
+    ["semi eixo", "semi-eixo", "eixo de transmissão"],
+  ),
+  part(
+    5,
+    "Junta homocinética externa",
+    "transmissao",
+    "Transmite torque junto à roda, permitindo a articulação necessária ao esterçamento e ao curso da suspensão.",
+    "É a junta do lado da roda. A homocinética interna é o item 6; as duas posições podem usar construções diferentes.",
+    ["CV externa", "junta da roda"],
+  ),
+  part(
+    6,
+    "Junta homocinética interna",
+    "transmissao",
+    "Transmite torque junto ao câmbio e permite a compensação axial do semieixo durante a movimentação do conjunto.",
+    "A ilustração mostra uma junta deslizante tipo trizeta/tulipa como exemplo. Nem toda aplicação utiliza essa construção.",
+    ["CV interna", "trizeta", "tulipa"],
+  ),
+  part(
+    7,
+    "Cubo de roda com rolamento",
+    "freios-rodas",
+    "Apoia a roda e permite sua rotação, suportando os esforços transmitidos pelo pneu e pelo conjunto de freio.",
+    "Cubo e rolamento podem ser integrados ou separados. Anel magnético do ABS, fixação e torque exigem a especificação da aplicação.",
+    ["wheel hub", "mancal da roda"],
+  ),
+  part(
+    8,
+    "Disco de freio ventilado",
+    "freios-rodas",
+    "Gira com o cubo e recebe o atrito das pastilhas para desacelerar a roda; os canais internos auxiliam na dissipação de calor.",
+    "Verifique espessura mínima, empenamento e desgaste conforme o fabricante. Disco ventilado não significa necessariamente perfurado.",
+    ["rotor de freio", "brake disc"],
+  ),
+  part(
+    9,
+    "Pinça de freio",
+    "freios-rodas",
+    "Converte a pressão hidráulica em força nas pastilhas, pressionando-as contra o disco.",
+    "A pinça acompanha o esterçamento, mas não gira com o disco. Inspecione pistão, vedadores, mangueira e guias conforme o tipo de pinça.",
+    ["caliper", "pistão de freio"],
+  ),
+  part(
+    10,
+    "Suporte da pinça",
+    "freios-rodas",
+    "Fixa e posiciona o conjunto da pinça junto à manga de eixo e orienta as pastilhas nos projetos aplicáveis.",
+    "É apresentado separado da pinça, item 9. Existem pinças de outras construções sem este suporte independente.",
+    ["cavalete", "carrier", "suporte do cáliper"],
+  ),
+  part(
+    11,
+    "Amortecedor (cartucho / coluna)",
+    "suspensao",
+    "Amortece as oscilações da suspensão; na coluna McPherson também participa da localização da roda.",
+    "A imagem isola o amortecedor, sem a mola. Inspecione vazamentos, haste, fixações e funcionamento; construção e curso variam.",
+    ["damper", "strut", "McPherson"],
+  ),
+  part(
+    12,
+    "Mola helicoidal",
+    "suspensao",
+    "Sustenta a carga e armazena energia elástica durante o curso da suspensão, em conjunto com o amortecimento.",
+    "Altura, carga e diâmetro são específicos da aplicação. A mola comprimida armazena energia e requer ferramenta e procedimento adequados.",
+    ["espiral", "spring"],
+  ),
+  part(
+    13,
+    "Coxim superior do amortecedor",
+    "suspensao",
+    "Liga a coluna à carroceria, isola vibrações e pode incorporar o rolamento que permite o esterçamento.",
+    "Corresponde ao item Torre / Coxim no cartaz. A imagem mostra o suporte removível; a torre estrutural pertence à carroceria e é outra peça.",
+    ["torre", "batente superior", "rolamento superior", "top mount"],
+  ),
+  part(
+    14,
+    "Bandeja (braço de suspensão)",
+    "suspensao",
+    "Guia a posição da roda em relação ao agregado ou à carroceria por suas articulações e buchas.",
+    "O exemplo inclui um pivô para contexto. Pivô substituível ou integrado e material do braço variam; o item 15 mostra a articulação isolada.",
+    ["balança", "braço inferior", "control arm"],
+  ),
+  part(
+    15,
+    "Pivô da bandeja",
+    "suspensao",
+    "Articula a ligação da bandeja com a manga de eixo, permitindo os movimentos da suspensão e da direção.",
+    "É uma articulação esférica, diferente do cubo de roda do item 7. Verifique folga e coifa conforme o método de inspeção do fabricante.",
+    ["pivô de suspensão", "ball joint"],
+  ),
+  part(
+    16,
+    "Terminal de direção",
+    "direcao",
+    "Transmite o movimento da barra de direção à manga de eixo por uma articulação esférica.",
+    "A imagem representa o terminal externo. Rosca, conicidade e lado variam; a montagem exige verificação da geometria da direção.",
+    ["ponteira", "tie rod end"],
+  ),
+  part(
+    17,
+    "Caixa de direção",
+    "direcao",
+    "Transforma o comando do volante em deslocamento das barras que esterçam as rodas.",
+    "A referência mostra cremalheira e pinhão. Assistência elétrica ou hidráulica, sensores e procedimentos de ajuste dependem do projeto.",
+    ["cremalheira", "EPS", "direção hidráulica"],
+  ),
+  part(
+    18,
+    "Barra estabilizadora",
+    "suspensao",
+    "Conecta os lados da suspensão por torção para reduzir a inclinação lateral da carroceria.",
+    "Sua fixação utiliza buchas e pode empregar bieletas. Diâmetro, formato e pontos de ligação dependem da aplicação.",
+    ["antirolagem", "anti roll bar"],
+  ),
+  part(
+    19,
+    "Bieletas da barra estabilizadora",
+    "suspensao",
+    "Transmitem os movimentos da suspensão à barra estabilizadora nos pontos previstos pelo projeto.",
+    "O par ilustrado é uma referência visual. Comprimento, lado, articulações, coifas e torque de fixação precisam ser confirmados.",
+    ["link estabilizador", "end link"],
+  ),
+  part(
+    20,
+    "Buchas da bandeja e da estabilizadora",
+    "suspensao",
+    "Permitem movimentos controlados nas fixações e reduzem a transmissão de vibrações entre os componentes.",
+    "A imagem reúne exemplos cilíndricos e de apoio da barra. Posição de montagem e aperto em altura de trabalho dependem do procedimento do fabricante.",
+    ["silent block", "borracha", "bucha"],
+  ),
+];
+
+export const frontModuleAssemblies: readonly VisualAssembly[] = [
+  {
+    id: "agregado",
+    name: "Subchassi / agregado isolado",
+    system: "estrutura",
+    imageCell: 0,
+    description:
+      "Estrutura de apoio sem os demais conjuntos, para identificar seus pontos de conexão.",
+    details: [
+      "Estrutura do agregado",
+      "Pontos de fixação à carroceria",
+      "Apoios dos braços e da direção",
+    ],
+    partNumbers: [1],
+  },
+  {
+    id: "mcpherson",
+    name: "Sistema de suspensão McPherson",
+    system: "suspensao",
+    imageCell: 1,
+    description:
+      "Coluna, mola e braço reunidos em uma vista de canto dianteiro para identificar suas relações.",
+    details: [
+      "Coxim superior e rolamento",
+      "Mola helicoidal",
+      "Amortecedor / coluna",
+      "Bandeja e pivô",
+      "Manga de eixo (contexto)",
+    ],
+    partNumbers: [11, 12, 13, 14, 15],
+  },
+  {
+    id: "transmissao",
+    name: "Transmissão e diferencial",
+    system: "transmissao",
+    imageCell: 2,
+    description:
+      "Corte ilustrativo de uma transmissão transversal com o diferencial integrado e saídas para os semieixos.",
+    details: [
+      "Engrenagens da transmissão",
+      "Diferencial integrado",
+      "Saídas para os semieixos",
+      "Juntas internas junto ao câmbio",
+    ],
+    partNumbers: [2, 3, 4, 5, 6],
+  },
+  {
+    id: "freio",
+    name: "Sistema de freio e cubo",
+    system: "freios-rodas",
+    imageCell: 3,
+    description:
+      "Pinça, suporte, disco ventilado e cubo apresentados separadamente para comparação visual.",
+    details: [
+      "Pinça de freio",
+      "Suporte da pinça",
+      "Disco ventilado",
+      "Cubo com rolamento",
+    ],
+    partNumbers: [7, 8, 9, 10],
+  },
+  {
+    id: "posicao",
+    name: "Posição do módulo no veículo",
+    system: "estrutura",
+    imageCell: 4,
+    description:
+      "Localização ilustrativa na região do eixo dianteiro de um veículo com motorização transversal e tração dianteira.",
+    details: [
+      "Região frontal destacada em laranja",
+      "Relação com rodas e carroceria",
+      "Imagem de contexto; não identifica um modelo ou compatibilidade",
+    ],
+    partNumbers: [],
+  },
+];
+export const frontModulePartArtwork: VisualArtwork = {
+  src: "/images/front-module-reference/components.webp",
+  columns: 4,
+  rows: 5,
+  aspectRatio: 1.5,
+  rowBounds: [0, 241 / 1145, 482 / 1145, 722 / 1145, 935 / 1145, 1],
+};
+export const frontModuleAssemblyArtwork: VisualArtwork = {
+  src: "/images/front-module-reference/assemblies.webp",
+  columns: 3,
+  rows: 2,
+  aspectRatio: 1,
+};
+export const frontModuleVisualCatalog: VisualCatalog = {
+  id: "modulo-dianteiro",
+  name: "Módulo Dianteiro",
+  className: "front-module-reference-catalog",
+  title: "Módulo dianteiro, peça por peça.",
+  eyebrow: "CATÁLOGO VISUAL / CHASSI E MOVIMENTO",
+  description:
+    "Suspensão, direção, freios e transmissão dianteira organizados a partir do cartaz. Explore os 20 componentes numerados, os conjuntos e a posição no veículo.",
+  searchTerms: "módulo dianteiro",
+  searchPlaceholder: "Nome, número ou função: pivô, 15, homocinética…",
+  systemLabel: "Sistema do módulo",
+  assemblyLabel: "Conjuntos e localização",
+  assemblyNoun: ["vista", "vistas"],
+  interactiveHref: "/categorias/suspensao",
+  interactiveLabel: "Explorar suspensão interativa",
+  systems: frontModuleSystems,
+  parts: frontModuleParts,
+  assemblies: frontModuleAssemblies,
+  partArtwork: frontModulePartArtwork,
+  assemblyArtwork: frontModuleAssemblyArtwork,
+  overview: {
+    kind: "sprite",
+    artwork: frontModuleAssemblyArtwork,
+    cell: 5,
+    alt: "Ilustração didática gerada do conjunto dianteiro com suspensão, freios, direção e transmissão",
+    caption: "Conjunto dianteiro · referência ilustrativa",
+  },
+  sections: [
+    {
+      title: "Função do módulo dianteiro",
+      description:
+        "Integra os elementos dianteiros de suspensão, direção e freio e, quando há tração dianteira, a transmissão de torque às rodas. Atua na estabilidade, dirigibilidade, tração e segurança do veículo.",
+    },
+    {
+      title: "Manutenção: pontos de atenção",
+      items: [
+        "Verificar folgas em pivôs, bandejas e terminais.",
+        "Inspecionar as coifas das juntas homocinéticas.",
+        "Checar vazamentos na transmissão e no diferencial.",
+        "Avaliar o estado dos amortecedores e das molas.",
+        "Verificar o desgaste de discos, pastilhas e rolamentos.",
+        "Conferir buchas do subchassi e da barra estabilizadora.",
+      ],
+    },
+    {
+      title: "Exemplos citados no cartaz",
+      description:
+        "São exemplos de categorias de veículos, sem confirmação de compatibilidade ou de que todos utilizem a configuração ilustrada. Versões AWD/4x4, como Toro e Ranger, podem ter arquiteturas diferentes.",
+      groups: [
+        { name: "Hatch", text: "Polo, Onix, Argo, HB20, 208" },
+        { name: "Sedã", text: "Virtus, Cruze, Corolla, Civic" },
+        { name: "SUV", text: "T-Cross, Tracker, Compass, Renegade" },
+        { name: "Utilitário", text: "Strada, Toro (AWD), Ranger (4x4)" },
+      ],
+    },
+  ],
+  notes: [
+    "Imagens ilustrativas geradas para estudo com base na referência visual. Não são fotografias de fabricante e não confirmam medidas, código ou compatibilidade de peças.",
+    "A numeração 1 a 20 segue a lista principal e a suspensão interativa. O diferencial pode integrar o câmbio; a torre da carroceria é diferente do coxim removível do item 13.",
+    "Arquitetura de suspensão, assistência da direção, tração e construção dos freios variam conforme veículo, ano e versão. Confirme a aplicação e consulte as especificações do fabricante.",
+  ],
+};
