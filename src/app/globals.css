@@ -2812,3 +2812,72 @@ html[data-theme="dark"] .sensor-actuator-catalog {
 @media(prefers-reduced-motion:reduce) { .starter-explorer * { scroll-behavior:auto; } }
 .starter-list-picture { width:42px; height:42px; flex-shrink:0; background:#fff url('/images/starter/starter-components.webp'); background-size:400% 300%; border-radius:4px; }
 .starter-table-scroll:focus-visible { outline:2px solid #ffad5c; outline-offset:3px; }
+
+/* Catálogo visual da referência Mercedes-Benz na seção de artigos. */
+.mercedes-reference-catalog { --reference-accent:#a24308; margin:24px 0 50px; }
+html[data-theme="dark"] .mercedes-reference-catalog { --reference-accent:#ffb175; }
+.reference-catalog-hero { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:32px; align-items:center; padding:30px; background:linear-gradient(115deg,var(--soft),var(--surface)); border:1px solid var(--border); border-radius:14px; }
+.reference-catalog-eyebrow { color:var(--reference-accent); font-size:10px; font-weight:800; letter-spacing:.1em; }
+.reference-catalog-hero h2 { margin:14px 0; font-size:clamp(26px,3.4vw,38px); }
+.reference-catalog-hero p { max-width:700px; font-size:14px; line-height:1.8; }
+.reference-catalog-counts { display:flex; gap:24px; flex-wrap:wrap; margin:20px 0; color:var(--muted); font-size:13px; }
+.reference-catalog-counts strong { color:var(--text); font-size:26px; margin-right:5px; }
+.reference-catalog-atlas-link { display:inline-flex; align-items:center; gap:8px; color:var(--reference-accent); font-size:13px; font-weight:700; min-height:40px; }
+.reference-catalog-overview { margin:0; background:#fff; border-radius:10px; overflow:hidden; }
+.reference-catalog-overview img { display:block; width:100%; height:260px; object-fit:contain; }
+.reference-catalog-overview figcaption,.reference-catalog-picture figcaption { font-size:10px; color:#455166; background:#f0f3f7; padding:8px 12px; }
+.reference-catalog-modes { display:flex; flex-wrap:wrap; gap:10px; margin:24px 0 18px; }
+.reference-catalog-modes button { border:1px solid var(--border); border-radius:8px; padding:11px 16px; min-height:44px; background:var(--surface); color:var(--text); font-size:13px; }
+.reference-catalog-modes button[aria-pressed=true] { background:var(--text); color:var(--bg); border-color:var(--text); }
+.reference-catalog-modes button span { margin-left:7px; font-weight:700; }
+.reference-catalog-filters { display:grid; grid-template-columns:1.5fr 1fr 1fr auto; align-items:end; gap:14px; padding:20px; background:var(--surface); border:1px solid var(--border); border-radius:10px; }
+.reference-catalog-filters label { display:flex; flex-direction:column; min-width:0; font-size:11px; font-weight:700; gap:8px; }
+.reference-catalog-filters input,.reference-catalog-filters select { width:100%; min-width:0; height:46px; padding:10px 12px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); font-size:13px; font-weight:400; }
+.reference-catalog-filters input::placeholder { color:var(--muted); opacity:1; }
+.reference-catalog-search > span { position:relative; }
+.reference-catalog-search svg { position:absolute; top:14px; left:12px; color:var(--muted); pointer-events:none; }
+.reference-catalog-search input { padding-left:39px; }
+.reference-catalog-clear { height:46px; border:1px solid var(--border); border-radius:6px; padding:10px 12px; background:var(--bg); color:var(--text); font-size:11px; }
+.reference-catalog-clear:disabled { color:var(--muted); opacity:1; cursor:default; }
+.reference-catalog-result { font-size:12px; margin:16px 0 20px; overflow-wrap:anywhere; }
+.reference-catalog-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; list-style:none; padding:0; margin:0; }
+.reference-catalog-grid > li { display:flex; min-width:0; }
+.reference-catalog-card { display:flex; flex-direction:column; width:100%; min-width:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface); }
+.reference-catalog-picture { margin:0; background:#fff; }
+.reference-catalog-art { width:100%; aspect-ratio:1; background-repeat:no-repeat; }
+.reference-catalog-art-part { background-image:url('/images/mercedes-reference/components.webp'); background-size:400% 600%; }
+.reference-catalog-art-assembly { background-image:url('/images/engines/subassemblies.webp'); background-size:300% 200%; }
+.reference-catalog-card .reference-catalog-art { max-width:220px; margin:auto; }
+.reference-catalog-card-body { display:flex; flex-direction:column; flex:1; padding:18px; }
+.reference-catalog-card-meta { display:flex; align-items:center; gap:9px; font-size:10px; color:var(--muted); margin-bottom:14px; }
+.reference-catalog-number { border-radius:5px; background:var(--soft); color:var(--reference-accent); padding:3px 6px; font-weight:800; }
+.reference-catalog-card h3 { font-size:17px; line-height:1.35; margin-bottom:12px; }
+.reference-catalog-card p { font-size:12px; line-height:1.75; margin-bottom:18px; }
+.reference-catalog-details { display:inline-flex; justify-content:space-between; align-items:center; gap:8px; width:100%; margin-top:auto; padding:12px 0 0; min-height:42px; border:0; border-top:1px solid var(--border); background:transparent; color:var(--reference-accent); text-align:left; font-size:11px; font-weight:700; }
+.reference-catalog-details svg { flex-shrink:0; }
+.reference-catalog-assembly-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.reference-catalog-card-system { font-size:10px; color:var(--reference-accent); font-weight:700; margin-bottom:12px; }
+.reference-catalog-subparts { color:var(--muted); font-size:11px; line-height:1.9; padding-left:17px; margin:0 0 18px; }
+.reference-catalog-notes { margin-top:24px; }
+.reference-catalog-notes p { font-size:11px; line-height:1.8; margin-bottom:8px; }
+.reference-catalog-empty { padding:28px; border:1px dashed var(--border); border-radius:10px; background:var(--surface); }
+.reference-catalog-empty h3 { font-size:20px; margin-bottom:12px; }
+.reference-catalog-empty button { border:1px solid var(--border); border-radius:6px; padding:10px 14px; background:var(--bg); color:var(--text); font-size:13px; }
+.reference-catalog-dialog { width:min(920px,calc(100% - 32px)); max-height:90vh; padding:0; border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--text); overflow-y:auto; }
+.reference-catalog-dialog::backdrop { background:#050b16bd; }
+.reference-catalog-close { display:flex; align-items:center; justify-content:center; margin:12px 12px 0 auto; width:42px; height:42px; border:1px solid var(--border); border-radius:50%; background:var(--bg); color:var(--text); }
+.reference-catalog-dialog-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; padding:12px 28px 28px; align-items:start; }
+.reference-catalog-dialog-body > div { min-width:0; }
+.reference-catalog-dialog-body .reference-catalog-picture { border-radius:8px; overflow:hidden; }
+.reference-catalog-dialog-body h3 { font-size:25px; margin:14px 0; }
+.reference-catalog-dialog-body h4 { font-weight:700; margin:20px 0 8px; font-size:13px; }
+.reference-catalog-dialog-body p,.reference-catalog-dialog-body li { color:var(--muted); font-size:13px; line-height:1.8; }
+.reference-catalog-dialog-body ul { padding-left:18px; }
+.reference-catalog-dialog-body a { display:inline-block; margin:14px 0; color:var(--reference-accent); font-size:13px; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+.reference-catalog-dialog-body p.reference-catalog-dialog-note { border-top:1px solid var(--border); padding-top:14px; margin-top:16px; font-size:11px; }
+.reference-articles-heading { padding-top:28px; border-top:1px solid var(--border); margin:0 0 24px; }
+.reference-articles-heading h2 { font-size:27px; margin-bottom:10px; }
+.reference-articles-heading p { font-size:13px; }
+@media(max-width:1100px) { .reference-catalog-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }.reference-catalog-filters { grid-template-columns:1.5fr 1fr 1fr; }.reference-catalog-clear { grid-column:1 / -1; width:fit-content; } }
+@media(max-width:760px) { .reference-catalog-hero { grid-template-columns:1fr; padding:24px; }.reference-catalog-overview { width:200px; }.reference-catalog-overview img { height:230px; }.reference-catalog-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.reference-catalog-filters { grid-template-columns:1fr 1fr; }.reference-catalog-search { grid-column:1 / -1; }.reference-catalog-dialog-body { grid-template-columns:1fr; padding:12px 22px 24px; gap:20px; }.reference-catalog-dialog-body .reference-catalog-picture { max-width:360px; width:100%; margin:auto; } }
+@media(max-width:520px) { .reference-catalog-grid { grid-template-columns:1fr; gap:18px; }.reference-catalog-filters { grid-template-columns:1fr; padding:16px; }.reference-catalog-clear { width:100%; }.reference-catalog-card .reference-catalog-art { max-width:240px; }.reference-catalog-hero { padding:22px; gap:20px; } }

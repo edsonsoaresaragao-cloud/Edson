@@ -6,6 +6,7 @@ import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
 import { PartsMarketplace } from "@/components/parts-marketplace";
+import { MercedesReferenceCatalog } from "@/components/mercedes-reference-catalog";
 import { SearchBox } from "@/components/forms";
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
@@ -93,6 +94,15 @@ export default async function Catalog({
               Os filtros abaixo pesquisam os conteúdos educativos do Edson
               Oficina.
             </p>
+          </div>
+        </>
+      )}
+      {section === "artigos" && (
+        <>
+          <MercedesReferenceCatalog />
+          <div className="reference-articles-heading">
+            <h2>Notícias e artigos publicados</h2>
+            <p>Pesquise os conteúdos do portal nos filtros abaixo.</p>
           </div>
         </>
       )}
