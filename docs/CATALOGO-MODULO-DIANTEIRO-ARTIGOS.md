@@ -1,6 +1,6 @@
 # Catálogo do módulo dianteiro em Notícias e artigos
 
-Em `/artigos`, a biblioteca permite escolher entre **Módulo Dianteiro** e **Mercedes-Benz**. O módulo dianteiro é a escolha inicial; `/artigos?catalog=mercedes` abre diretamente o catálogo anterior. A troca atualiza o parâmetro `catalog`, preservando os demais parâmetros da URL, sem buscar novamente os artigos. Os filtros locais de peças são reiniciados ao trocar de catálogo.
+Em `/artigos`, a biblioteca permite escolher entre **Compressor de ar-condicionado**, **Módulo Dianteiro** e **Mercedes-Benz**. O compressor é a escolha inicial; `/artigos?catalog=modulo-dianteiro` abre diretamente este catálogo e `/artigos?catalog=mercedes` abre o de motores. A troca atualiza o parâmetro `catalog`, preservando os demais parâmetros da URL, sem buscar novamente os artigos. Os filtros locais de peças são reiniciados ao trocar de catálogo.
 
 ## Organização e comportamento
 

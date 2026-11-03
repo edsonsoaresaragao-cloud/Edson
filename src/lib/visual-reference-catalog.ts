@@ -1,4 +1,6 @@
 export type VisualPart = {
+  /** Context identifiers (for example flow arrows) are not replacement parts. */
+  kind?: "context";
   number: number;
   name: string;
   system: string;
@@ -43,6 +45,12 @@ export type VisualCatalog = {
   systemLabel: string;
   assemblyLabel: string;
   assemblyNoun: [string, string];
+  partLabels?: {
+    tab: string;
+    singular: string;
+    plural: string;
+    feminine?: boolean;
+  };
   interactiveHref: string;
   interactiveLabel: string;
   systems: readonly { id: string; name: string }[];

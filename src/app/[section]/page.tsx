@@ -7,6 +7,7 @@ import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
 import { PartsMarketplace } from "@/components/parts-marketplace";
 import { TechnicalCatalogLibrary } from "@/components/technical-catalog-library";
+import { resolveTechnicalCatalogId } from "@/lib/technical-catalogs";
 import { SearchBox } from "@/components/forms";
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
@@ -101,9 +102,7 @@ export default async function Catalog({
         <>
           <TechnicalCatalogLibrary
             key={s.catalog}
-            initialCatalog={
-              s.catalog === "mercedes" ? "mercedes" : "modulo-dianteiro"
-            }
+            initialCatalog={resolveTechnicalCatalogId(s.catalog)}
           />
           <div className="reference-articles-heading">
             <h2>Notícias e artigos publicados</h2>

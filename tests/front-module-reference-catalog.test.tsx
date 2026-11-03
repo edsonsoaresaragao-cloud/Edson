@@ -117,7 +117,11 @@ test("cada região do atlas se limita à sua linha, inclusive nas linhas desigua
     );
 });
 test("biblioteca entrega o módulo sem JavaScript e preserva o catálogo Mercedes", () => {
-  const markup = renderToStaticMarkup(createElement(TechnicalCatalogLibrary));
+  const markup = renderToStaticMarkup(
+    createElement(TechnicalCatalogLibrary, {
+      initialCatalog: "modulo-dianteiro",
+    }),
+  );
   assert.equal(
     (markup.match(/class="reference-catalog-card"/g) || []).length,
     20,

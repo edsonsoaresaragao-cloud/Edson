@@ -79,6 +79,20 @@ export function VisualReferenceCatalog({
   const parts = filterVisualParts(catalog, query, system, order),
     assemblies = filterVisualAssemblies(catalog, query, system);
   const count = view === "parts" ? parts.length : assemblies.length;
+  const partLabels = catalog.partLabels ?? {
+    tab: "Componentes",
+    singular: "componente",
+    plural: "componentes",
+    feminine: false,
+  };
+  const resultNoun =
+    view === "parts"
+      ? partLabels
+      : {
+          singular: catalog.assemblyNoun[0],
+          plural: catalog.assemblyNoun[1],
+          feminine: catalog.assemblyNoun[0] === "vista",
+        };
   const filtered = !!query || system !== "all" || order !== "number";
   function clear() {
     setQuery("");
@@ -104,7 +118,7 @@ export function VisualReferenceCatalog({
           <p>{catalog.description}</p>
           <div className="reference-catalog-counts">
             <span>
-              <strong>{catalog.parts.length}</strong> componentes
+              <strong>{catalog.parts.length}</strong> {partLabels.plural}
             </span>
             <span>
               <strong>{catalog.assemblies.length}</strong>{" "}
@@ -132,7 +146,7 @@ export function VisualReferenceCatalog({
           aria-pressed={view === "parts"}
           onClick={() => setView("parts")}
         >
-          Componentes <span>{catalog.parts.length}</span>
+          {partLabels.tab} <span>{catalog.parts.length}</span>
         </button>
         <button
           type="button"
@@ -203,21 +217,21 @@ export function VisualReferenceCatalog({
         aria-live="polite"
         aria-atomic="true"
       >
-        {count}{" "}
-        {view === "parts"
+        {count} {count === 1 ? resultNoun.singular : resultNoun.plural}{" "}
+        {resultNoun.feminine
           ? count === 1
-            ? "componente encontrado"
-            : "componentes encontrados"
+            ? "encontrada"
+            : "encontradas"
           : count === 1
-            ? `${catalog.assemblyNoun[0]} ${catalog.assemblyNoun[0] === "vista" ? "encontrada" : "encontrado"}`
-            : `${catalog.assemblyNoun[1]} ${catalog.assemblyNoun[0] === "vista" ? "encontradas" : "encontrados"}`}
+            ? "encontrado"
+            : "encontrados"}
         {query.trim() && <> para “{query.trim()}”</>}
       </p>
 
       {view === "parts" ? (
         <ul
           className="reference-catalog-grid"
-          aria-label={`Componentes principais — ${catalog.name}`}
+          aria-label={`${partLabels.tab} principais — ${catalog.name}`}
         >
           {parts.map((item) => (
             <li key={item.number}>
@@ -232,7 +246,11 @@ export function VisualReferenceCatalog({
                     <span className="reference-catalog-number">
                       {String(item.number).padStart(2, "0")}
                     </span>
-                    <span>{visualSystemName(catalog, item.system)}</span>
+                    <span>
+                      {item.kind === "context"
+                        ? "Fluxo / contexto"
+                        : visualSystemName(catalog, item.system)}
+                    </span>
                   </div>
                   <h3>{item.name}</h3>
                   <p>{item.description}</p>
@@ -371,14 +389,20 @@ export function VisualReferenceCatalog({
               <p>{detail.item.description}</p>
               {detail.kind === "part" ? (
                 <>
-                  <h4>Aplicação e identificação</h4>
+                  <h4>
+                    {detail.item.kind === "context"
+                      ? "Leitura da ilustração"
+                      : "Aplicação e identificação"}
+                  </h4>
                   <p>{detail.item.note}</p>
-                  <Link
-                    href={`/pecas?buy=${encodeURIComponent(detail.item.name)}`}
-                    prefetch={false}
-                  >
-                    Pesquisar esta peça nas lojas ↗
-                  </Link>
+                  {detail.item.kind !== "context" && (
+                    <Link
+                      href={`/pecas?buy=${encodeURIComponent(detail.item.name)}`}
+                      prefetch={false}
+                    >
+                      Pesquisar esta peça nas lojas ↗
+                    </Link>
+                  )}
                 </>
               ) : (
                 <>

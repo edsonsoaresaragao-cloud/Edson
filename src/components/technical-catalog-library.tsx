@@ -4,13 +4,14 @@ import {
   ReferenceOverview,
   VisualReferenceCatalog,
 } from "./visual-reference-catalog";
-import { frontModuleVisualCatalog } from "@/lib/front-module-reference-catalog";
-import { mercedesVisualCatalog } from "@/lib/mercedes-visual-catalog";
-
-const catalogs = [frontModuleVisualCatalog, mercedesVisualCatalog] as const;
-export type TechnicalCatalogId = "modulo-dianteiro" | "mercedes";
+import {
+  technicalCatalogs,
+  defaultTechnicalCatalog,
+  type TechnicalCatalogId,
+} from "@/lib/technical-catalogs";
+export type { TechnicalCatalogId } from "@/lib/technical-catalogs";
 export function TechnicalCatalogLibrary({
-  initialCatalog = "modulo-dianteiro",
+  initialCatalog = defaultTechnicalCatalog,
 }: {
   initialCatalog?: TechnicalCatalogId;
 }) {
@@ -22,8 +23,7 @@ export function TechnicalCatalogLibrary({
     url.searchParams.set("catalog", id);
     window.history.replaceState(null, "", url);
   }
-  const catalog =
-    catalogs.find((item) => item.id === selected) || frontModuleVisualCatalog;
+  const catalog = technicalCatalogs[selected];
   return (
     <div className="technical-catalog-library">
       <h2>Catálogos técnicos ilustrados</h2>
@@ -36,7 +36,7 @@ export function TechnicalCatalogLibrary({
         role="group"
         aria-label="Escolher catálogo técnico"
       >
-        {catalogs.map((item) => (
+        {Object.values(technicalCatalogs).map((item) => (
           <button
             key={item.id}
             type="button"
@@ -48,8 +48,8 @@ export function TechnicalCatalogLibrary({
             <span className="technical-catalog-choice-text">
               <strong>{item.name}</strong>
               <span>
-                {item.parts.length} componentes · {item.assemblies.length}{" "}
-                {item.assemblyNoun[1]}
+                {item.parts.length} {item.partLabels?.plural ?? "componentes"} ·{" "}
+                {item.assemblies.length} {item.assemblyNoun[1]}
               </span>
               <span className="technical-catalog-choice-action">
                 {selected === item.id
