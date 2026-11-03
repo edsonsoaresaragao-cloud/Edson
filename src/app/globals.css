@@ -2751,3 +2751,64 @@ html[data-theme="dark"] .sensor-actuator-catalog {
   .parts-reference-card .component-reference { border-right: 0; border-bottom: 1px solid var(--border); }
   .parts-reference-card > div { padding: 18px; }
 }
+
+/* Motor de partida: vistas e fichas individuais da referência. */
+.starter-explorer { color:#eaf3fc; }
+.starter-explorer h2,.starter-explorer h3,.starter-explorer h4 { color:#edf5fc; }
+.starter-explorer p { color:#b9cddd; }
+.starter-explorer .suspension-heading { background:linear-gradient(115deg,#283c4a,#101e2d); }
+.starter-explorer .suspension-heading > div { min-width:0; }
+.starter-explorer .suspension-stage { height:610px; }
+.starter-explorer .suspension-parts ol { max-height:none; }
+.starter-explorer .suspension-number { background:#24617f; }
+.starter-explorer .suspension-toolbar { gap:8px; }
+.starter-annotations button { line-height:1.35; }
+.starter-picture { background:#fff; color:#455166; border-radius:10px; overflow:hidden; margin:0; }
+.starter-picture > div { aspect-ratio:1; width:100%; background-image:url('/images/starter/starter-components.webp'); background-size:400% 300%; background-repeat:no-repeat; }
+.starter-picture figcaption { font-size:10px; padding:8px 10px; background:#f0f3f7; line-height:1.5; }
+.starter-assembled-picture { width:170px; flex-shrink:0; }
+.starter-assembled-picture figcaption { font-size:9px; }
+.starter-controls { grid-template-columns:1fr 1fr 1.15fr; }
+.starter-toggles { display:flex; flex-direction:column; gap:14px; justify-content:center; }
+.starter-explorer .starter-toggles label { display:flex; align-items:center; gap:9px; }
+.starter-explorer .starter-toggles input { width:17px; min-height:17px; margin:0; }
+.starter-phase { margin:0 16px 20px; padding:20px; background:#163042; border:1px solid #41667f; border-radius:10px; }
+.starter-phase > span { font-size:10px; letter-spacing:.09em; color:#ffd081; }
+.starter-phase h3 { margin:10px 0; font-size:20px; }
+.starter-phase p { font-size:13px; margin:0; }
+.starter-signals { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+.starter-signals span { border:1px solid #526c7e; padding:5px 8px; border-radius:20px; font-size:10px; color:#c6d9e8; }
+.starter-signals span[data-active=true] { color:#ffe3a3; border-color:#bd974f; background:#3c321d; }
+.starter-selected-detail { display:grid; grid-template-columns:205px minmax(0,1fr); margin:0 16px 20px; border:1px solid #3b5b72; border-radius:10px; overflow:hidden; background:#142b3e; }
+.starter-selected-detail > div { padding:20px; }
+.starter-selected-detail .starter-picture { border-radius:0; }
+.starter-selected-detail h3 { font-size:20px; margin:12px 0; }
+.starter-selected-detail p { font-size:13px; line-height:1.65; }
+.starter-selected-detail a { color:#ffc484; font-size:12px; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+.starter-explorer .starter-context-note { margin-top:24px; font-size:12px; }
+.starter-study { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; padding:26px; border-top:1px solid #30445b; }
+.starter-study section { min-width:0; }
+.starter-study h3 { font-size:18px; margin-bottom:14px; }
+.starter-study p,.starter-study li { font-size:12px; line-height:1.8; }
+.starter-study ul { padding-left:18px; color:#c4d7e6; }
+.starter-study li { margin-bottom:10px; }
+.starter-study strong { color:#e2edf6; }
+.starter-study section:nth-child(3) { grid-column:1 / -1; }
+.starter-steps { list-style:none; margin:0 0 16px; padding:0; display:flex; flex-direction:column; gap:8px; }
+.starter-steps button { display:flex; gap:12px; align-items:center; width:100%; background:#172e42; border:1px solid #3a5b74; color:#d0e0ec; border-radius:7px; padding:9px 12px; text-align:left; font-size:12px; }
+.starter-steps button[aria-pressed=true] { color:#ffe4ad; border-color:#c6a05c; background:#393321; }
+.starter-steps button span { font-weight:700; }
+.starter-circuit svg { width:100%; height:auto; min-height:160px; border:1px solid #304a5f; border-radius:10px; background:#0b1c2b; }
+.starter-table-scroll { overflow-x:auto; }
+.starter-table-scroll table { width:100%; border-collapse:collapse; font-size:12px; }
+.starter-table-scroll th,.starter-table-scroll td { padding:12px; text-align:left; border:1px solid #365165; vertical-align:top; color:#c5d7e4; min-width:150px; }
+.starter-table-scroll thead th { background:#1d364b; color:#f0d59e; }
+.starter-table-scroll tbody th { font-weight:600; color:#e7f1f8; }
+.starter-schematic-stage { position:absolute; inset:0; padding:28px 10px 8px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.starter-schematic-stage svg { width:100%; max-height:84%; }
+.starter-schematic-stage p { font-size:12px; text-align:center; }
+@media(max-width:950px) { .starter-selected-detail { grid-template-columns:190px minmax(0,1fr); } }
+@media(max-width:640px) { .starter-explorer .suspension-heading { flex-direction:column; align-items:flex-start; }.starter-assembled-picture { width:130px; }.starter-explorer .suspension-stage { height:520px; }.starter-annotations button { width:29px; padding:5px 2px; font-size:10px; text-align:center; min-height:29px; transform:none; }.starter-selected-detail { grid-template-columns:1fr; }.starter-selected-detail .starter-picture > div { width:220px; margin:auto; }.starter-controls { grid-template-columns:1fr; }.starter-study { grid-template-columns:1fr; padding:20px; }.starter-study section:nth-child(3) { grid-column:auto; }.starter-table-scroll table { min-width:600px; } }
+@media(prefers-reduced-motion:reduce) { .starter-explorer * { scroll-behavior:auto; } }
+.starter-list-picture { width:42px; height:42px; flex-shrink:0; background:#fff url('/images/starter/starter-components.webp'); background-size:400% 300%; border-radius:4px; }
+.starter-table-scroll:focus-visible { outline:2px solid #ffad5c; outline-offset:3px; }
