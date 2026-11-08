@@ -2916,7 +2916,7 @@ html[data-theme="dark"] .visual-reference-catalog { --reference-accent:#ffb175; 
 .reference-catalog-context p,.reference-catalog-context li,.reference-catalog-context dd { font-size:12px; line-height:1.85; color:var(--muted); }
 .reference-catalog-context ul { padding-left:18px; margin:0; }
 .reference-catalog-context dl { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin:18px 0 0; }
-.starter-reference-catalog .reference-catalog-context dl { grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); }
+.starter-reference-catalog .reference-catalog-context dl,.manual-transmission-reference-catalog .reference-catalog-context dl { grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); }
 .reference-catalog-context dt { font-weight:700; font-size:13px; margin-bottom:6px; }
 .reference-catalog-context dd { margin:0; }
 @media(max-width:760px) { .technical-catalog-choices { grid-template-columns:1fr; }.reference-catalog-context { grid-template-columns:1fr; }.reference-catalog-context dl { grid-template-columns:repeat(2,minmax(0,1fr)); } }

@@ -145,7 +145,7 @@ test("o conteúdo conserva funcionamento e diagnóstico com valores contextualiz
   assert.match(catalog.notes.join(" "), /Não são fotografias/);
 });
 
-test("a biblioteca entrega as 11 fichas no servidor e preserva os seis catálogos anteriores", () => {
+test("a biblioteca entrega as 11 fichas no servidor e preserva os demais catálogos", () => {
   const html = renderToStaticMarkup(
     createElement(TechnicalCatalogLibrary, {
       initialCatalog: "motor-de-partida",

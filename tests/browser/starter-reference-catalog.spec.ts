@@ -103,7 +103,7 @@ test("arranque: fichas ampliadas, voz, acesso às lojas e conjuntos de funcionam
   ).toHaveAttribute("href", "/categorias/motor-de-partida");
 });
 
-test("arranque: sete catálogos, URL, imagens e acessibilidade nos dois temas e na ficha", async ({
+test("arranque: catálogos, URL, imagens e acessibilidade nos dois temas e na ficha", async ({
   page,
 }, info) => {
   const root = page.locator(".starter-reference-catalog");
