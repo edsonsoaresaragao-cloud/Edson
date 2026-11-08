@@ -123,7 +123,7 @@ test("manual: fichas ampliadas, voz, sincronizador, seleção e conjuntos extern
   ).toHaveAttribute("href", "/categorias/transmissao-manual");
 });
 
-test("manual: oito catálogos, imagens locais, URL e acessibilidade nos dois temas", async ({
+test("manual: catálogos, imagens locais, URL e acessibilidade nos dois temas", async ({
   page,
 }, info) => {
   const failures: string[] = [];

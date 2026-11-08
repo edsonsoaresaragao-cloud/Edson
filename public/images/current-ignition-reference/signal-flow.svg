@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Fluxos funcionais da ignição COP</title>
+  <desc id="desc">A bateria alimenta a ECU e as quatro bobinas por proteção. Sensores enviam informações à ECU. Os comandos azuis terminam nas bobinas; os caminhos amarelos de alta tensão vão de cada bobina à sua vela. Não representa pinagem ou esquema de reparo.</desc>
+  <defs>
+    <marker id="red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L8 4L0 8Z" fill="#bd2924"/></marker>
+    <marker id="green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L8 4L0 8Z" fill="#24863f"/></marker>
+    <marker id="blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L8 4L0 8Z" fill="#1663b9"/></marker>
+    <marker id="gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L8 4L0 8Z" fill="#9c6800"/></marker>
+  </defs>
+  <rect width="800" height="500" fill="white"/>
+  <g font-family="Arial, sans-serif" fill="#122d4d" text-anchor="middle">
+    <g fill="#eef3f8" stroke="#34536f" stroke-width="2">
+      <rect id="battery" x="25" y="20" width="130" height="55" rx="8"/>
+      <rect id="fuse" x="210" y="28" width="90" height="40" rx="7"/>
+      <rect id="sensors" x="20" y="150" width="110" height="245" rx="8"/>
+      <rect id="ecu" x="160" y="260" width="135" height="90" rx="10"/>
+      <rect id="coil-1" x="365" y="160" width="70" height="95" rx="8"/>
+      <rect id="coil-2" x="475" y="160" width="70" height="95" rx="8"/>
+      <rect id="coil-3" x="585" y="160" width="70" height="95" rx="8"/>
+      <rect id="coil-4" x="695" y="160" width="70" height="95" rx="8"/>
+    </g>
+    <text x="90" y="54" font-size="23" font-weight="bold">Bateria</text>
+    <text x="255" y="54" font-size="19">Fusível</text>
+    <text x="75" y="177" font-size="19" font-weight="bold">Sensores</text>
+    <g font-size="18"><text x="75" y="207">CKP</text><text x="75" y="240">CMP</text><text x="75" y="273">MAP/MAF</text><text x="75" y="306">TPS</text><text x="75" y="339">ECT</text><text x="75" y="372">Lambda</text></g>
+    <text x="227" y="313" font-size="28" font-weight="bold">ECU</text>
+    <g font-size="18"><text x="400" y="195">Bobina</text><text x="510" y="195">Bobina</text><text x="620" y="195">Bobina</text><text x="730" y="195">Bobina</text></g>
+    <g font-size="22" font-weight="bold"><text x="400" y="229">1</text><text x="510" y="229">2</text><text x="620" y="229">3</text><text x="730" y="229">4</text></g>
+    <g fill="none" stroke="#bd2924" stroke-width="3">
+      <path d="M155 47H210" marker-end="url(#red)"/>
+      <path id="supply" d="M300 47V100H730"/>
+      <path data-from="supply" data-to="ecu" d="M300 47H315V235H227V260" marker-end="url(#red)"/>
+      <path data-from="supply" data-to="coil-1" d="M400 100V160" marker-end="url(#red)"/>
+      <path data-from="supply" data-to="coil-2" d="M510 100V160" marker-end="url(#red)"/>
+      <path data-from="supply" data-to="coil-3" d="M620 100V160" marker-end="url(#red)"/>
+      <path data-from="supply" data-to="coil-4" d="M730 100V160" marker-end="url(#red)"/>
+    </g>
+    <g fill="none" stroke="#24863f" stroke-width="3">
+      <path d="M130 200H145V365M130 233H145M130 266H145M130 299H145M130 332H145M130 365H145"/>
+      <path data-from="sensors" data-to="ecu" d="M145 305H160" marker-end="url(#green)"/>
+    </g>
+    <g fill="none" stroke="#1663b9" stroke-width="3">
+      <path d="M295 305H325V130H670"/>
+      <path data-from="ecu" data-to="coil-1" d="M350 130V207H365" marker-end="url(#blue)"/>
+      <path data-from="ecu" data-to="coil-2" d="M455 130V207H475" marker-end="url(#blue)"/>
+      <path data-from="ecu" data-to="coil-3" d="M565 130V207H585" marker-end="url(#blue)"/>
+      <path data-from="ecu" data-to="coil-4" d="M670 130V207H695" marker-end="url(#blue)"/>
+    </g>
+    <g fill="none" stroke="#9c6800" stroke-width="3">
+      <path data-from="coil-1" data-to="spark-1" d="M400 255V325" marker-end="url(#gold)"/>
+      <path data-from="coil-2" data-to="spark-2" d="M510 255V325" marker-end="url(#gold)"/>
+      <path data-from="coil-3" data-to="spark-3" d="M620 255V325" marker-end="url(#gold)"/>
+      <path data-from="coil-4" data-to="spark-4" d="M730 255V325" marker-end="url(#gold)"/>
+    </g>
+    <g fill="#eef3f8" stroke="#34536f" stroke-width="2">
+      <path id="spark-1" d="M392 330H408V370H412V390H388V370H392ZM400 390V400H410V394"/>
+      <path id="spark-2" d="M502 330H518V370H522V390H498V370H502ZM510 390V400H520V394"/>
+      <path id="spark-3" d="M612 330H628V370H632V390H608V370H612ZM620 390V400H630V394"/>
+      <path id="spark-4" d="M722 330H738V370H742V390H718V370H722ZM730 390V400H740V394"/>
+    </g>
+    <g font-size="19"><text x="400" y="425">Vela 1</text><text x="510" y="425">Vela 2</text><text x="620" y="425">Vela 3</text><text x="730" y="425">Vela 4</text></g>
+    <g text-anchor="start" font-size="17">
+      <rect x="20" y="453" width="14" height="14" fill="#bd2924"/><text x="42" y="466">Alimentação</text>
+      <rect x="215" y="453" width="14" height="14" fill="#24863f"/><text x="237" y="466">Sensores</text>
+      <rect x="390" y="453" width="14" height="14" fill="#1663b9"/><text x="412" y="466">Comando</text>
+      <rect x="565" y="453" width="14" height="14" fill="#9c6800"/><text x="587" y="466">Alta tensão</text>
+    </g>
+    <text x="400" y="493" font-size="14">Fluxos funcionais. Não representa pinagem ou esquema de reparo.</text>
+  </g>
+</svg>

@@ -6,11 +6,13 @@ import { mercedesVisualCatalog } from "./mercedes-visual-catalog";
 import { hvacVisualCatalog } from "./hvac-reference-catalog";
 import { starterVisualCatalog } from "./starter-reference-catalog";
 import { manualTransmissionVisualCatalog } from "./manual-transmission-reference-catalog";
+import { currentIgnitionVisualCatalog } from "./current-ignition-reference-catalog";
 
 export const technicalCatalogs = {
   hvac: hvacVisualCatalog,
   arrefecimento: coolingVisualCatalog,
   alternador: alternatorVisualCatalog,
+  "ignicao-atual": currentIgnitionVisualCatalog,
   "motor-de-partida": starterVisualCatalog,
   "transmissao-manual": manualTransmissionVisualCatalog,
   compressor: compressorVisualCatalog,
