@@ -14,7 +14,7 @@ A fala anterior é cancelada antes de iniciar outra. Movimentos, animação, alt
 
 `src/components/use-part-narration.ts` usa a síntese de voz do navegador. O pedido tem idioma `pt-BR`, velocidade 0,95 e texto `Nome. Função: descrição`. Prefere voz brasileira local, depois outra brasileira e, na ausência, outra voz em português. Com a lista ainda vazia, solicita o idioma ao navegador; novas seleções consultam novamente as vozes, atendendo ao carregamento tardio. A reprodução efetiva depende das vozes e do áudio disponíveis no dispositivo.
 
-`src/components/hvac-explorer.tsx` reúne os caminhos de seleção em um callback estável, mantendo o renderizador existente. O hook trata término, erro e eventos atrasados de falas canceladas. Ao ocultar a aba, sair da página ou desmontar o módulo, cancela a fala atual e remove os ouvintes. O estado inicial de suporte é compatível com renderização no servidor. Sem chave, arquivo de áudio, endpoint ou variável de ambiente adicional.
+`src/components/hvac-explorer.tsx` reúne os caminhos de seleção em um callback estável, mantendo o renderizador existente. Os controles usam `src/components/part-narration-controls.tsx`, compartilhado com o compressor. O hook trata término, erro e eventos atrasados de falas canceladas. Ao ocultar a aba, sair da página ou desmontar o módulo, cancela a fala atual e remove os ouvintes. O estado inicial de suporte é compatível com renderização no servidor. Sem chave, arquivo de áudio, endpoint ou variável de ambiente adicional.
 
 ## Validação
 

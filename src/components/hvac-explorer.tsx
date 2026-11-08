@@ -2,11 +2,12 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
 import { hvacParts, initialHvacState } from "@/lib/hvac-parts";
 import type { HvacRenderer } from "@/lib/hvac-renderer";
 export function HvacExplorer() {
-  const { availability, enabled, speaking, error, speak, stop, toggle } =
-    usePartNarration();
+  const narration = usePartNarration(),
+    { speak } = narration;
   const [state, setState] = useState(initialHvacState),
     [paused, setPaused] = useState(false),
     [status, setStatus] = useState<"loading" | "ready" | "fallback">("loading");
@@ -117,44 +118,11 @@ export function HvacExplorer() {
               Explorar compressor ↗
             </Link>
           </div>
-          <div
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
             className="hvac-narration"
-            role="group"
-            aria-label="Narração das peças"
-          >
-            <div className="suspension-toolbar hvac-narration-controls">
-              <button
-                type="button"
-                aria-pressed={enabled && availability === "available"}
-                disabled={availability !== "available"}
-                onClick={toggle}
-              >
-                Falar ao selecionar
-              </button>
-              <button
-                type="button"
-                disabled={availability !== "available" || !enabled}
-                onClick={() => speak(selected)}
-              >
-                Ouvir peça novamente
-              </button>
-              <button type="button" disabled={!speaking} onClick={stop}>
-                Interromper fala
-              </button>
-            </div>
-            <p role="status" aria-live="polite" aria-atomic="true">
-              {availability === "checking"
-                ? "Verificando voz do navegador…"
-                : availability === "unavailable"
-                  ? "A voz não está disponível neste navegador. As descrições continuam no texto."
-                  : error ||
-                    (!enabled
-                      ? "Narração desligada. As peças continuam selecionáveis."
-                      : speaking
-                        ? `Lendo: ${selected.name}.`
-                        : "Clique na peça, na etiqueta ou na lista para ouvir o nome e a função em português.")}
-            </p>
-          </div>
+          />
           <div className="suspension-stage">
             <div
               ref={host}

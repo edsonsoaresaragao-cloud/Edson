@@ -15,3 +15,7 @@ Carregamento do renderizador apenas no cliente, com pausa ao ocultar aba/sair da
 Validação: cinco testes do compressor (geometria, cinemática, desacoplamento, corte/seleção e acesso/HTML), mais quatro testes HVAC; TypeScript direcionado e lint aprovados. Sem validação visual em navegador/GPU nesta sessão. Build completo continua dependente da geração Prisma indisponível no ambiente.
 
 Publicação pelo fluxo existente do Render: **Manual Deploy → Deploy latest commit** após o push no GitHub.
+
+## Narração ao selecionar
+
+Os 16 itens podem ser ouvidos ao clicar na peça 3D, etiqueta, lista ou etapa de funcionamento. A narração fala nome e função em português, com controles para repetir, interromper e desligar. O áudio começa após ação do visitante; a voz depende do navegador/dispositivo. Alterar as vistas não inicia fala. Detalhes e validação em `docs/NARRACAO-PECAS-COMPRESSOR.md`.

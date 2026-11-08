@@ -122,4 +122,9 @@ test("acesso ao compressor fica no módulo HVAC e página oferece nomes sem WebG
   assert.ok(html.includes("Corte em funcionamento"));
   assert.ok(html.includes('aria-live="polite"'));
   assert.ok(html.includes("Embreagem acoplada"));
+  assert.ok(html.includes('aria-label="Narração das peças"'));
+  assert.ok(html.includes("Falar ao selecionar"));
+  assert.ok(html.includes("Ouvir peça novamente"));
+  assert.ok(html.includes("Interromper fala"));
+  assert.ok(html.includes("Verificando voz do navegador"));
 });

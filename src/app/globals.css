@@ -2846,10 +2846,10 @@ html[data-theme="dark"] .visual-reference-catalog { --reference-accent:#ffb175; 
 .reference-catalog-picture { margin:0; background:#fff; }
 .cooling-reference-catalog .reference-catalog-card .reference-catalog-picture { display:grid; grid-template-rows:240px auto; }
 .hvac-reference-catalog .reference-catalog-card .reference-catalog-picture { display:grid; grid-template-rows:250px auto; }
-.hvac-narration { border-top:1px solid #30445b; border-bottom:1px solid #30445b; }
-.hvac-narration-controls { padding-bottom:8px; }
-.hvac-narration p { margin:0; padding:0 1rem 1rem; font-size:12px; color:#b5c8d9; line-height:1.6; }
-.hvac-narration-controls button:disabled { opacity:1; color:#9db4c7; cursor:default; }
+.part-narration { border-top:1px solid #30445b; border-bottom:1px solid #30445b; }
+.part-narration-controls { padding-bottom:8px; }
+.part-narration p { margin:0; padding:0 1rem 1rem; font-size:12px; color:#b5c8d9; line-height:1.6; }
+.part-narration-controls button:disabled { opacity:1; color:#9db4c7; cursor:default; }
 .reference-catalog-art { width:100%; aspect-ratio:1; background-repeat:no-repeat; }
 .reference-catalog-card .reference-catalog-art { max-width:220px; margin:auto; }
 .reference-catalog-card-body { display:flex; flex-direction:column; flex:1; padding:18px; }

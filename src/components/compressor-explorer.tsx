@@ -1,17 +1,30 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
 import {
   compressorParts,
   initialCompressorState,
 } from "@/lib/compressor-parts";
 import type { CompressorRenderer } from "@/lib/compressor-renderer";
 export function CompressorExplorer() {
+  const narration = usePartNarration(),
+    { speak } = narration;
   const [state, setState] = useState(initialCompressorState),
     [paused, setPaused] = useState(false),
     [status, setStatus] = useState<"loading" | "ready" | "fallback">("loading");
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<CompressorRenderer | null>(null),
     latest = useRef({ state, paused });
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = compressorParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -24,7 +37,7 @@ export function CompressorExplorer() {
           controller.current = createCompressorRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
           );
           controller.current.setPaused(latest.current.paused);
@@ -41,7 +54,7 @@ export function CompressorExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -52,6 +65,7 @@ export function CompressorExplorer() {
   return (
     <section
       className="suspension-explorer compressor-explorer"
+      data-renderer={status}
       aria-labelledby="compressor-title"
     >
       <header className="suspension-heading">
@@ -116,6 +130,11 @@ export function CompressorExplorer() {
               Restaurar câmera
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="compressor-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -262,7 +281,7 @@ export function CompressorExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -288,7 +307,7 @@ export function CompressorExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === p.id}
-                onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                onClick={() => selectPart(p.id)}
               >
                 {p.name} →
               </button>
