@@ -4,11 +4,13 @@ import { compressorVisualCatalog } from "./compressor-reference-catalog";
 import { frontModuleVisualCatalog } from "./front-module-reference-catalog";
 import { mercedesVisualCatalog } from "./mercedes-visual-catalog";
 import { hvacVisualCatalog } from "./hvac-reference-catalog";
+import { starterVisualCatalog } from "./starter-reference-catalog";
 
 export const technicalCatalogs = {
   hvac: hvacVisualCatalog,
   arrefecimento: coolingVisualCatalog,
   alternador: alternatorVisualCatalog,
+  "motor-de-partida": starterVisualCatalog,
   compressor: compressorVisualCatalog,
   "modulo-dianteiro": frontModuleVisualCatalog,
   mercedes: mercedesVisualCatalog,

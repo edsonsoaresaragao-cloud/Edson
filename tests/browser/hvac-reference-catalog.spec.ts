@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { technicalCatalogs } from "../../src/lib/technical-catalogs";
 
 const path = process.env.HVAC_CATALOG_PREVIEW_PATH || "/artigos?catalog=hvac";
 
@@ -107,7 +108,7 @@ test("fichas distinguem secador/acumulador, mostram esquema e preservam foco", a
   );
 });
 
-test("seis catálogos, URL, imagens locais, responsividade e acessibilidade", async ({
+test("catálogos, URL, imagens locais, responsividade e acessibilidade", async ({
   page,
 }, info) => {
   const failures: string[] = [];
@@ -122,7 +123,7 @@ test("seis catálogos, URL, imagens locais, responsividade e acessibilidade", as
     library
       .getByRole("group", { name: "Escolher catálogo técnico" })
       .getByRole("button"),
-  ).toHaveCount(6);
+  ).toHaveCount(Object.keys(technicalCatalogs).length);
   await expect(root.locator(".reference-catalog-card")).toHaveCount(12);
   await page.screenshot({
     path: `test-results/hvac-catalog-${info.project.name}-overview.png`,

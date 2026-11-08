@@ -137,7 +137,7 @@ test("imagens locais preservam proporções e o esquema define um único ciclo f
   );
   assert.doesNotMatch(svg, /<script|<foreignObject|href=/);
 });
-test("HTML inicial mostra HVAC e mantém os seis catálogos disponíveis", () => {
+test("HTML inicial mostra HVAC e mantém os sete catálogos disponíveis", () => {
   const markup = renderToStaticMarkup(createElement(TechnicalCatalogLibrary));
   assert.equal(
     (markup.match(/class="reference-catalog-card"/g) || []).length,
@@ -147,11 +147,12 @@ test("HTML inicial mostra HVAC e mantém os seis catálogos disponíveis", () =>
   assert.match(markup, /Ilustração didática gerada/);
   assert.match(markup, /não são equivalentes/);
   assert.match(markup, /Como ler as cores do cartaz/);
-  assert.equal(Object.keys(technicalCatalogs).length, 6);
+  assert.equal(Object.keys(technicalCatalogs).length, 7);
   for (const id of [
     "hvac",
     "arrefecimento",
     "alternador",
+    "motor-de-partida",
     "compressor",
     "modulo-dianteiro",
     "mercedes",
