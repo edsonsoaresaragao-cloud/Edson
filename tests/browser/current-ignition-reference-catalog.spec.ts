@@ -118,7 +118,7 @@ test("ignição atual: fichas, voz, contexto e esquema funcional ampliado", asyn
   ).toHaveAttribute("href", "/categorias/ignicao/atual");
 });
 
-test("ignição atual: nove catálogos, URL, imagens e acessibilidade nos dois temas", async ({
+test("ignição atual: catálogos, URL, imagens e acessibilidade nos dois temas", async ({
   page,
 }, info) => {
   const root = page.locator(".current-ignition-reference-catalog");
