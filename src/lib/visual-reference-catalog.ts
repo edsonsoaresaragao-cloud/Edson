@@ -10,6 +10,7 @@ export type VisualPart = {
   imageCell: number;
 };
 export type VisualAssembly = {
+  artwork?: VisualArtwork;
   id: string;
   name: string;
   system: string;
@@ -19,6 +20,7 @@ export type VisualAssembly = {
   imageCell: number;
 };
 export type VisualArtwork = {
+  caption?: string;
   src: string;
   columns: number;
   rows: number;

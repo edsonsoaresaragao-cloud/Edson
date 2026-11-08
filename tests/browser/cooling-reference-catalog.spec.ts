@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { technicalCatalogs } from "../../src/lib/technical-catalogs";
 
 const path =
   process.env.COOLING_CATALOG_PREVIEW_PATH || "/artigos?catalog=arrefecimento";
@@ -99,7 +100,7 @@ test("fichas ampliam imagens, explicam aplicação e distinguem os circuitos", a
   await expect(dialog).toContainText("13. Ventilador da cabine / blower");
 });
 
-test("cinco catálogos, URL, imagens locais, responsividade e acessibilidade", async ({
+test("catálogos, URL, imagens locais, responsividade e acessibilidade", async ({
   page,
 }, info) => {
   const failures: string[] = [];
@@ -114,7 +115,7 @@ test("cinco catálogos, URL, imagens locais, responsividade e acessibilidade", a
     library
       .getByRole("group", { name: "Escolher catálogo técnico" })
       .getByRole("button"),
-  ).toHaveCount(5);
+  ).toHaveCount(Object.keys(technicalCatalogs).length);
   await expect(root.locator(".reference-catalog-card")).toHaveCount(15);
   await page.screenshot({
     path: `test-results/cooling-catalog-${info.project.name}-overview.png`,

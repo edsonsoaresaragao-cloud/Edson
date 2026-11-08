@@ -78,4 +78,9 @@ test("HTML oferece descrições e controles sem depender de WebGL", () => {
   assert.ok(html.includes('aria-live="polite"'));
   assert.ok(html.includes("os dois fluxos não se misturam"));
   assert.equal((html.match(/type="range"/g) || []).length, 2);
+  assert.ok(html.includes('aria-label="Narração das peças"'));
+  assert.ok(html.includes("Falar ao selecionar"));
+  assert.ok(html.includes("Ouvir peça novamente"));
+  assert.ok(html.includes("Interromper fala"));
+  assert.ok(html.includes("Verificando voz do navegador"));
 });

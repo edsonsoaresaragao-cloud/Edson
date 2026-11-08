@@ -28,10 +28,10 @@ function ReferenceImage({
       <div
         className="reference-catalog-art"
         role="img"
-        aria-label={`Ilustração didática gerada: ${name}`}
+        aria-label={`${artwork.caption ?? "Ilustração didática gerada"}: ${name}`}
         style={visualArtworkStyle(artwork, cell)}
       />
-      <figcaption>Ilustração didática gerada</figcaption>
+      <figcaption>{artwork.caption ?? "Ilustração didática gerada"}</figcaption>
     </figure>
   );
 }
@@ -278,7 +278,7 @@ export function VisualReferenceCatalog({
               <article className="reference-catalog-card">
                 <ReferenceImage
                   cell={item.imageCell}
-                  artwork={catalog.assemblyArtwork}
+                  artwork={item.artwork ?? catalog.assemblyArtwork}
                   name={item.name}
                 />
                 <div className="reference-catalog-card-body">
@@ -374,7 +374,7 @@ export function VisualReferenceCatalog({
               artwork={
                 detail.kind === "part"
                   ? catalog.partArtwork
-                  : catalog.assemblyArtwork
+                  : (detail.item.artwork ?? catalog.assemblyArtwork)
               }
               name={detail.item.name}
             />

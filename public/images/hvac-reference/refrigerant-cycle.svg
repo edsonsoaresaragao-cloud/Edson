@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="460" viewBox="0 0 600 460" role="img" aria-labelledby="title desc">
+  <title id="title">Ciclo do refrigerante com válvula de expansão e filtro secador</title>
+  <desc id="desc">Compressor para condensador, filtro secador, válvula de expansão, evaporador e retorno de vapor ao compressor. O ar da cabine e o líquido do aquecedor não integram este circuito.</desc>
+  <defs>
+    <marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d93632"/></marker>
+    <marker id="orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d96516"/></marker>
+    <marker id="yellow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#b98b08"/></marker>
+    <marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#087bc5"/></marker>
+  </defs>
+  <rect width="600" height="460" fill="white"/>
+  <g fill="none" stroke-width="7" stroke-linecap="round">
+    <path data-from="compressor" data-to="condensador" d="M210 86H376" stroke="#d93632" marker-end="url(#red)"/>
+    <path data-from="condensador" data-to="secador" d="M477 128V187" stroke="#d96516" marker-end="url(#orange)"/>
+    <path data-from="secador" data-to="expansao" d="M477 259V333" stroke="#b98b08" marker-end="url(#yellow)"/>
+    <path data-from="expansao" data-to="evaporador" d="M380 378H224" stroke="#087bc5" marker-end="url(#blue)"/>
+    <path data-from="evaporador" data-to="compressor" d="M119 334V132" stroke="#087bc5" marker-end="url(#blue)"/>
+  </g>
+  <g font-family="Arial,Helvetica,sans-serif" text-anchor="middle">
+    <g fill="#f0f4f8" stroke="#a8b6c7" stroke-width="2">
+      <rect x="26" y="42" width="184" height="86" rx="12"/>
+      <rect x="380" y="42" width="194" height="86" rx="12"/>
+      <rect x="380" y="190" width="194" height="66" rx="12"/>
+      <rect x="380" y="336" width="194" height="86" rx="12"/>
+      <rect x="26" y="336" width="194" height="86" rx="12"/>
+    </g>
+    <g fill="#102b4b" font-weight="700" font-size="21">
+      <text x="118" y="79">1 · Compressor</text>
+      <text x="477" y="79">2 · Condensador</text>
+      <text x="477" y="218">4 · Filtro secador</text>
+      <text x="477" y="370">5 · Válvula de</text><text x="477" y="395">expansão</text>
+      <text x="123" y="373">6 · Evaporador</text>
+    </g>
+    <g fill="#45566b" font-size="15">
+      <text x="118" y="107">Comprime o vapor</text>
+      <text x="477" y="107">Rejeita calor ao ar</text>
+      <text x="477" y="242">Retém umidade e impurezas</text>
+      <text x="123" y="400">Absorve calor do ar</text>
+    </g>
+    <g font-size="16" font-weight="600">
+      <text x="293" y="59" fill="#a42d28">Vapor · alta pressão</text>
+      <text x="360" y="154" fill="#914510">Líquido</text><text x="360" y="176" fill="#914510">alta pressão</text>
+      <text x="360" y="292" fill="#7c5d07">Líquido filtrado</text><text x="360" y="314" fill="#7c5d07">alta pressão</text>
+      <text x="300" y="344" fill="#075e98">Mistura fria</text><text x="300" y="366" fill="#075e98">baixa pressão</text>
+      <text x="214" y="219" fill="#075e98">Retorno de vapor</text><text x="214" y="242" fill="#075e98">baixa pressão</text>
+    </g>
+    <text x="300" y="448" fill="#45566b" font-size="14">Referência funcional · sem valores de pressão, temperatura ou carga</text>
+  </g>
+</svg>

@@ -18,6 +18,7 @@ import { coolingParts } from "../src/lib/cooling-parts";
 import {
   technicalCatalogs,
   resolveTechnicalCatalogId,
+  defaultTechnicalCatalog,
 } from "../src/lib/technical-catalogs";
 import { TechnicalCatalogLibrary } from "../src/components/technical-catalog-library";
 
@@ -129,8 +130,10 @@ test("cada peça recebe uma região local única com proporções corretas", () 
       "WEBP",
     );
 });
-test("HTML inicial mostra arrefecimento e mantém os cinco catálogos disponíveis", () => {
-  const markup = renderToStaticMarkup(createElement(TechnicalCatalogLibrary));
+test("HTML preserva arrefecimento e os catálogos anteriores", () => {
+  const markup = renderToStaticMarkup(
+    createElement(TechnicalCatalogLibrary, { initialCatalog: "arrefecimento" }),
+  );
   assert.equal(
     (markup.match(/class="reference-catalog-card"/g) || []).length,
     15,
@@ -139,7 +142,7 @@ test("HTML inicial mostra arrefecimento e mantém os cinco catálogos disponíve
   assert.match(markup, /Ilustração didática gerada/);
   assert.match(markup, /exemplos, não especificações universais/);
   assert.match(markup, /Possíveis falhas e sintomas/);
-  assert.equal(Object.keys(technicalCatalogs).length, 5);
+  assert.ok(Object.hasOwn(technicalCatalogs, "arrefecimento"));
   for (const id of [
     "arrefecimento",
     "alternador",
@@ -152,5 +155,5 @@ test("HTML inicial mostra arrefecimento e mantém os cinco catálogos disponíve
     assert.ok(markup.includes(`Abrir catálogo ${technicalCatalogs[id].name}`));
   }
   for (const value of [undefined, "", "inexistente", "__proto__", "toString"])
-    assert.equal(resolveTechnicalCatalogId(value), "arrefecimento");
+    assert.equal(resolveTechnicalCatalogId(value), defaultTechnicalCatalog);
 });

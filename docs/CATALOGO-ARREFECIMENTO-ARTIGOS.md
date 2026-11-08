@@ -1,6 +1,6 @@
 # Catálogo do sistema de arrefecimento
 
-Disponível na biblioteca de `/artigos` e diretamente em `/artigos?catalog=arrefecimento`. O arrefecimento é a escolha inicial; os outros catálogos continuam disponíveis pelo seletor e por seus parâmetros. A biblioteca passa a reunir arrefecimento, alternador, compressor, módulo dianteiro e Mercedes-Benz.
+Disponível na biblioteca de `/artigos` e diretamente em `/artigos?catalog=arrefecimento`. Os outros catálogos e a escolha inicial são definidos em `src/lib/technical-catalogs.ts`, com seleção e acesso direto por seu parâmetro `catalog`.
 
 ## Conteúdo
 

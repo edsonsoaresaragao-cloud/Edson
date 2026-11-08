@@ -13,3 +13,7 @@ A imagem original não foi incorporada como fotografia: o anexo está visível n
 Validação: geometria finita dos 13 componentes, limites de separação, ciclo fechado, mangueiras seguindo posições, desligamento dos movimentos e HTML acessível sem WebGL. Testes de regressão de Suspensão, TypeScript direcionado e lint. Sem validação visual em navegador/GPU nesta sessão; build completo permanece dependente de geração Prisma indisponível no ambiente.
 
 Publicar pelo fluxo existente: push no GitHub e Render → Manual Deploy → Deploy latest commit.
+
+## Narração ao selecionar
+
+Cliques na peça 3D, etiqueta, lista ou etapa do ciclo falam o nome e a função em português, com controles para repetir, interromper e desligar a narração. O áudio começa após uma ação do visitante e a fala anterior é cancelada ao escolher outra peça. Disponibilidade e voz dependem do navegador/dispositivo. A descrição em texto permanece acessível. Detalhes e validação em `docs/NARRACAO-PECAS-HVAC.md`.

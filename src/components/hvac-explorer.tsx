@@ -1,15 +1,27 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePartNarration } from "./use-part-narration";
 import { hvacParts, initialHvacState } from "@/lib/hvac-parts";
 import type { HvacRenderer } from "@/lib/hvac-renderer";
 export function HvacExplorer() {
+  const { availability, enabled, speaking, error, speak, stop, toggle } =
+    usePartNarration();
   const [state, setState] = useState(initialHvacState),
     [paused, setPaused] = useState(false),
     [status, setStatus] = useState<"loading" | "ready" | "fallback">("loading");
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<HvacRenderer | null>(null),
     latest = useRef({ state, paused });
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = hvacParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -22,7 +34,7 @@ export function HvacExplorer() {
           controller.current = createHvacRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
           );
           controller.current.setPaused(latest.current.paused);
@@ -39,7 +51,7 @@ export function HvacExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -50,6 +62,7 @@ export function HvacExplorer() {
   return (
     <section
       className="suspension-explorer hvac-explorer"
+      data-renderer={status}
       aria-labelledby="hvac-title"
     >
       <header className="suspension-heading">
@@ -103,6 +116,44 @@ export function HvacExplorer() {
             >
               Explorar compressor ↗
             </Link>
+          </div>
+          <div
+            className="hvac-narration"
+            role="group"
+            aria-label="Narração das peças"
+          >
+            <div className="suspension-toolbar hvac-narration-controls">
+              <button
+                type="button"
+                aria-pressed={enabled && availability === "available"}
+                disabled={availability !== "available"}
+                onClick={toggle}
+              >
+                Falar ao selecionar
+              </button>
+              <button
+                type="button"
+                disabled={availability !== "available" || !enabled}
+                onClick={() => speak(selected)}
+              >
+                Ouvir peça novamente
+              </button>
+              <button type="button" disabled={!speaking} onClick={stop}>
+                Interromper fala
+              </button>
+            </div>
+            <p role="status" aria-live="polite" aria-atomic="true">
+              {availability === "checking"
+                ? "Verificando voz do navegador…"
+                : availability === "unavailable"
+                  ? "A voz não está disponível neste navegador. As descrições continuam no texto."
+                  : error ||
+                    (!enabled
+                      ? "Narração desligada. As peças continuam selecionáveis."
+                      : speaking
+                        ? `Lendo: ${selected.name}.`
+                        : "Clique na peça, na etiqueta ou na lista para ouvir o nome e a função em português.")}
+            </p>
           </div>
           <div className="suspension-stage">
             <div
@@ -249,7 +300,7 @@ export function HvacExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -274,7 +325,7 @@ export function HvacExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === step.id}
-                onClick={() => setState((s) => ({ ...s, selected: step.id }))}
+                onClick={() => selectPart(step.id)}
               >
                 {step.name} →
               </button>
