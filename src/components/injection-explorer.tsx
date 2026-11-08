@@ -1,11 +1,14 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   injectionParts,
   initialInjectionState,
   type InjectionPulse,
 } from "@/lib/injection-parts";
 import type { InjectionRenderer } from "@/lib/injection-renderer";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
+
 export function InjectionExplorer() {
   const [state, setState] = useState(initialInjectionState),
     [paused, setPaused] = useState(false),
@@ -14,6 +17,17 @@ export function InjectionExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<InjectionRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = injectionParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -26,7 +40,7 @@ export function InjectionExplorer() {
           controller.current = createInjectionRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
             setPulse,
           );
@@ -44,7 +58,7 @@ export function InjectionExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -56,6 +70,7 @@ export function InjectionExplorer() {
     <section
       className="suspension-explorer injection-explorer"
       aria-labelledby="injection-title"
+      data-renderer={status}
     >
       <header className="suspension-heading">
         <div>
@@ -81,7 +96,7 @@ export function InjectionExplorer() {
             key={p.id}
             type="button"
             aria-pressed={state.selected === p.id}
-            onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+            onClick={() => selectPart(p.id)}
           >
             {p.name}
           </button>
@@ -130,6 +145,11 @@ export function InjectionExplorer() {
               {state.running ? "Desligar demonstração" : "Iniciar demonstração"}
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="injection-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -298,7 +318,7 @@ export function InjectionExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -322,7 +342,7 @@ export function InjectionExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === p.id}
-                onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                onClick={() => selectPart(p.id)}
               >
                 {p.name} →
               </button>

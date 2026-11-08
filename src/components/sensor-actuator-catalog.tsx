@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { ComponentReferenceImage } from "./component-reference-image";
+import { PartSelectionPicture } from "./part-selection-picture";
+import { PartNarrationControls } from "./part-narration-controls";
+import { usePartNarration } from "./use-part-narration";
 import { useId, useState } from "react";
 import { ArrowUpRight, Cpu, Search } from "lucide-react";
 import {
@@ -13,11 +16,25 @@ import {
   type TechnicalComponent,
 } from "@/lib/sensor-actuator-catalog";
 
-function ComponentCard({ item }: { item: TechnicalComponent }) {
+function ComponentCard({
+  item,
+  selected,
+  onSelect,
+}: {
+  item: TechnicalComponent;
+  selected: boolean;
+  onSelect: () => void;
+}) {
   return (
     <li>
-      <article className="technical-component" id={item.id}>
-        <ComponentReferenceImage item={item} />
+      <article
+        className="technical-component"
+        id={item.id}
+        data-selected={selected}
+      >
+        <PartSelectionPicture name={item.name} onSelect={onSelect}>
+          <ComponentReferenceImage item={item} />
+        </PartSelectionPicture>
         <div className="technical-component-body">
           <div className="technical-component-meta">
             <span>
@@ -28,7 +45,16 @@ function ComponentCard({ item }: { item: TechnicalComponent }) {
               {item.scope === "additional" ? "Adicional" : "Essencial"}
             </span>
           </div>
-          <h3>{item.name}</h3>
+          <h3>
+            <button
+              type="button"
+              className="part-name-select"
+              aria-pressed={selected}
+              onClick={onSelect}
+            >
+              {item.name}
+            </button>
+          </h3>
           <span className="technical-component-system">{item.system}</span>
           <dl>
             <dt>Função</dt>
@@ -91,6 +117,16 @@ export function SensorActuatorCatalog() {
   const [kind, setKind] = useState<ComponentKind | "all">("all");
   const [scope, setScope] = useState<CatalogScope>("main");
   const [system, setSystem] = useState("all");
+  const [selected, setSelected] = useState<TechnicalComponent | null>(null);
+  const narration = usePartNarration();
+  function select(item: TechnicalComponent) {
+    setSelected(item);
+    narration.speak({ name: item.name, description: item.function });
+  }
+  function resetSelection() {
+    narration.stop();
+    setSelected(null);
+  }
   const items = filterTechnicalComponents({ query, kind, scope, system });
   const scopedItems = technicalComponents.filter(
     (item) => scope === "all" || item.scope === scope,
@@ -106,6 +142,7 @@ export function SensorActuatorCatalog() {
   const filtered =
     !!query || kind !== "all" || system !== "all" || scope !== "main";
   function clear() {
+    resetSelection();
     setQuery("");
     setKind("all");
     setSystem("all");
@@ -137,6 +174,16 @@ export function SensorActuatorCatalog() {
           </span>
         </div>
       </header>
+
+      <PartNarrationControls
+        narration={narration}
+        part={
+          selected
+            ? { name: selected.name, description: selected.function }
+            : null
+        }
+        surface
+      />
 
       <div
         className="component-signal-flow"
@@ -174,7 +221,10 @@ export function SensorActuatorCatalog() {
             <input
               type="search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => {
+                resetSelection();
+                setQuery(event.target.value);
+              }}
               placeholder="Nome, sigla ou função: CKP, bobina, pressão…"
               maxLength={160}
             />
@@ -184,7 +234,10 @@ export function SensorActuatorCatalog() {
           Conteúdo do catálogo
           <select
             value={scope}
-            onChange={(event) => setScope(event.target.value as CatalogScope)}
+            onChange={(event) => {
+              resetSelection();
+              setScope(event.target.value as CatalogScope);
+            }}
           >
             <option value="main">24 componentes essenciais</option>
             <option value="additional">16 componentes adicionais</option>
@@ -195,7 +248,10 @@ export function SensorActuatorCatalog() {
           Sistema do componente
           <select
             value={system}
-            onChange={(event) => setSystem(event.target.value)}
+            onChange={(event) => {
+              resetSelection();
+              setSystem(event.target.value);
+            }}
           >
             <option value="all">Todos os sistemas</option>
             {systems.map((name) => (
@@ -223,7 +279,10 @@ export function SensorActuatorCatalog() {
               key={value}
               type="button"
               aria-pressed={kind === value}
-              onClick={() => setKind(value)}
+              onClick={() => {
+                resetSelection();
+                setKind(value);
+              }}
             >
               {label} <span>{counts[value]}</span>
             </button>
@@ -257,7 +316,12 @@ export function SensorActuatorCatalog() {
           aria-label="Fichas técnicas dos componentes"
         >
           {items.map((item) => (
-            <ComponentCard key={item.id} item={item} />
+            <ComponentCard
+              key={item.id}
+              item={item}
+              selected={selected?.id === item.id}
+              onSelect={() => select(item)}
+            />
           ))}
         </ul>
       ) : (

@@ -1,9 +1,17 @@
 "use client";
 import { useState } from "react";
-import { type Engine } from "@/lib/engines";
+import { engineParts, type Engine } from "@/lib/engines";
 import visuals from "@/lib/engine-visuals.json";
 import { EngineDiagram } from "./engine-diagram";
 import { EngineSheet } from "./engine-sheet";
+import { PartNarrationControls } from "./part-narration-controls";
+import { usePartNarration } from "./use-part-narration";
+
+export type EngineSelection = {
+  name: string;
+  description: string;
+  number?: number;
+};
 
 export function EngineVisual({
   engine,
@@ -18,10 +26,25 @@ export function EngineVisual({
     "generated",
   );
   const [photoFailed, setPhotoFailed] = useState(false);
+  const narration = usePartNarration();
+  const [selection, setSelection] = useState<EngineSelection>({
+    name: engineParts[part].name,
+    description: engineParts[part].text,
+  });
+  function select(index: number, component?: EngineSelection) {
+    const next = component ?? {
+      name: engineParts[index].name,
+      description: engineParts[index].text,
+    };
+    onSelect(index);
+    setSelection(next);
+    narration.speak(next);
+  }
   const visual = visuals.find((v) => v.id === engine.id)!;
   const panelId = `visual-${engine.id}`;
   return (
     <div className={`engine-drawing engine-view-${view}`}>
+      <PartNarrationControls narration={narration} part={selection} surface />
       <div
         className="engine-view-tabs"
         role="tablist"
@@ -57,10 +80,14 @@ export function EngineVisual({
                         : -1;
               if (next < 0) return;
               event.preventDefault();
+              narration.stop();
               setView(order[next]);
               document.getElementById(`${panelId}-${order[next]}`)?.focus();
             }}
-            onClick={() => setView(id)}
+            onClick={() => {
+              narration.stop();
+              setView(id);
+            }}
           >
             {label}
           </button>
@@ -68,14 +95,37 @@ export function EngineVisual({
       </div>
       <div id={panelId} role="tabpanel" aria-labelledby={`${panelId}-${view}`}>
         {view === "generated" ? (
-          <EngineSheet engine={engine} selected={part} onSelect={onSelect} />
-        ) : view === "diagram" ? (
-          <EngineDiagram
-            cylinders={visual.cylinders}
-            v={engine.layout === "V6"}
+          <EngineSheet
+            engine={engine}
             selected={part}
-            onSelect={onSelect}
+            selection={selection}
+            onSelect={select}
           />
+        ) : view === "diagram" ? (
+          <>
+            <EngineDiagram
+              cylinders={visual.cylinders}
+              v={engine.layout === "V6"}
+              selected={part}
+              onSelect={select}
+            />
+            <div
+              className="engine-diagram-parts"
+              role="group"
+              aria-label="Peças do esquema"
+            >
+              {engineParts.map((item, index) => (
+                <button
+                  type="button"
+                  key={item.name}
+                  aria-pressed={part === index}
+                  onClick={() => select(index)}
+                >
+                  {item.name}
+                </button>
+              ))}
+            </div>
+          </>
         ) : (
           <figure className="engine-photo-frame">
             {view === "photo" && photoFailed ? (

@@ -5,16 +5,18 @@ export function PartNarrationControls({
   narration,
   part,
   className = "",
+  surface = false,
 }: {
   narration: ReturnType<typeof usePartNarration>;
-  part: { name: string; description: string };
+  part: { name: string; description: string } | null;
   className?: string;
+  surface?: boolean;
 }) {
   const { availability, enabled, speaking, error, speak, stop, toggle } =
     narration;
   return (
     <div
-      className={`part-narration ${className}`}
+      className={`part-narration ${surface ? "part-narration-surface" : ""} ${className}`}
       role="group"
       aria-label="Narração das peças"
     >
@@ -29,8 +31,8 @@ export function PartNarrationControls({
         </button>
         <button
           type="button"
-          disabled={availability !== "available" || !enabled}
-          onClick={() => speak(part)}
+          disabled={availability !== "available" || !enabled || !part}
+          onClick={() => part && speak(part)}
         >
           Ouvir peça novamente
         </button>
@@ -47,8 +49,10 @@ export function PartNarrationControls({
               (!enabled
                 ? "Narração desligada. As peças continuam selecionáveis."
                 : speaking
-                  ? `Lendo: ${part.name}.`
-                  : "Clique na peça, na etiqueta ou na lista para ouvir o nome e a função em português.")}
+                  ? `Lendo: ${part?.name ?? "peça selecionada"}.`
+                  : surface
+                    ? "Selecione uma peça para ouvir o nome e a função em português."
+                    : "Clique na peça, na etiqueta ou na lista para ouvir o nome e a função em português.")}
       </p>
     </div>
   );

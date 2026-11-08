@@ -1,6 +1,9 @@
 "use client";
 import { useId, useRef, useState } from "react";
 import Link from "next/link";
+import { PartSelectionPicture } from "./part-selection-picture";
+import { PartNarrationControls } from "./part-narration-controls";
+import { usePartNarration } from "./use-part-narration";
 import { ArrowUpRight, Search, X } from "lucide-react";
 import {
   filterVisualParts,
@@ -76,6 +79,8 @@ export function VisualReferenceCatalog({
     [order, setOrder] = useState<"number" | "name">("number"),
     [view, setView] = useState<"parts" | "assemblies">("parts"),
     [detail, setDetail] = useState<Detail | null>(null);
+  const narration = usePartNarration();
+  const [selected, setSelected] = useState<Detail["item"] | null>(null);
   const parts = filterVisualParts(catalog, query, system, order),
     assemblies = filterVisualAssemblies(catalog, query, system);
   const count = view === "parts" ? parts.length : assemblies.length;
@@ -95,12 +100,15 @@ export function VisualReferenceCatalog({
         };
   const filtered = !!query || system !== "all" || order !== "number";
   function clear() {
+    narration.stop();
     setQuery("");
     setSystem("all");
     setOrder("number");
   }
   function open(value: Detail) {
     setDetail(value);
+    setSelected(value.item);
+    narration.speak(value.item);
     if (dialog.current && !dialog.current.open) dialog.current.showModal();
   }
   function close() {
@@ -136,6 +144,10 @@ export function VisualReferenceCatalog({
         <ReferenceOverview overview={catalog.overview} />
       </header>
 
+      {!detail && (
+        <PartNarrationControls narration={narration} part={selected} surface />
+      )}
+
       <div
         className="reference-catalog-modes"
         role="group"
@@ -144,14 +156,20 @@ export function VisualReferenceCatalog({
         <button
           type="button"
           aria-pressed={view === "parts"}
-          onClick={() => setView("parts")}
+          onClick={() => {
+            narration.stop();
+            setView("parts");
+          }}
         >
           {partLabels.tab} <span>{catalog.parts.length}</span>
         </button>
         <button
           type="button"
           aria-pressed={view === "assemblies"}
-          onClick={() => setView("assemblies")}
+          onClick={() => {
+            narration.stop();
+            setView("assemblies");
+          }}
         >
           {catalog.assemblyLabel} <span>{catalog.assemblies.length}</span>
         </button>
@@ -161,6 +179,7 @@ export function VisualReferenceCatalog({
         role="search"
         aria-label={`Pesquisar no catálogo ${catalog.name}`}
         onSubmit={(event) => event.preventDefault()}
+        onChange={() => narration.stop()}
       >
         <label className="reference-catalog-search">
           Buscar no catálogo
@@ -236,11 +255,16 @@ export function VisualReferenceCatalog({
           {parts.map((item) => (
             <li key={item.number}>
               <article className="reference-catalog-card">
-                <ReferenceImage
-                  cell={item.imageCell}
-                  artwork={catalog.partArtwork}
+                <PartSelectionPicture
                   name={item.name}
-                />
+                  onSelect={() => open({ kind: "part", item })}
+                >
+                  <ReferenceImage
+                    cell={item.imageCell}
+                    artwork={catalog.partArtwork}
+                    name={item.name}
+                  />
+                </PartSelectionPicture>
                 <div className="reference-catalog-card-body">
                   <div className="reference-catalog-card-meta">
                     <span className="reference-catalog-number">
@@ -252,7 +276,15 @@ export function VisualReferenceCatalog({
                         : visualSystemName(catalog, item.system)}
                     </span>
                   </div>
-                  <h3>{item.name}</h3>
+                  <h3>
+                    <button
+                      type="button"
+                      className="part-name-select"
+                      onClick={() => open({ kind: "part", item })}
+                    >
+                      {item.name}
+                    </button>
+                  </h3>
                   <p>{item.description}</p>
                   <button
                     type="button"
@@ -276,16 +308,29 @@ export function VisualReferenceCatalog({
           {assemblies.map((item) => (
             <li key={item.id}>
               <article className="reference-catalog-card">
-                <ReferenceImage
-                  cell={item.imageCell}
-                  artwork={item.artwork ?? catalog.assemblyArtwork}
+                <PartSelectionPicture
                   name={item.name}
-                />
+                  onSelect={() => open({ kind: "assembly", item })}
+                >
+                  <ReferenceImage
+                    cell={item.imageCell}
+                    artwork={item.artwork ?? catalog.assemblyArtwork}
+                    name={item.name}
+                  />
+                </PartSelectionPicture>
                 <div className="reference-catalog-card-body">
                   <span className="reference-catalog-card-system">
                     {visualSystemName(catalog, item.system)}
                   </span>
-                  <h3>{item.name}</h3>
+                  <h3>
+                    <button
+                      type="button"
+                      className="part-name-select"
+                      onClick={() => open({ kind: "assembly", item })}
+                    >
+                      {item.name}
+                    </button>
+                  </h3>
                   <p>{item.description}</p>
                   <ul className="reference-catalog-subparts">
                     {item.details.map((name) => (
@@ -354,7 +399,10 @@ export function VisualReferenceCatalog({
         ref={dialog}
         className="reference-catalog-dialog"
         aria-labelledby={`${id}-dialog-title`}
-        onClose={() => setDetail(null)}
+        onClose={() => {
+          narration.stop();
+          setDetail(null);
+        }}
         onClick={(event) => {
           if (event.target === event.currentTarget) close();
         }}
@@ -387,6 +435,11 @@ export function VisualReferenceCatalog({
               </span>
               <h3 id={`${id}-dialog-title`}>{detail.item.name}</h3>
               <p>{detail.item.description}</p>
+              <PartNarrationControls
+                narration={narration}
+                part={detail.item}
+                surface
+              />
               {detail.kind === "part" ? (
                 <>
                   <h4>

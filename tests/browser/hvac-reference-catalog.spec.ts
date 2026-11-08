@@ -33,7 +33,7 @@ test("HVAC mostra 12 imagens e pesquisa por número, nome, sistema e ordem", asy
   await expect(root.locator(".reference-catalog-card h3")).toHaveText(
     "Válvula de expansão",
   );
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".reference-catalog-result")).toContainText(
     "1 componente encontrado",
   );
   await root.getByLabel("Buscar no catálogo").fill("inexistente987");

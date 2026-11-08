@@ -66,7 +66,7 @@ test("busca, tipos, adicionais, sistemas e links de compra", async ({
   await expect(root.locator("article")).toHaveCount(40);
   await root.getByRole("button", { name: "Sensores 20", exact: true }).click();
   await expect(root.locator("article")).toHaveCount(20);
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".component-catalog-status")).toContainText(
     "20 componentes encontrados",
   );
   expect(

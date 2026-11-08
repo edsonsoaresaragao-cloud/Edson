@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   initialStarterState,
   starterParts,
@@ -10,6 +10,8 @@ import {
 } from "@/lib/starter-parts";
 import type { StarterRenderer } from "@/lib/starter-renderer";
 import { StarterCircuit, StarterSchematic } from "./starter-diagrams";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
 
 function StarterPicture({
   index,
@@ -45,6 +47,17 @@ export function StarterExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<StarterRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const select = useCallback(
+    (id: number) => {
+      const part = starterParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -63,7 +76,7 @@ export function StarterExplorer() {
           controller.current = createStarterRenderer(
             host.current,
             latest.current.state,
-            (selected) => setState((current) => ({ ...current, selected })),
+            select,
             fallback,
             (index, power) => {
               setPhase(index);
@@ -82,7 +95,7 @@ export function StarterExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [select]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -112,9 +125,6 @@ export function StarterExplorer() {
   const active = starterStages[phase];
   const powered =
     status === "ready" ? contact : starterSequence(phase * 2.6 + 1.3).contact;
-  function select(id: number) {
-    setState((current) => ({ ...current, selected: id }));
-  }
   function step(index: number) {
     setPaused(true);
     setPhase(index);
@@ -232,6 +242,11 @@ export function StarterExplorer() {
               Restaurar câmera
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="starter-narration"
+          />
           <div className="suspension-stage starter-stage">
             <div
               ref={host}

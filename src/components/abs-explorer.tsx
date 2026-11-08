@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   absParts,
   initialAbsState,
@@ -7,6 +7,9 @@ import {
   type AbsPhase,
 } from "@/lib/abs-parts";
 import type { AbsRenderer } from "@/lib/abs-renderer";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
+
 export function AbsExplorer() {
   const [state, setState] = useState(initialAbsState),
     [paused, setPaused] = useState(false),
@@ -15,6 +18,17 @@ export function AbsExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<AbsRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = absParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -27,7 +41,7 @@ export function AbsExplorer() {
           controller.current = createAbsRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
             setPhase,
           );
@@ -45,7 +59,7 @@ export function AbsExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -57,6 +71,7 @@ export function AbsExplorer() {
     <section
       className="suspension-explorer abs-explorer"
       aria-labelledby="abs-title"
+      data-renderer={status}
     >
       <header className="suspension-heading">
         <div>
@@ -83,7 +98,7 @@ export function AbsExplorer() {
             key={p.id}
             type="button"
             aria-pressed={state.selected === p.id}
-            onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+            onClick={() => selectPart(p.id)}
           >
             {p.name}
           </button>
@@ -124,6 +139,11 @@ export function AbsExplorer() {
               Restaurar câmera
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="abs-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -292,7 +312,7 @@ export function AbsExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -317,7 +337,7 @@ export function AbsExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === p.id}
-                onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                onClick={() => selectPart(p.id)}
               >
                 {p.name} →
               </button>

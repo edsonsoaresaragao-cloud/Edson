@@ -39,7 +39,7 @@ test("módulo dianteiro mostra 20 imagens e busca por número, nome e sistema", 
     }),
   ).toBeVisible();
   await root.getByRole("button", { name: "Restaurar filtros" }).click();
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".reference-catalog-result")).toContainText(
     "20 componentes encontrados",
   );
   expect(errors).toEqual([]);

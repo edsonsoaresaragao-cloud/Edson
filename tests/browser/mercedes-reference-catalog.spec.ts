@@ -36,7 +36,7 @@ test("catálogo pesquisa, filtra e ordena as 24 peças, preservando números", a
   ).toBeVisible();
   await root.getByRole("button", { name: "Restaurar filtros" }).click();
   await root.getByLabel("Buscar no catálogo").fill("bomba dagua");
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".reference-catalog-result")).toContainText(
     "1 componente encontrado",
   );
   await expect(root.locator(".reference-catalog-card h3")).toHaveText(

@@ -35,7 +35,7 @@ test("arrefecimento mostra 15 imagens e pesquisa por número, nome, sistema e or
   await expect(root.locator(".reference-catalog-card h3")).toHaveText(
     "Dreno do radiador",
   );
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".reference-catalog-result")).toContainText(
     "1 componente encontrado",
   );
   await root.getByLabel("Buscar no catálogo").fill("inexistente987");

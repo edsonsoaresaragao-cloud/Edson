@@ -13,7 +13,7 @@ test("compressor mostra as 16 identificações e pesquisa por número, nome e si
   await page.goto(path);
   const root = page.locator(".compressor-reference-catalog");
   await expect(root.locator(".reference-catalog-card")).toHaveCount(16);
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".reference-catalog-result")).toContainText(
     "16 identificações encontradas",
   );
   await root.getByLabel("Buscar no catálogo").fill("1");
@@ -34,7 +34,7 @@ test("compressor mostra as 16 identificações e pesquisa por número, nome e si
   await expect(root.locator(".reference-catalog-card h3")).toHaveText(
     "Bobina magnética",
   );
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".reference-catalog-result")).toContainText(
     "1 identificação encontrada",
   );
   await root.getByLabel("Buscar no catálogo").fill("inexistente987");

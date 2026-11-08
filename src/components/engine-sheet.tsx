@@ -3,6 +3,7 @@ import { engineParts, type Engine } from "@/lib/engines";
 import visuals from "@/lib/engine-visuals.json";
 import { getEngineComponents } from "@/lib/engine-specs";
 import { EngineSpecificationPanel } from "./engine-specification-panel";
+import type { EngineSelection } from "./engine-visual";
 
 const sheetParts = [
   {
@@ -65,15 +66,27 @@ function Subassembly({
 export function EngineSheet({
   engine,
   selected,
+  selection,
   onSelect,
 }: {
   engine: Engine;
   selected: number;
-  onSelect: (part: number) => void;
+  selection?: EngineSelection;
+  onSelect: (part: number, component?: EngineSelection) => void;
 }) {
   const visual = visuals.find((v) => v.id === engine.id)!;
   const points = engine.layout === "V6" ? vRegions : regions;
   const components = getEngineComponents(engine);
+  function select(number: number, part: number) {
+    const component = components[number - 1];
+    onSelect(part, {
+      number,
+      name: component.label,
+      description:
+        component.description +
+        (component.status === "not-applicable" ? ` ${component.note}.` : ""),
+    });
+  }
   const turbo = [
     "EA888",
     "CSS Prime",
@@ -139,26 +152,24 @@ export function EngineSheet({
                     className={`sheet-component-${component.status}`}
                     title={component.note}
                   >
-                    {match ? (
-                      <button
-                        type="button"
-                        aria-pressed={selected === match.part}
-                        onClick={() => onSelect(match.part)}
-                      >
-                        <span>{component.number}</span>
-                        {component.label}
-                        {component.status === "variable" && <sup>*</sup>}
-                      </button>
-                    ) : (
-                      <div className="sheet-component-static">
-                        <span>{component.number}</span>
-                        {component.label}
-                        {component.status === "variable" && <sup>*</sup>}
-                        {component.status === "not-applicable" && (
-                          <small>N/A</small>
-                        )}
-                      </div>
-                    )}
+                    <button
+                      type="button"
+                      aria-pressed={
+                        selection?.number
+                          ? selection.number === component.number
+                          : !!match && selected === match.part
+                      }
+                      onClick={() =>
+                        select(component.number, match?.part ?? selected)
+                      }
+                    >
+                      <span>{component.number}</span>
+                      {component.label}
+                      {component.status === "variable" && <sup>*</sup>}
+                      {component.status === "not-applicable" && (
+                        <small>N/A</small>
+                      )}
+                    </button>
                   </li>
                 );
               })}
@@ -172,14 +183,18 @@ export function EngineSheet({
           <EngineSpecificationPanel engine={engine} />
           <div className="sheet-selected" aria-live="polite">
             <strong>
-              {selected === 0
-                ? "Capa e tampa superior"
-                : engineParts[selected].name}
+              {selection?.number
+                ? selection.name
+                : selected === 0
+                  ? "Capa e tampa superior"
+                  : engineParts[selected].name}
             </strong>
             <p>
-              {selected === 0
-                ? "Capa de acabamento e tampa de válvulas são peças diferentes. A capa pode ser opcional; a tampa veda o cabeçote. A marcação identifica a região superior da ilustração."
-                : engineParts[selected].text}
+              {selection?.number
+                ? selection.description
+                : selected === 0
+                  ? "Capa de acabamento e tampa de válvulas são peças diferentes. A capa pode ser opcional; a tampa veda o cabeçote. A marcação identifica a região superior da ilustração."
+                  : engineParts[selected].text}
             </p>
           </div>
         </aside>
@@ -198,8 +213,12 @@ export function EngineSheet({
                 className="sheet-marker"
                 style={{ left: `${points[i][0]}%`, top: `${points[i][1]}%` }}
                 aria-label={`${p.number}. ${p.label}`}
-                aria-pressed={selected === p.part}
-                onClick={() => onSelect(p.part)}
+                aria-pressed={
+                  selection?.number
+                    ? selection.number === p.number
+                    : selected === p.part
+                }
+                onClick={() => select(p.number, p.part)}
               >
                 {p.number}
               </button>

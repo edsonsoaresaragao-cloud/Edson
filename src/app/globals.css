@@ -2850,6 +2850,22 @@ html[data-theme="dark"] .visual-reference-catalog { --reference-accent:#ffb175; 
 .part-narration-controls { padding-bottom:8px; }
 .part-narration p { margin:0; padding:0 1rem 1rem; font-size:12px; color:#b5c8d9; line-height:1.6; }
 .part-narration-controls button:disabled { opacity:1; color:#9db4c7; cursor:default; }
+.part-narration-surface { margin:20px 0; border-color:var(--border); background:var(--surface); color:var(--text); }
+.part-narration-surface p { color:var(--muted); }
+.part-narration-surface .part-narration-controls { background:transparent; }
+.part-narration-surface .part-narration-controls button { background:var(--bg); border-color:var(--border); color:var(--text); }
+.part-narration-surface .part-narration-controls button[aria-pressed=true] { background:var(--text); color:var(--bg); border-color:var(--text); }
+.part-narration-surface .part-narration-controls button:disabled { color:var(--muted); background:var(--bg); border-color:var(--border); }
+.part-selection-picture { position:relative; }
+.part-selection-picture > button { position:absolute; inset:0; z-index:2; width:100%; height:100%; border:0; background:transparent; border-radius:inherit; cursor:pointer; }
+.part-selection-picture > button:focus-visible { outline:3px solid var(--accent); outline-offset:-4px; }
+.part-name-select { display:inline; padding:0; border:0; background:transparent; color:inherit; font:inherit; text-align:inherit; cursor:pointer; }
+.part-name-select:hover { text-decoration:underline; text-underline-offset:3px; }
+.part-name-select:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.engine-diagram-parts { display:flex; flex-wrap:wrap; gap:8px; padding:16px; }
+.engine-diagram-parts button { padding:10px 12px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:var(--text); font-size:12px; }
+.engine-diagram-parts button[aria-pressed=true] { background:var(--text); color:var(--bg); }
+.technical-component[data-selected=true] { outline:2px solid var(--accent); outline-offset:2px; }
 .reference-catalog-art { width:100%; aspect-ratio:1; background-repeat:no-repeat; }
 .reference-catalog-card .reference-catalog-art { max-width:220px; margin:auto; }
 .reference-catalog-card-body { display:flex; flex-direction:column; flex:1; padding:18px; }

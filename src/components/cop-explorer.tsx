@@ -1,7 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { copParts, initialCopState, type CopEvent } from "@/lib/cop-parts";
 import type { CopRenderer } from "@/lib/cop-renderer";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
+
 export function CopExplorer() {
   const [state, setState] = useState(initialCopState),
     [paused, setPaused] = useState(false),
@@ -11,6 +14,17 @@ export function CopExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<CopRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = copParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -23,7 +37,7 @@ export function CopExplorer() {
           controller.current = createCopRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => {
               setFailed(true);
               setReady(false);
@@ -44,7 +58,7 @@ export function CopExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -56,6 +70,7 @@ export function CopExplorer() {
     <section
       className="suspension-explorer cop-explorer"
       aria-labelledby="cop-title"
+      data-renderer={failed ? "fallback" : ready ? "ready" : "loading"}
     >
       <header className="suspension-heading">
         <div>
@@ -126,6 +141,11 @@ export function CopExplorer() {
               {state.running ? "Desligar demonstração" : "Iniciar demonstração"}
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="cop-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -254,7 +274,7 @@ export function CopExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}

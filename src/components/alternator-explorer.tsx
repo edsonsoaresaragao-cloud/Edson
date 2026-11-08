@@ -1,10 +1,13 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   alternatorParts,
   initialAlternatorState,
 } from "@/lib/alternator-parts";
 import type { AlternatorRenderer } from "@/lib/alternator-renderer";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
+
 export function AlternatorExplorer() {
   const [state, setState] = useState(initialAlternatorState),
     [paused, setPaused] = useState(false),
@@ -12,6 +15,17 @@ export function AlternatorExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<AlternatorRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = alternatorParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -24,7 +38,7 @@ export function AlternatorExplorer() {
           controller.current = createAlternatorRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
           );
           controller.current.setPaused(latest.current.paused);
@@ -41,7 +55,7 @@ export function AlternatorExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -53,6 +67,7 @@ export function AlternatorExplorer() {
     <section
       className="suspension-explorer alternator-explorer"
       aria-labelledby="alternator-title"
+      data-renderer={status}
     >
       <header className="suspension-heading">
         <div>
@@ -114,6 +129,11 @@ export function AlternatorExplorer() {
               Restaurar câmera
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="alternator-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -258,7 +278,7 @@ export function AlternatorExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -283,7 +303,7 @@ export function AlternatorExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === p.id}
-                onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                onClick={() => selectPart(p.id)}
               >
                 {p.name}
               </button>

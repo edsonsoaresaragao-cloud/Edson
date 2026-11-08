@@ -31,7 +31,7 @@ test("alternador mostra 16 imagens e pesquisa por número, nome, sistema e ordem
   await expect(root.locator(".reference-catalog-card h3")).toHaveText(
     "Porta-escovas",
   );
-  await expect(root.getByRole("status")).toContainText(
+  await expect(root.locator(".reference-catalog-result")).toContainText(
     "1 componente encontrado",
   );
   await root.getByLabel("Buscar no catálogo").fill("inexistente987");

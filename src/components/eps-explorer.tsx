@@ -1,7 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { epsParts, initialEpsState } from "@/lib/eps-parts";
 import type { EpsRenderer } from "@/lib/eps-renderer";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
+
 export function EpsExplorer() {
   const [state, setState] = useState(initialEpsState),
     [paused, setPaused] = useState(false),
@@ -9,6 +12,21 @@ export function EpsExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<EpsRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = epsParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({
+        ...current,
+        selected: id,
+        cutaway: id === 6 ? true : current.cutaway,
+      }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -21,7 +39,7 @@ export function EpsExplorer() {
           controller.current = createEpsRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
           );
           controller.current.setPaused(latest.current.paused);
@@ -38,7 +56,7 @@ export function EpsExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -50,6 +68,7 @@ export function EpsExplorer() {
     <section
       className="suspension-explorer eps-explorer"
       aria-labelledby="eps-title"
+      data-renderer={status}
     >
       <header className="suspension-heading">
         <div>
@@ -76,13 +95,7 @@ export function EpsExplorer() {
             key={p.id}
             type="button"
             aria-pressed={state.selected === p.id}
-            onClick={() =>
-              setState((s) => ({
-                ...s,
-                selected: p.id,
-                cutaway: p.id === 6 ? true : s.cutaway,
-              }))
-            }
+            onClick={() => selectPart(p.id)}
           >
             {p.name}
           </button>
@@ -146,6 +159,11 @@ export function EpsExplorer() {
               Centralizar direção
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="eps-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -299,13 +317,7 @@ export function EpsExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() =>
-                    setState((s) => ({
-                      ...s,
-                      selected: p.id,
-                      cutaway: p.id === 6 ? true : s.cutaway,
-                    }))
-                  }
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -330,13 +342,7 @@ export function EpsExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === p.id}
-                onClick={() =>
-                  setState((s) => ({
-                    ...s,
-                    selected: p.id,
-                    cutaway: p.id === 6 ? true : s.cutaway,
-                  }))
-                }
+                onClick={() => selectPart(p.id)}
               >
                 {p.name} →
               </button>

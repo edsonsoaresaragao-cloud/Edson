@@ -1,10 +1,13 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   initialSuspensionState,
   suspensionParts,
 } from "@/lib/suspension-parts";
 import type { SuspensionRenderer } from "@/lib/suspension-renderer";
+
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
 
 export function SuspensionExplorer() {
   const [state, setState] = useState(initialSuspensionState),
@@ -13,6 +16,17 @@ export function SuspensionExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<SuspensionRenderer | null>(null);
   const latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = suspensionParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -25,7 +39,7 @@ export function SuspensionExplorer() {
           controller.current = createSuspensionRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
           );
           controller.current.setPaused(latest.current.paused);
@@ -42,7 +56,7 @@ export function SuspensionExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -51,7 +65,11 @@ export function SuspensionExplorer() {
   }, [paused]);
   const selected = suspensionParts[state.selected - 1];
   return (
-    <section className="suspension-explorer" aria-labelledby="suspension-title">
+    <section
+      className="suspension-explorer suspension-system-explorer"
+      aria-labelledby="suspension-title"
+      data-renderer={status}
+    >
       <div className="suspension-heading">
         <div>
           <span className="eyebrow">EXPLORE / MÓDULO DIANTEIRO</span>
@@ -76,7 +94,7 @@ export function SuspensionExplorer() {
             key={item.id}
             type="button"
             aria-pressed={state.selected === item.id}
-            onClick={() => setState((s) => ({ ...s, selected: item.id }))}
+            onClick={() => selectPart(item.id)}
           >
             {item.name}
           </button>
@@ -113,6 +131,11 @@ export function SuspensionExplorer() {
               Restaurar câmera
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="suspension-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -223,7 +246,7 @@ export function SuspensionExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === part.id}
-                  onClick={() => setState((s) => ({ ...s, selected: part.id }))}
+                  onClick={() => selectPart(part.id)}
                 >
                   <span className="suspension-number">{part.id}</span>
                   {part.name}

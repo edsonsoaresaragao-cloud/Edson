@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { steeringParts, initialSteeringState } from "@/lib/steering-parts";
 import type { SteeringRenderer } from "@/lib/steering-renderer";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
+
 export function SteeringExplorer() {
   const [state, setState] = useState(initialSteeringState),
     [paused, setPaused] = useState(false),
@@ -10,6 +13,17 @@ export function SteeringExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<SteeringRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = steeringParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -22,7 +36,7 @@ export function SteeringExplorer() {
           controller.current = createSteeringRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
           );
           controller.current.setPaused(latest.current.paused);
@@ -39,7 +53,7 @@ export function SteeringExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -51,6 +65,7 @@ export function SteeringExplorer() {
     <section
       className="suspension-explorer steering-explorer"
       aria-labelledby="steering-title"
+      data-renderer={status}
     >
       <header className="suspension-heading">
         <div>
@@ -77,7 +92,7 @@ export function SteeringExplorer() {
             key={p.id}
             type="button"
             aria-pressed={state.selected === p.id}
-            onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+            onClick={() => selectPart(p.id)}
           >
             {p.name}
           </button>
@@ -133,6 +148,11 @@ export function SteeringExplorer() {
               Explorar direção elétrica ↗
             </Link>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="steering-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -288,7 +308,7 @@ export function SteeringExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -313,7 +333,7 @@ export function SteeringExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === p.id}
-                onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                onClick={() => selectPart(p.id)}
               >
                 {p.name} →
               </button>

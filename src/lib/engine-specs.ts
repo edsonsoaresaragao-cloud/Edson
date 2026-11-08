@@ -1,5 +1,5 @@
 import { type Engine } from "./engines";
-import visuals from "./engine-visuals.json";
+import visuals from "./engine-visuals.json" with { type: "json" };
 
 export const specLabels = {
   configuration: "Configuração",
@@ -292,6 +292,32 @@ export const componentDefinitions = [
   "Bomba d’água",
 ];
 const variableComponents = new Set([1, 5, 15, 18, 19, 22, 23]);
+const componentFunctions = [
+  "Cobre a região superior do motor como acabamento e pode contribuir para reduzir o ruído. Não substitui a tampa de válvulas.",
+  "Abriga o elemento filtrante que retém partículas do ar antes da admissão.",
+  "Conduz o ar entre os componentes do sistema de admissão.",
+  "Distribui o ar admitido aos cilindros do motor.",
+  "Regula a passagem de ar para o motor por meio da abertura da borboleta.",
+  "Fecha a parte superior dos cilindros e abriga as válvulas e seus acionamentos.",
+  "Veda a união entre bloco e cabeçote, separando gases de combustão, óleo e líquido de arrefecimento.",
+  "Aloja os cilindros, sustenta o conjunto móvel e contém galerias de óleo e de arrefecimento.",
+  "Os pistões recebem a pressão da combustão. Os anéis vedam os cilindros e ajudam no controle do óleo e na transferência de calor.",
+  "Ligam os pistões ao virabrequim e transmitem os esforços da combustão.",
+  "Transforma o movimento alternativo dos pistões em rotação.",
+  "Fecha a parte inferior do motor e armazena o óleo nos sistemas de cárter úmido.",
+  "Faz o óleo circular sob pressão para lubrificar os componentes do motor.",
+  "Retém partículas e contaminantes do óleo que circula pelo motor.",
+  "Transfere calor entre o óleo e outro fluido para ajudar a controlar sua temperatura.",
+  "Utiliza a energia dos gases de escape para comprimir o ar enviado à admissão.",
+  "Reúne os gases que saem dos cilindros e os conduz ao sistema de escape ou à turbina.",
+  "Trata os gases de escape para reduzir emissões. Os elementos utilizados dependem do combustível e da versão.",
+  "Resfria o ar comprimido pelo turbocompressor antes de sua entrada no motor.",
+  "Sincroniza o virabrequim e os comandos de válvulas, conforme a arquitetura do motor.",
+  "Transmitem a rotação do motor aos acessórios acionados por correia.",
+  "Converte energia mecânica em energia elétrica para alimentar o veículo e carregar a bateria.",
+  "Comprime e faz circular o refrigerante no circuito de climatização.",
+  "Faz circular o líquido de arrefecimento entre o motor e os demais componentes do sistema.",
+];
 const turboFamilies = new Set([
   "EA888",
   "CSS Prime",
@@ -316,6 +342,7 @@ export function getEngineComponents(engine: Engine) {
     return {
       number,
       label,
+      description: componentFunctions[index],
       status: notApplicable
         ? ("not-applicable" as const)
         : variableComponents.has(number)

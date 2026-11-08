@@ -1,7 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { coolingParts, initialCoolingState } from "@/lib/cooling-parts";
 import type { CoolingRenderer } from "@/lib/cooling-renderer";
+import { usePartNarration } from "./use-part-narration";
+import { PartNarrationControls } from "./part-narration-controls";
+
 export function CoolingExplorer() {
   const [state, setState] = useState(initialCoolingState),
     [paused, setPaused] = useState(false),
@@ -9,6 +12,17 @@ export function CoolingExplorer() {
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<CoolingRenderer | null>(null),
     latest = useRef({ state, paused });
+  const narration = usePartNarration();
+  const { speak } = narration;
+  const selectPart = useCallback(
+    (id: number) => {
+      const part = coolingParts.find((item) => item.id === id);
+      if (!part) return;
+      setState((current) => ({ ...current, selected: id }));
+      speak(part);
+    },
+    [speak],
+  );
   useEffect(() => {
     latest.current = { state, paused };
   }, [state, paused]);
@@ -21,7 +35,7 @@ export function CoolingExplorer() {
           controller.current = createCoolingRenderer(
             host.current,
             latest.current.state,
-            (id) => setState((s) => ({ ...s, selected: id })),
+            selectPart,
             () => setStatus("fallback"),
           );
           controller.current.setPaused(latest.current.paused);
@@ -38,7 +52,7 @@ export function CoolingExplorer() {
       controller.current?.dispose();
       controller.current = null;
     };
-  }, []);
+  }, [selectPart]);
   useEffect(() => {
     controller.current?.setState(state);
   }, [state]);
@@ -50,6 +64,7 @@ export function CoolingExplorer() {
     <section
       className="suspension-explorer cooling-explorer"
       aria-labelledby="cooling-title"
+      data-renderer={status}
     >
       <header className="suspension-heading">
         <div>
@@ -74,13 +89,13 @@ export function CoolingExplorer() {
             key={p.id}
             type="button"
             aria-pressed={state.selected === p.id}
-            onClick={() =>
+            onClick={() => {
+              selectPart(p.id);
               setState((s) => ({
                 ...s,
-                selected: p.id,
                 explosion: status === "fallback" ? s.explosion : 0.75,
-              }))
-            }
+              }));
+            }}
           >
             {p.name}
           </button>
@@ -121,6 +136,11 @@ export function CoolingExplorer() {
               Restaurar câmera
             </button>
           </div>
+          <PartNarrationControls
+            narration={narration}
+            part={selected}
+            className="cooling-narration"
+          />
           <div className="suspension-stage">
             <div
               ref={host}
@@ -307,7 +327,7 @@ export function CoolingExplorer() {
                 <button
                   type="button"
                   aria-pressed={state.selected === p.id}
-                  onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                  onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
                   {p.name}
@@ -332,7 +352,7 @@ export function CoolingExplorer() {
               <button
                 type="button"
                 aria-pressed={state.selected === p.id}
-                onClick={() => setState((s) => ({ ...s, selected: p.id }))}
+                onClick={() => selectPart(p.id)}
               >
                 {p.name} →
               </button>
