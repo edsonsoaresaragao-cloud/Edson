@@ -10,6 +10,7 @@ import { currentIgnitionVisualCatalog } from "./current-ignition-reference-catal
 import { immobilizerVisualCatalog } from "./immobilizer-reference-catalog";
 import { mpiVisualCatalog } from "./mpi-reference-catalog";
 import { absVisualCatalog } from "./abs-reference-catalog";
+import { epsVisualCatalog } from "./eps-reference-catalog";
 
 export const technicalCatalogs = {
   hvac: hvacVisualCatalog,
@@ -18,6 +19,7 @@ export const technicalCatalogs = {
   "ignicao-atual": currentIgnitionVisualCatalog,
   "injecao-mpi": mpiVisualCatalog,
   "freios-abs": absVisualCatalog,
+  "direcao-eletrica-eps": epsVisualCatalog,
   "chave-e-imobilizador": immobilizerVisualCatalog,
   "motor-de-partida": starterVisualCatalog,
   "transmissao-manual": manualTransmissionVisualCatalog,
