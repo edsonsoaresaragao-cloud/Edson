@@ -8,12 +8,14 @@ import { starterVisualCatalog } from "./starter-reference-catalog";
 import { manualTransmissionVisualCatalog } from "./manual-transmission-reference-catalog";
 import { currentIgnitionVisualCatalog } from "./current-ignition-reference-catalog";
 import { immobilizerVisualCatalog } from "./immobilizer-reference-catalog";
+import { mpiVisualCatalog } from "./mpi-reference-catalog";
 
 export const technicalCatalogs = {
   hvac: hvacVisualCatalog,
   arrefecimento: coolingVisualCatalog,
   alternador: alternatorVisualCatalog,
   "ignicao-atual": currentIgnitionVisualCatalog,
+  "injecao-mpi": mpiVisualCatalog,
   "chave-e-imobilizador": immobilizerVisualCatalog,
   "motor-de-partida": starterVisualCatalog,
   "transmissao-manual": manualTransmissionVisualCatalog,
