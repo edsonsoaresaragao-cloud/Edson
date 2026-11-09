@@ -11,6 +11,7 @@ import { immobilizerVisualCatalog } from "./immobilizer-reference-catalog";
 import { mpiVisualCatalog } from "./mpi-reference-catalog";
 import { absVisualCatalog } from "./abs-reference-catalog";
 import { epsVisualCatalog } from "./eps-reference-catalog";
+import { electricalVisualCatalog } from "./electrical-reference-catalog";
 
 export const technicalCatalogs = {
   hvac: hvacVisualCatalog,
@@ -20,6 +21,7 @@ export const technicalCatalogs = {
   "injecao-mpi": mpiVisualCatalog,
   "freios-abs": absVisualCatalog,
   "direcao-eletrica-eps": epsVisualCatalog,
+  "sistema-eletrico-eletronico": electricalVisualCatalog,
   "chave-e-imobilizador": immobilizerVisualCatalog,
   "motor-de-partida": starterVisualCatalog,
   "transmissao-manual": manualTransmissionVisualCatalog,
