@@ -119,7 +119,7 @@ test("manual: fichas ampliadas, voz, sincronizador, seleção e conjuntos extern
   await root.getByLabel("Sistema da transmissão").selectOption("contexto");
   await expect(root.locator(".reference-catalog-card")).toHaveCount(3);
   await expect(
-    root.getByRole("link", { name: "Ver conteúdos de transmissão manual" }),
+    root.getByRole("link", { name: "Explorar transmissão manual interativa" }),
   ).toHaveAttribute("href", "/categorias/transmissao-manual");
 });
 

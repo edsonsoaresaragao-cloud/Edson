@@ -13,6 +13,7 @@ import { HvacExplorer } from "@/components/hvac-explorer";
 import { SuspensionExplorer } from "@/components/suspension-explorer";
 import { SensorActuatorCatalog } from "@/components/sensor-actuator-catalog";
 import { StarterExplorer } from "@/components/starter-explorer";
+import { ManualTransmissionExplorer } from "@/components/manual-transmission-explorer";
 export const dynamic = "force-dynamic";
 export default async function Category({
   params,
@@ -43,6 +44,7 @@ export default async function Category({
       <PageHeading title={c.name} description={c.description} />
       {slug === "sensores-e-atuadores" && <SensorActuatorCatalog />}
       {slug === "motor-de-partida" && <StarterExplorer />}
+      {slug === "transmissao-manual" && <ManualTransmissionExplorer />}
       {slug === "suspensao" && <SuspensionExplorer />}
       {slug === "ar-condicionado" && <HvacExplorer />}
       {slug === "alternador" && <AlternatorExplorer />}

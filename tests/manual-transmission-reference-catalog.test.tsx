@@ -195,7 +195,7 @@ test("o catálogo aparece em artigos e entrega imagens, voz e conteúdos no serv
   assert.match(html, /Transmissão manual, peça por peça/);
   assert.match(html, /Narração das peças/);
   assert.match(html, /Relações de marcha: exemplos do cartaz/);
-  assert.match(html, /Ver conteúdos de transmissão manual/);
+  assert.match(html, /Explorar transmissão manual interativa/);
   assert.match(html, /href="\/categorias\/transmissao-manual"/);
   assert.equal(
     resolveTechnicalCatalogId("transmissao-manual"),

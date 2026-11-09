@@ -10,8 +10,15 @@ import { steeringParts } from "../../../src/lib/steering-parts";
 import { epsParts } from "../../../src/lib/eps-parts";
 import { copParts } from "../../../src/lib/cop-parts";
 import { starterParts } from "../../../src/lib/starter-parts";
+import { transmissionParts } from "../../../src/lib/manual-transmission-parts";
 
 export const narrationSystems = [
+  {
+    id: "transmission",
+    path: "/categorias/transmissao-manual",
+    parts: transmissionParts,
+    selector: ".manual-transmission-explorer",
+  },
   {
     id: "suspension",
     path: "/categorias/suspensao",

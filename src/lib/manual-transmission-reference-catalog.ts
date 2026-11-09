@@ -301,7 +301,7 @@ export const manualTransmissionVisualCatalog: VisualCatalog = {
   assemblyLabel: "Conjuntos e funcionamento",
   assemblyNoun: ["vista", "vistas"],
   interactiveHref: "/categorias/transmissao-manual",
-  interactiveLabel: "Ver conteúdos de transmissão manual",
+  interactiveLabel: "Explorar transmissão manual interativa",
   systems: manualTransmissionSystems,
   parts: manualTransmissionParts,
   assemblies: manualTransmissionAssemblies,
