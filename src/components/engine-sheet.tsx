@@ -224,11 +224,6 @@ export function EngineSheet({
               </button>
             ))}
           </div>
-          <figcaption>
-            ILUSTRAÇÃO GERADA POR IA · NÃO É FOTOGRAFIA
-            <br />
-            Regiões indicativas; não é um desenho técnico certificado.
-          </figcaption>
         </figure>
         <aside className="sheet-right">
           <h3>Subconjuntos em detalhe</h3>

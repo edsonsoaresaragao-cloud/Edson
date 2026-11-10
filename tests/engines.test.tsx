@@ -90,10 +90,8 @@ test("cada família tem fonte rastreável e uma vista própria", async () => {
   }
 });
 
-test("a vista gerada e a referência externa ficam identificadas na interface", () => {
+test("a ficha preserva a navegação por abas e a referência externa", () => {
   const html = renderToStaticMarkup(createElement(EngineCatalog));
-  assert.ok(html.includes("ILUSTRAÇÃO GERADA POR IA"));
-  assert.ok(html.includes("NÃO É FOTOGRAFIA"));
   assert.ok(html.includes('role="tablist"'));
   assert.ok(html.includes("Referência visual:"));
   assert.ok(html.includes("mercedes-benz-m264.webp"));
