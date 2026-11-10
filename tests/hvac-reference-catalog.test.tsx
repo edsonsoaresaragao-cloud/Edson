@@ -147,7 +147,7 @@ test("HTML inicial mostra HVAC e mantém os catálogos disponíveis", () => {
   assert.match(markup, /Ilustração didática gerada/);
   assert.match(markup, /não são equivalentes/);
   assert.match(markup, /Como ler as cores do cartaz/);
-  assert.equal(Object.keys(technicalCatalogs).length, 14);
+  assert.equal(Object.keys(technicalCatalogs).length, 15);
   for (const id of [
     "hvac",
     "arrefecimento",
@@ -160,6 +160,7 @@ test("HTML inicial mostra HVAC e mantém os catálogos disponíveis", () => {
     "chave-e-imobilizador",
     "motor-de-partida",
     "transmissao-manual",
+    "transmissao-automatica",
     "compressor",
     "modulo-dianteiro",
     "mercedes",

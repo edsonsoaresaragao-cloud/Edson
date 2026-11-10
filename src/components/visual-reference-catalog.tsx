@@ -292,7 +292,7 @@ export function VisualReferenceCatalog({
                     aria-label={`Ver ficha: ${item.name}`}
                     onClick={() => open({ kind: "part", item })}
                   >
-                    Ampliar imagem e ver detalhes{" "}
+                    Ver ficha{" "}
                     <ArrowUpRight size={15} aria-hidden="true" />
                   </button>
                 </div>
@@ -343,7 +343,7 @@ export function VisualReferenceCatalog({
                     aria-label={`Ver conjunto: ${item.name}`}
                     onClick={() => open({ kind: "assembly", item })}
                   >
-                    Ampliar conjunto{" "}
+                    Ver conjunto{" "}
                     <ArrowUpRight size={15} aria-hidden="true" />
                   </button>
                 </div>

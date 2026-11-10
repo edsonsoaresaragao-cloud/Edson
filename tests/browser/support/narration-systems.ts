@@ -11,8 +11,15 @@ import { epsParts } from "../../../src/lib/eps-parts";
 import { copParts } from "../../../src/lib/cop-parts";
 import { starterParts } from "../../../src/lib/starter-parts";
 import { transmissionParts } from "../../../src/lib/manual-transmission-parts";
+import { automaticParts } from "../../../src/lib/automatic-transmission-parts";
 
 export const narrationSystems = [
+  {
+    id: "automatic",
+    path: "/categorias/transmissao-automatica",
+    parts: automaticParts,
+    selector: ".automatic-transmission-explorer",
+  },
   {
     id: "transmission",
     path: "/categorias/transmissao-manual",

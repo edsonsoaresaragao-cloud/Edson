@@ -6,6 +6,7 @@ import { mercedesVisualCatalog } from "./mercedes-visual-catalog";
 import { hvacVisualCatalog } from "./hvac-reference-catalog";
 import { starterVisualCatalog } from "./starter-reference-catalog";
 import { manualTransmissionVisualCatalog } from "./manual-transmission-reference-catalog";
+import { automaticTransmissionVisualCatalog } from "./automatic-transmission-reference-catalog";
 import { currentIgnitionVisualCatalog } from "./current-ignition-reference-catalog";
 import { immobilizerVisualCatalog } from "./immobilizer-reference-catalog";
 import { mpiVisualCatalog } from "./mpi-reference-catalog";
@@ -25,6 +26,7 @@ export const technicalCatalogs = {
   "chave-e-imobilizador": immobilizerVisualCatalog,
   "motor-de-partida": starterVisualCatalog,
   "transmissao-manual": manualTransmissionVisualCatalog,
+  "transmissao-automatica": automaticTransmissionVisualCatalog,
   compressor: compressorVisualCatalog,
   "modulo-dianteiro": frontModuleVisualCatalog,
   mercedes: mercedesVisualCatalog,

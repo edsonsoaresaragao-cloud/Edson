@@ -15,10 +15,11 @@ import { EpsExplorer } from "../src/components/eps-explorer";
 import { CopExplorer } from "../src/components/cop-explorer";
 import { StarterExplorer } from "../src/components/starter-explorer";
 import { ManualTransmissionExplorer } from "../src/components/manual-transmission-explorer";
+import { AutomaticTransmissionExplorer } from "../src/components/automatic-transmission-explorer";
 import { engines } from "../src/lib/engines";
 import { getEngineComponents } from "../src/lib/engine-specs";
 
-test("os 13 módulos entregam controles de voz e funções em texto antes da hidratação", () => {
+test("os 14 módulos entregam controles de voz e funções em texto antes da hidratação", () => {
   for (const Component of [
     SuspensionExplorer,
     HvacExplorer,
@@ -33,6 +34,7 @@ test("os 13 módulos entregam controles de voz e funções em texto antes da hid
     CopExplorer,
     StarterExplorer,
     ManualTransmissionExplorer,
+    AutomaticTransmissionExplorer,
   ]) {
     const html = renderToStaticMarkup(createElement(Component));
     assert.match(html, /Narração das peças/, Component.name);
