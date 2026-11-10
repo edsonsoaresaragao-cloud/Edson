@@ -51,8 +51,7 @@ export default async function Detail({
             <>
               <YouTubePlayer id={c.youtubeId} title={c.title} />
               <p className="credit">
-                Fonte: {c.author}. EDSON OFICINA não possui afiliação com o
-                canal.{" "}
+                Fonte: {c.author}.{" "}
                 <a
                   href={"https://www.youtube.com/watch?v=" + c.youtubeId}
                   target="_blank"
