@@ -85,6 +85,11 @@ export default async function Catalog({
                 : "Explore conteúdos técnicos por sistema, peça, veículo e palavra-chave."
         }
       />
+      {section === "diagnostico" && (
+        <Link className="ad-launch" href="/diagnostico/alternador">
+          DIAGNÓSTICO AVANÇADO DO ALTERNADOR ↗
+        </Link>
+      )}
       {section === "pecas" && (
         <>
           <PartsMarketplace initial={s} />

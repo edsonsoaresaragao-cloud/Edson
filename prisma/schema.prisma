@@ -16,6 +16,8 @@ model User {
  enrollments Enrollment[]
  certificates Certificate[]
  resets PasswordReset[]
+ diagnostics DiagnosticCase[]
+ diagnosticEntries DiagnosticTechnicalEntry[]
 }
 model PasswordReset {
  id String @id
@@ -212,4 +214,25 @@ model RateLimit {
  count Int
  expiresAt DateTime
  @@index([expiresAt])
+}
+model DiagnosticCase {
+ id String @id @default(uuid())
+ ownerId String
+ owner User @relation(fields:[ownerId],references:[id],onDelete:Cascade)
+ data Json
+ revision Int @default(1)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([ownerId,updatedAt])
+}
+model DiagnosticTechnicalEntry {
+ id String @id @default(uuid())
+ kind String
+ data Json
+ published Boolean @default(false)
+ editorId String
+ editor User @relation(fields:[editorId],references:[id])
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([published,kind])
 }
