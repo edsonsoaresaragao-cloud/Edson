@@ -51,7 +51,3 @@ O aluno se cadastra ou pode ser criado em **Usuários**. Entregue a senha tempor
 O aluno solicita o certificado após concluir todos os requisitos. O código é aleatório, único e verificável; a emissão é idempotente. O PDF contém nome, curso, carga horária, data, código e marca. A consulta pública revela o curso e a validade, mas não o nome do aluno; o PDF é restrito ao titular e ADMIN. Não há reconhecimento oficial presumido.
 
 Mensagens do formulário aparecem em **Mensagens**; não são encaminhadas automaticamente a e-mail. Em **Configurações**, confira apenas a presença das variáveis, nunca valores secretos. A auditoria registra operações administrativas e seus responsáveis. Execute e valide backups conforme `DEPLOY.md`.
-
-## Referências de diagnóstico do alternador
-
-A central `/diagnostico/alternador` possui cadastro técnico em `/admin/diagnostico-alternador`, restrito a ADMIN. É possível manter aplicações e limites, testes, falhas, DTCs, boletins, imagens licenciadas, diagramas, vídeos e procedimentos com fonte, data/revisão e aplicabilidade. Rascunhos permanecem privados. Consulte [Diagnóstico avançado do alternador](DIAGNOSTICO-AVANCADO-ALTERNADOR.md) para o contrato de dados, regras e publicação. Diagnósticos individuais são vinculados à conta de quem os registra e não são expostos pela listagem pública de referências.

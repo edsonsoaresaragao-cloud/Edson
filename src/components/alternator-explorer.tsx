@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   alternatorParts,
@@ -9,19 +8,13 @@ import type { AlternatorRenderer } from "@/lib/alternator-renderer";
 import { usePartNarration } from "./use-part-narration";
 import { PartNarrationControls } from "./part-narration-controls";
 
-export function AlternatorExplorer({
-  selectedPart,
-  onPartSelect,
-}: { selectedPart?: number; onPartSelect?: (id: number) => void } = {}) {
+export function AlternatorExplorer() {
   const [state, setState] = useState(initialAlternatorState),
     [paused, setPaused] = useState(false),
     [status, setStatus] = useState<"loading" | "ready" | "fallback">("loading");
   const host = useRef<HTMLDivElement>(null),
     controller = useRef<AlternatorRenderer | null>(null),
-    latest = useRef({
-      state: { ...state, selected: selectedPart ?? state.selected },
-      paused,
-    });
+    latest = useRef({ state, paused });
   const narration = usePartNarration();
   const { speak } = narration;
   const selectPart = useCallback(
@@ -30,16 +23,12 @@ export function AlternatorExplorer({
       if (!part) return;
       setState((current) => ({ ...current, selected: id }));
       speak(part);
-      onPartSelect?.(id);
     },
-    [speak, onPartSelect],
+    [speak],
   );
   useEffect(() => {
-    latest.current = {
-      state: { ...state, selected: selectedPart ?? state.selected },
-      paused,
-    };
-  }, [state, paused, selectedPart]);
+    latest.current = { state, paused };
+  }, [state, paused]);
   useEffect(() => {
     let cancelled = false;
     import("@/lib/alternator-renderer")
@@ -68,15 +57,12 @@ export function AlternatorExplorer({
     };
   }, [selectPart]);
   useEffect(() => {
-    controller.current?.setState({
-      ...state,
-      selected: selectedPart ?? state.selected,
-    });
-  }, [state, selectedPart]);
+    controller.current?.setState(state);
+  }, [state]);
   useEffect(() => {
     controller.current?.setPaused(paused);
   }, [paused]);
-  const selected = alternatorParts[(selectedPart ?? state.selected) - 1];
+  const selected = alternatorParts[state.selected - 1];
   return (
     <section
       className="suspension-explorer alternator-explorer"
@@ -94,9 +80,6 @@ export function AlternatorExplorer({
         </div>
         <span className="suspension-count">16 componentes</span>
       </header>
-      <Link className="ad-launch" href="/diagnostico/alternador">
-        DIAGNÓSTICO AVANÇADO DO ALTERNADOR ↗
-      </Link>
       <div className="suspension-layout">
         <div>
           <div className="suspension-toolbar">
@@ -294,7 +277,7 @@ export function AlternatorExplorer({
               <li key={p.id}>
                 <button
                   type="button"
-                  aria-pressed={(selectedPart ?? state.selected) === p.id}
+                  aria-pressed={state.selected === p.id}
                   onClick={() => selectPart(p.id)}
                 >
                   <span className="suspension-number">{p.id}</span>
@@ -319,7 +302,7 @@ export function AlternatorExplorer({
             <li key={p.id}>
               <button
                 type="button"
-                aria-pressed={(selectedPart ?? state.selected) === p.id}
+                aria-pressed={state.selected === p.id}
                 onClick={() => selectPart(p.id)}
               >
                 {p.name}

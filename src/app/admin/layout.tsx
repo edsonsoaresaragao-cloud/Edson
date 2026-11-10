@@ -14,7 +14,6 @@ const menu = [
   ["uploads", "Enviar vídeo / apostila"],
   ["youtube", "Importar YouTube"],
   ["categorias", "Categorias"],
-  ["diagnostico-alternador", "Base técnica do alternador"],
   ["conteudos?kind=PART", "Peças"],
   ["conteudos?kind=DIAGNOSIS", "Diagnósticos"],
   ["conteudos?kind=GUIDE", "Guias"],
@@ -49,7 +48,6 @@ export default async function AdminLayout({
               ([path]) =>
                 user.role === "ADMIN" ||
                 ![
-                  "diagnostico-alternador",
                   "alunos",
                   "certificados",
                   "mensagens",

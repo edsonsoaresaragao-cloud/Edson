@@ -143,11 +143,6 @@ export function VisualReferenceCatalog({
         </div>
         <ReferenceOverview overview={catalog.overview} />
       </header>
-      {catalog.id === "alternador" && (
-        <Link className="ad-launch" href="/diagnostico/alternador">
-          DIAGNÓSTICO AVANÇADO DO ALTERNADOR ↗
-        </Link>
-      )}
 
       {!detail && (
         <PartNarrationControls narration={narration} part={selected} surface />
@@ -297,7 +292,8 @@ export function VisualReferenceCatalog({
                     aria-label={`Ver ficha: ${item.name}`}
                     onClick={() => open({ kind: "part", item })}
                   >
-                    Ver ficha <ArrowUpRight size={15} aria-hidden="true" />
+                    Ver ficha{" "}
+                    <ArrowUpRight size={15} aria-hidden="true" />
                   </button>
                 </div>
               </article>
@@ -347,7 +343,8 @@ export function VisualReferenceCatalog({
                     aria-label={`Ver conjunto: ${item.name}`}
                     onClick={() => open({ kind: "assembly", item })}
                   >
-                    Ver conjunto <ArrowUpRight size={15} aria-hidden="true" />
+                    Ver conjunto{" "}
+                    <ArrowUpRight size={15} aria-hidden="true" />
                   </button>
                 </div>
               </article>
@@ -445,14 +442,6 @@ export function VisualReferenceCatalog({
               />
               {detail.kind === "part" ? (
                 <>
-                  {catalog.id === "alternador" && (
-                    <Link
-                      className="ad-launch"
-                      href={`/diagnostico/alternador?component=${detail.item.number}`}
-                    >
-                      Diagnosticar este componente ↗
-                    </Link>
-                  )}
                   <h4>
                     {detail.item.kind === "context"
                       ? "Leitura da ilustração"
