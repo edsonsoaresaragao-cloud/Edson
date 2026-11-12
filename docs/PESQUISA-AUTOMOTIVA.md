@@ -2,8 +2,6 @@
 
 A pesquisa aparece acima das ofertas em `/pecas`. O endereço `/pesquisa-automotiva` também abre o mesmo componente. A busca de ofertas, seus parâmetros `buy` e a biblioteca técnica foram preservados. A pesquisa técnica usa os parâmetros `auto` e `auto_*`, que permitem compartilhar uma consulta completa.
 
-A primeira aba é **PEÇAS**. Cada pesquisa principal também consulta ofertas com a peça e os filtros de veículo/código preenchidos, disponíveis nessa aba. Os links para Mercado Livre, Amazon Brasil, Google Shopping e Bing Shopping levam a mesma busca completa. A compra é concluída na loja de origem. Trocar de aba mantém as ofertas e a paginação, sem repetir a chamada de compra. A URL conserva os parâmetros técnicos e de compra; links antigos de ofertas em `/pecas?buy=...` continuam funcionando.
-
 ## Ativação no Render
 
 1. Configure uma API de busca autorizada no serviço do portal:
