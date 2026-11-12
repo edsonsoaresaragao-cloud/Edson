@@ -179,8 +179,6 @@ export function parseJob(
         kind: "video",
         image,
         imagePage: image ? url : null,
-        channel: clean(snippet.channelTitle, 160) || null,
-        embeddable: true,
         published:
           typeof snippet.publishedAt === "string" &&
           Number.isFinite(Date.parse(snippet.publishedAt))

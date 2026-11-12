@@ -2,15 +2,15 @@ import { z } from "zod";
 const text = (max: number) => z.string().trim().max(max).default("");
 export const partsQuerySchema = z
   .object({
-    q: text(250),
-    brand: text(60),
-    model: text(150),
+    q: text(120),
+    brand: text(50),
+    model: text(60),
     year: z
       .string()
       .regex(/^$|^(19|20)\d{2}$|^2100$/, "Informe um ano válido.")
       .default(""),
-    engine: text(160),
-    code: text(60),
+    engine: text(60),
+    code: text(50),
     page: z.coerce.number().int().min(1).max(5).default(1),
   })
   .refine(
@@ -24,21 +24,7 @@ export const partsQuerySchema = z
     },
   );
 export type PartsQuery = z.infer<typeof partsQuerySchema>;
-export type OfferDetails = {
-  brand: string | null;
-  code: string | null;
-  applications: string[];
-  currency: "BRL" | null;
-  shipping: number | null;
-  total: number | null;
-  condition: "new" | "used" | "refurbished" | "unknown";
-  availability: "in_stock" | "out_of_stock" | "preorder" | "unknown";
-  compatibility: "confirmed" | "declared" | "unverified";
-  priceUpdatedAt: string | null;
-};
 export type Offer = {
-  details?: OfferDetails;
-  checkedAt?: string;
   id: string;
   title: string;
   description: string;
@@ -145,12 +131,10 @@ export function isProductPage(url: string, structured = false) {
     return false;
   if (
     /^\/$/.test(path) ||
-    /\/(search|s|busca|buscar|lista|category|categorias|blog|noticias|artigos|login|captcha|challenge)(\/|$)/i.test(
+    /\/(search|busca|buscar|lista|category|categorias|blog|noticias|artigos|login|captcha|challenge)(\/|$)/i.test(
       path,
     ) ||
-    ["q", "search", "busca", "s", "k", "keyword", "query"].some((k) =>
-      u.searchParams.has(k),
-    )
+    ["q", "search", "busca", "s"].some((k) => u.searchParams.has(k))
   )
     return false;
   if (structured) return true;

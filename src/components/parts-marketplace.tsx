@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { lowestComparable } from "@/lib/parts/details";
 import { ComponentReferenceImage } from "./component-reference-image";
 import { matchingPartReferences } from "@/lib/parts/references";
 import {
@@ -64,17 +63,8 @@ function OfferPicture({ offer }: { offer: Offer }) {
 }
 export function PartsMarketplace({
   initial = {},
-  controlled,
 }: {
   initial?: Record<string, string | undefined>;
-  controlled?: {
-    query: PartsQuery | null;
-    result: PartsResult | null;
-    busy: boolean;
-    error: string;
-    onSearch: (query: PartsQuery) => void;
-    onClear: () => void;
-  };
 }) {
   const seed = initialDraft(initial),
     parsed = partsQuerySchema.safeParse({
@@ -82,24 +72,15 @@ export function PartsMarketplace({
       page: initial.buyPage || 1,
     });
   const [draft, setDraft] = useState<Draft>(() => seed),
-    [localActive, setActive] = useState<PartsQuery | null>(() =>
+    [active, setActive] = useState<PartsQuery | null>(() =>
       parsed.success ? parsed.data : null,
     ),
-    [localData, setData] = useState<PartsResult | null>(null),
-    [localBusy, setBusy] = useState(() => parsed.success),
-    [localError, setError] = useState(""),
+    [data, setData] = useState<PartsResult | null>(null),
+    [busy, setBusy] = useState(() => parsed.success),
+    [error, setError] = useState(""),
     [sort, setSort] = useState("relevance"),
     [store, setStore] = useState("all"),
-    [onlyPhoto, setOnlyPhoto] = useState(false),
-    [partBrand, setPartBrand] = useState("all"),
-    [condition, setCondition] = useState("all"),
-    [confirmedOnly, setConfirmedOnly] = useState(false),
-    [minPrice, setMinPrice] = useState(""),
-    [maxPrice, setMaxPrice] = useState("");
-  const active = controlled ? controlled.query : localActive,
-    data = controlled ? controlled.result : localData,
-    busy = controlled ? controlled.busy : localBusy,
-    error = localError || (controlled ? controlled.error : "");
+    [onlyPhoto, setOnlyPhoto] = useState(false);
   const results = useRef<HTMLDivElement>(null);
   const generation = useRef(0);
   function run(input: Draft | PartsQuery, page = 1) {
@@ -115,11 +96,6 @@ export function PartsMarketplace({
       return;
     }
     setError("");
-    if (controlled) {
-      setDraft(next.data);
-      controlled.onSearch(next.data);
-      return;
-    }
     setData(null);
     setStore("all");
     setBusy(true);
@@ -141,12 +117,6 @@ export function PartsMarketplace({
     window.history.replaceState(null, "", url.pathname + url.search + url.hash);
   }
   function clearSearch() {
-    controlled?.onClear();
-    setPartBrand("all");
-    setCondition("all");
-    setConfirmedOnly(false);
-    setMinPrice("");
-    setMaxPrice("");
     generation.current++;
     setDraft(initialDraft({}));
     setActive(null);
@@ -171,7 +141,7 @@ export function PartsMarketplace({
     document.getElementById("parts-purchase-query")?.focus();
   }
   useEffect(() => {
-    if (!active || controlled) return;
+    if (!active) return;
     const controller = new AbortController(),
       id = generation.current;
     const params = new URLSearchParams(
@@ -205,7 +175,7 @@ export function PartsMarketplace({
           setBusy(false);
       });
     return () => controller.abort();
-  }, [active, controlled]);
+  }, [active]);
   const searchText = active
     ? buildPartsQuery(active)
     : [draft.q, draft.code, draft.brand, draft.model, draft.year, draft.engine]
@@ -215,53 +185,24 @@ export function PartsMarketplace({
   const stores = Array.from(
     new Set(data?.offers.map((o) => o.store) || []),
   ).sort();
-  const partBrands = [
-    ...new Set(
-      data?.offers
-        .map((o) => o.details?.brand)
-        .filter((v): v is string => !!v) || [],
-    ),
-  ].sort();
-  const cheapest = lowestComparable(data?.offers || []);
-  const money = (n: number) =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(n);
   const visible = (data?.offers || [])
     .filter(
       (o) =>
-        (store === "all" || o.store === store) &&
-        (!onlyPhoto || !!o.image) &&
-        (partBrand === "all" || o.details?.brand === partBrand) &&
-        (condition === "all" || o.details?.condition === condition) &&
-        (!confirmedOnly || o.details?.compatibility === "confirmed") &&
-        (!minPrice ||
-          (o.price !== null &&
-            o.price >= Number(minPrice.replace(",", ".")))) &&
-        (!maxPrice ||
-          (o.price !== null && o.price <= Number(maxPrice.replace(",", ".")))),
+        (store === "all" || o.store === store) && (!onlyPhoto || !!o.image),
     )
     .slice()
     .sort((a, b) =>
-      sort === "brand"
-        ? (a.details?.brand || "\uffff").localeCompare(
-            b.details?.brand || "\uffff",
-            "pt-BR",
-          )
-        : sort === "total"
-          ? (a.details?.total ?? Infinity) - (b.details?.total ?? Infinity)
-          : sort === "relevance"
+      sort === "relevance"
+        ? 0
+        : a.price === null
+          ? b.price === null
             ? 0
-            : a.price === null
-              ? b.price === null
-                ? 0
-                : 1
-              : b.price === null
-                ? -1
-                : sort === "low"
-                  ? a.price - b.price
-                  : b.price - a.price,
+            : 1
+          : b.price === null
+            ? -1
+            : sort === "low"
+              ? a.price - b.price
+              : b.price - a.price,
     );
   function field(name: keyof Draft) {
     return {
@@ -304,7 +245,7 @@ export function PartsMarketplace({
               id="parts-purchase-query"
               name="buy"
               minLength={2}
-              maxLength={250}
+              maxLength={120}
               placeholder="Ex.: bobina de ignição, pastilha de freio…"
               {...field("q")}
             />
@@ -319,7 +260,7 @@ export function PartsMarketplace({
             <input
               name="carBrand"
               placeholder="Ex.: Chevrolet"
-              maxLength={60}
+              maxLength={50}
               {...field("brand")}
             />
           </label>
@@ -328,7 +269,7 @@ export function PartsMarketplace({
             <input
               name="carModel"
               placeholder="Ex.: Onix"
-              maxLength={150}
+              maxLength={60}
               {...field("model")}
             />
           </label>
@@ -348,7 +289,7 @@ export function PartsMarketplace({
             <input
               name="carEngine"
               placeholder="Ex.: 1.0 turbo"
-              maxLength={160}
+              maxLength={60}
               {...field("engine")}
             />
           </label>
@@ -357,7 +298,7 @@ export function PartsMarketplace({
             <input
               name="partCode"
               placeholder="Se souber, informe o código"
-              maxLength={60}
+              maxLength={50}
               {...field("code")}
             />
           </label>
@@ -550,64 +491,7 @@ export function PartsMarketplace({
                       </option>
                       <option value="low">Menor preço em R$</option>
                       <option value="high">Maior preço em R$</option>
-                      <option value="brand">Marca da peça</option>
-                      <option value="total">
-                        Preço total com frete conhecido
-                      </option>
                     </select>
-                  </label>
-                  <label>
-                    Marca da peça
-                    <select
-                      value={partBrand}
-                      onChange={(e) => setPartBrand(e.target.value)}
-                    >
-                      <option value="all">Todas as marcas</option>
-                      {partBrands.map((v) => (
-                        <option key={v}>{v}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Condição
-                    <select
-                      value={condition}
-                      onChange={(e) => setCondition(e.target.value)}
-                    >
-                      <option value="all">Todas as condições</option>
-                      <option value="new">Novo</option>
-                      <option value="used">Usado</option>
-                      <option value="refurbished">Recondicionado</option>
-                      <option value="unknown">Não informada</option>
-                    </select>
-                  </label>
-                  <label>
-                    Preço mínimo (R$)
-                    <input
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                      type="number"
-                      min="0"
-                      step="0.01"
-                    />
-                  </label>
-                  <label>
-                    Preço máximo (R$)
-                    <input
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                      type="number"
-                      min="0"
-                      step="0.01"
-                    />
-                  </label>
-                  <label className="parts-photo-filter">
-                    <input
-                      type="checkbox"
-                      checked={confirmedOnly}
-                      onChange={(e) => setConfirmedOnly(e.target.checked)}
-                    />
-                    Somente compatibilidade confirmada
                   </label>
                   <label className="parts-photo-filter">
                     <input
@@ -629,65 +513,6 @@ export function PartsMarketplace({
                       <div className="parts-offer-copy">
                         <span className="parts-store">{o.store}</span>
                         <h3>{o.title}</h3>
-                        {cheapest.has(o.id) && (
-                          <span className="parts-comparable">
-                            Menor preço da mesma referência e condição nesta
-                            página · sem frete
-                          </span>
-                        )}
-                        <dl className="parts-offer-details">
-                          <div>
-                            <dt>Marca</dt>
-                            <dd>{o.details?.brand || "Não informada"}</dd>
-                          </div>
-                          <div>
-                            <dt>Código do anúncio</dt>
-                            <dd>{o.details?.code || "Não informado"}</dd>
-                          </div>
-                          <div>
-                            <dt>Condição</dt>
-                            <dd>
-                              {
-                                {
-                                  new: "Novo",
-                                  used: "Usado",
-                                  refurbished: "Recondicionado",
-                                  unknown: "Não informada",
-                                }[o.details?.condition || "unknown"]
-                              }
-                            </dd>
-                          </div>
-                          <div>
-                            <dt>Estoque</dt>
-                            <dd>
-                              {
-                                {
-                                  in_stock: "Disponível segundo a fonte",
-                                  out_of_stock: "Indisponível segundo a fonte",
-                                  preorder: "Pré-venda segundo a fonte",
-                                  unknown: "Não informado",
-                                }[o.details?.availability || "unknown"]
-                              }
-                            </dd>
-                          </div>
-                          <div>
-                            <dt>Aplicação</dt>
-                            <dd>
-                              {o.details?.applications.join(" · ") ||
-                                "Não informada pelo vendedor"}
-                            </dd>
-                          </div>
-                          <div>
-                            <dt>Compatibilidade</dt>
-                            <dd>
-                              {o.details?.compatibility === "confirmed"
-                                ? "Confirmada por integração de aplicação"
-                                : o.details?.compatibility === "declared"
-                                  ? "Declarada pelo vendedor; não verificada"
-                                  : "Não verificada"}
-                            </dd>
-                          </div>
-                        </dl>
                         <p className="parts-description">
                           {o.description ||
                             "Descrição completa disponível no anúncio de origem."}
@@ -700,36 +525,6 @@ export function PartsMarketplace({
                         <strong className="parts-price">
                           {o.priceText || "Preço no anúncio"}
                         </strong>
-                        {o.details?.priceUpdatedAt && (
-                          <p>
-                            Preço datado pela fonte:{" "}
-                            {new Date(o.details.priceUpdatedAt).toLocaleString(
-                              "pt-BR",
-                              { timeZone: "America/Fortaleza" },
-                            )}
-                            . Confirme o valor atual no anúncio.
-                          </p>
-                        )}
-                        <p>
-                          Frete:{" "}
-                          {o.details?.shipping != null
-                            ? money(o.details.shipping)
-                            : "Consultar na loja"}{" "}
-                          · Total:{" "}
-                          {o.details?.total != null
-                            ? money(o.details.total)
-                            : "Depende do frete"}
-                        </p>
-                        <small>
-                          Consultado em{" "}
-                          {new Date(
-                            o.checkedAt || data.queriedAt,
-                          ).toLocaleString("pt-BR", {
-                            timeZone: "America/Fortaleza",
-                          })}
-                          {data.cached ? " · em cache" : ""}. A fonte pode
-                          alterar o preço.
-                        </small>
                         {o.delivery && (
                           <p className="parts-delivery">{o.delivery}</p>
                         )}
@@ -745,7 +540,10 @@ export function PartsMarketplace({
                           target="_blank"
                           rel="noopener noreferrer nofollow"
                         >
-                          VER OFERTA / COMPRAR <ArrowUpRight size={16} />
+                          {o.destination === "shopping"
+                            ? "Ver oferta no Google Shopping"
+                            : "Ver anúncio na loja"}{" "}
+                          <ArrowUpRight size={16} />
                         </a>
                       </div>
                     </article>

@@ -20,7 +20,7 @@ export function searchCacheKey(
   return createHash("sha256")
     .update(
       JSON.stringify({
-        version: 2,
+        version: 1,
         q,
         providers: jobsFor(q, env).map((j) => j.id),
         googleEngine: env.AUTOMOTIVE_GOOGLE_CX || "",
@@ -111,11 +111,6 @@ export function createAutomotiveSearch(
             );
             return { id: job.id, state: "ok" as const, ...parsed };
           } catch (error) {
-            console.warn("[automotive-search] source_failure", {
-              provider: job.id,
-              reason:
-                error instanceof PartsQuotaError ? "quota" : "unavailable",
-            });
             const limited =
               error instanceof PartsQuotaError ||
               !!(

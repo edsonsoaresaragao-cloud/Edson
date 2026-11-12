@@ -242,7 +242,7 @@ test("consulta pública sem chave atravessa serviço, handler e interface", asyn
     root
       .locator(".parts-offer")
       .first()
-      .getByRole("link", { name: "VER OFERTA / COMPRAR" }),
+      .getByRole("link", { name: "Ver anúncio na loja" }),
   ).toHaveAttribute("href", "https://www.karhub.com.br/sensor-maf-fixture/p");
   await expect(
     root.locator(".parts-offer").first().locator("img"),

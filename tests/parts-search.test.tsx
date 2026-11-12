@@ -57,7 +57,7 @@ test("consulta inclui veículo, código e página com limites explícitos", () =
     false,
   );
   assert.equal(
-    partsQuerySchema.safeParse({ ...q, q: "a".repeat(251) }).success,
+    partsQuerySchema.safeParse({ ...q, q: "a".repeat(121) }).success,
     false,
   );
 });

@@ -1,37 +1,5 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { searchSchema } from "../../src/lib/automotive-search/contracts";
-function combined(technical: SearchResponse, params: URLSearchParams) {
-  const obj = Object.fromEntries(params);
-  delete obj.offerPage;
-  const query = searchSchema.parse(obj);
-  return {
-    version: 1,
-    query,
-    technical: { ...technical, query },
-    commercial: {
-      status: "unavailable",
-      offers: [],
-      sources: [],
-      queriedAt: technical.queriedAt,
-      page: 1,
-      hasNext: false,
-      query: query.q,
-      cached: false,
-    },
-    commercialQuery: {
-      q: query.q,
-      brand: query.brand,
-      model: query.model,
-      year: query.year,
-      engine: query.engine,
-      code: query.code,
-      page: 1,
-    },
-    intent: "learn",
-    errors: { technical: null, commercial: null },
-  };
-}
 import {
   emptyInput,
   type SearchResponse,
@@ -115,15 +83,6 @@ function fixture(query = "sensor map"): SearchResponse {
   };
 }
 test.beforeEach(async ({ page }) => {
-  await page.route("**/api/vehicle-catalog**", (route) =>
-    route.fulfill({
-      json: {
-        options: [],
-        source: "Catálogo de teste",
-        consultedAt: "2026-11-12T12:00:00Z",
-      },
-    }),
-  );
   await page.route("https://images.fixture.test/**", (route) =>
     route.fulfill({
       contentType: "image/png",
@@ -140,13 +99,11 @@ test("abas, citações, filtros, imagem com fonte e acessibilidade nos dois tema
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   let params = new URLSearchParams();
-  await page.route(/\/api\/automotive-search(?:\/unified)?\?/, (route) => {
+  await page.route("**/api/automotive-search?**", (route) => {
     params = new URL(route.request().url()).searchParams;
     if (params.has("suggest"))
       return route.fulfill({ json: { suggestions: ["Sensor MAP"] } });
-    return route.fulfill({
-      json: combined(fixture(params.get("q") || ""), params),
-    });
+    return route.fulfill({ json: fixture(params.get("q") || "") });
   });
   await page.goto(path);
   const root = page.locator(".automotive-search");
@@ -154,17 +111,15 @@ test("abas, citações, filtros, imagem com fonte e acessibilidade nos dois tema
     .getByLabel("Peça, sintoma ou pergunta automotiva")
     .fill("senso map");
   await expect(
-    root
-      .locator(".auto-suggestions")
-      .getByRole("button", { name: "Sensor MAP", exact: true }),
+    root.getByRole("button", { name: "Sensor MAP", exact: true }),
   ).toBeVisible();
   await root
     .getByText("Refinar veículo e fonte técnica", { exact: true })
     .click();
   await root.getByLabel("Montadora").fill("Hyundai");
-  await root.getByLabel("Modelo", { exact: true }).first().fill("HB20");
-  await root.getByLabel("Ano", { exact: true }).first().fill("2026");
-  await root.getByLabel("Motor / versão").first().fill("1.0");
+  await root.getByLabel("Modelo", { exact: true }).fill("HB20");
+  await root.getByLabel("Ano", { exact: true }).fill("2026");
+  await root.getByLabel("Motor / versão").fill("1.0");
   await root.getByLabel("Fonte técnica (web)").selectOption("bosch");
   await root.getByRole("button", { name: "Pesquisar", exact: true }).click();
   await expect(
@@ -187,16 +142,16 @@ test("abas, citações, filtros, imagem com fonte e acessibilidade nos dois tema
     ["CÓDIGOS", "Código P0106"],
     ["MANUAIS", "Manual MAP"],
   ]) {
-    await root.getByRole("tab", { name: new RegExp("^" + name) }).click();
+    await root.getByRole("button", { name, exact: true }).click();
     await expect(root.locator(".auto-source")).toHaveCount(1);
     await expect(root.locator(".auto-source")).toContainText(title);
   }
-  await root.getByRole("tab", { name: /^IMAGENS/ }).click();
-  await expect(root.locator(".auto-picture > button img")).toBeVisible();
+  await root.getByRole("button", { name: "IMAGENS", exact: true }).click();
+  await expect(root.locator(".auto-picture img")).toBeVisible();
   await expect(
     root.getByRole("link", { name: /fonte original/ }),
   ).toHaveAttribute("href", "https://www.boschaftermarket.com/teste-web");
-  await root.getByRole("tab", { name: /^TODOS/ }).click();
+  await root.getByRole("button", { name: "TODOS", exact: true }).click();
   for (const theme of ["light", "dark"]) {
     await page.evaluate(
       (t) => (document.documentElement.dataset.theme = t),
@@ -228,7 +183,7 @@ test("vazio, limite, erro recuperável e histórico local opcional", async ({
   page,
 }) => {
   let mode = "empty";
-  await page.route(/\/api\/automotive-search(?:\/unified)?\?/, (route) => {
+  await page.route("**/api/automotive-search?**", (route) => {
     if (new URL(route.request().url()).searchParams.has("suggest"))
       return route.fulfill({ json: { suggestions: [] } });
     if (mode === "error")
@@ -250,9 +205,7 @@ test("vazio, limite, erro recuperável e histórico local opcional", async ({
         status: "partial",
         providers: [{ id: "google-web", state: "limited" }],
       });
-    return route.fulfill({
-      json: combined(result, new URL(route.request().url()).searchParams),
-    });
+    return route.fulfill({ json: result });
   });
   await page.goto(path);
   const root = page.locator(".automotive-search");

@@ -284,8 +284,6 @@ export function parseMerchantMetadata(
       source: meta("og:site_name") || prior.store,
       price: offer.price ?? (meta("product:price:amount") || undefined),
       currency: str(offer.priceCurrency) || meta("product:price:currency"),
-      product,
-      offer,
     },
     prior.source,
     q,
