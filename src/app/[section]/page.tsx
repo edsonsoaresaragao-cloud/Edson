@@ -5,7 +5,6 @@ import { kindPaths, kindLabels, normalize } from "@/lib/catalog";
 import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
-import { AutomotiveSearch } from "@/components/automotive-search/search";
 import { PartsMarketplace } from "@/components/parts-marketplace";
 import { TechnicalCatalogLibrary } from "@/components/technical-catalog-library";
 import { resolveTechnicalCatalogId } from "@/lib/technical-catalogs";
@@ -88,7 +87,6 @@ export default async function Catalog({
       />
       {section === "pecas" && (
         <>
-          <AutomotiveSearch initial={s.auto || ""} />
           <div id="ofertas-de-pecas">
             <PartsMarketplace initial={s} />
           </div>

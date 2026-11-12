@@ -1,6 +1,6 @@
 # Pesquisa técnica automotiva
 
-A pesquisa aparece acima das ofertas em `/pecas`. O endereço `/pesquisa-automotiva` também abre o mesmo componente. A busca de ofertas, seus parâmetros `buy` e a biblioteca técnica foram preservados. A pesquisa técnica usa os parâmetros `auto` e `auto_*`, que permitem compartilhar uma consulta completa.
+O bloco de pesquisa técnica foi retirado da página `/pecas` a pedido do proprietário. O endereço antigo `/pesquisa-automotiva` redireciona para `/pecas`. A busca de ofertas, seus parâmetros `buy` e a biblioteca técnica foram preservados. Os serviços e dados técnicos existentes permanecem separados da interface pública; a documentação abaixo descreve essa implementação preservada.
 
 ## Ativação no Render
 
@@ -42,8 +42,8 @@ O cache técnico compartilhado armazena consulta, filtros e resultados, sem asso
 
 - `npx tsx --test tests/automotive-search.test.tsx tests/parts-search.test.tsx tests/parts-public-search.test.tsx`
 - Banco de teste descartável: `AUTOMOTIVE_TEST_DATABASE_URL=postgresql://... npx tsx --test tests/automotive-search-postgres.test.ts`. O teste cria um schema próprio em transação e faz rollback; não use banco de produção.
-- Com o servidor local sem chaves pagas: `npx playwright test tests/browser/automotive-search.spec.ts` (desktop e celular). Integrações positivas usam respostas controladas identificadas como teste. O endpoint real sem configuração também é verificado.
+- Com o servidor local sem chaves pagas: `npx playwright test tests/browser/automotive-search.spec.ts` verifica o redirecionamento da rota antiga e os endpoints preservados. Os testes da interface retirada foram removidos da suíte pública.
 
 A validação local não comprova credenciais ou acesso comercial no Render. Após configurar as chaves, confira uma consulta real, links de origem, imagens, vídeo, síntese com citações e consumo no painel dos provedores.
 
-Na implementação, passaram 35 testes de serviço/interface e regressão das ofertas, o teste da migração/cache/histórico em PostgreSQL e 16 testes de navegador (nova pesquisa junto às ofertas, desktop/celular, com acessibilidade nos dois temas). ESLint e TypeScript no escopo novo passaram. A geração do cliente Prisma ficou bloqueada pelo download do binário, que retornou HTTP 403 no ambiente; o build completo não foi validado. Não havia chaves externas no ambiente local, portanto as integrações positivas foram verificadas com respostas controladas, não com chamadas pagas reais.
+Na implementação original, passaram 35 testes de serviço/interface e regressão das ofertas, o teste da migração/cache/histórico em PostgreSQL e 16 testes de navegador (nova pesquisa junto às ofertas, desktop/celular, com acessibilidade nos dois temas). ESLint e TypeScript no escopo novo passaram. A geração do cliente Prisma ficou bloqueada pelo download do binário, que retornou HTTP 403 no ambiente; o build completo não foi validado. Não havia chaves externas no ambiente local, portanto as integrações positivas foram verificadas com respostas controladas, não com chamadas pagas reais.
