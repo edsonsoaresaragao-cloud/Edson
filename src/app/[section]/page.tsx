@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
 import { kindPaths, kindLabels, normalize } from "@/lib/catalog";
-import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
 import { PartsMarketplace } from "@/components/parts-marketplace";
@@ -37,6 +35,23 @@ export default async function Catalog({
   const s = await searchParams;
   const kind = Object.keys(kindPaths).find((k) => kindPaths[k] === section);
   if (!kind && section !== "busca") notFound();
+  if (section === "pecas") {
+    return (
+      <div className="container page-content">
+        <PageHeading
+          title="Encontre ofertas de peças"
+          description="Busque peças por nome, código e veículo. Consulte ofertas e compare lojas."
+        />
+        <div id="ofertas-de-pecas">
+          <PartsMarketplace initial={s} />
+        </div>
+      </div>
+    );
+  }
+  const [{ db }, { searchContent }] = await Promise.all([
+    import("@/lib/db"),
+    import("@/lib/content"),
+  ]);
   const page = Math.max(1, Math.min(1000, Number(s.page) || 1));
   const [{ items, hasNext }, categories, courses] = await Promise.all([
     searchContent({
@@ -68,38 +83,15 @@ export default async function Catalog({
   return (
     <div className="container page-content">
       <PageHeading
-        title={
-          section === "pecas"
-            ? "Encontre ofertas de peças"
-            : kind
-              ? kindLabels[kind]
-              : "Pesquisa inteligente"
-        }
+        title={kind ? kindLabels[kind] : "Pesquisa inteligente"}
         description={
-          section === "pecas"
-            ? "Busque peças por nome, código e veículo. Consulte ofertas e continue explorando a biblioteca técnica abaixo."
-            : section === "videos"
-              ? "Vídeos próprios e incorporações oficiais. Cada conteúdo externo preserva sua autoria."
-              : section === "diagnostico"
-                ? "Causas possíveis e verificações educativas. A confirmação de falhas exige avaliação e testes profissionais."
-                : "Explore conteúdos técnicos por sistema, peça, veículo e palavra-chave."
+          section === "videos"
+            ? "Vídeos próprios e incorporações oficiais. Cada conteúdo externo preserva sua autoria."
+            : section === "diagnostico"
+              ? "Causas possíveis e verificações educativas. A confirmação de falhas exige avaliação e testes profissionais."
+              : "Explore conteúdos técnicos por sistema, peça, veículo e palavra-chave."
         }
       />
-      {section === "pecas" && (
-        <>
-          <div id="ofertas-de-pecas">
-            <PartsMarketplace initial={s} />
-          </div>
-          <div className="parts-library-heading" id="biblioteca-tecnica">
-            <span className="eyebrow">CONHECIMENTO / BIBLIOTECA TÉCNICA</span>
-            <h2>Entenda a peça antes de escolher.</h2>
-            <p>
-              Os filtros abaixo pesquisam os conteúdos educativos do Edson
-              Oficina.
-            </p>
-          </div>
-        </>
-      )}
       {section === "artigos" && (
         <>
           <TechnicalCatalogLibrary
