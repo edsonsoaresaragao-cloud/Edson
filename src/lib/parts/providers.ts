@@ -1,3 +1,4 @@
+import { offerDetails } from "./details";
 import { createHash } from "node:crypto";
 import {
   brlPrice,
@@ -39,7 +40,11 @@ export function providerJobs(
       env.SERPAPI_API_KEY ||
       env.SERPAPI_KEY
     )?.trim(),
-    brave = (env.PARTS_BRAVE_API_KEY || env.BRAVE_SEARCH_API_KEY)?.trim();
+    brave = (
+      env.PARTS_BRAVE_API_KEY ||
+      env.BRAVE_SEARCH_API_KEY ||
+      env.AUTOMOTIVE_BRAVE_API_KEY
+    )?.trim();
   const jobs: Provider[] = [];
   if (serp) {
     const url = new URL("https://serpapi.com/search.json");
@@ -138,7 +143,7 @@ export function offerFromRow(
   const r = row(value);
   const map = row(r.pagemap),
     meta = row(list(map.metatags)[0]),
-    product = row(list(map.product)[0]),
+    product = row(r.product || list(map.product)[0]),
     thumbnail = row(r.thumbnail);
   const structured =
     list(map.product).length > 0 ||
@@ -147,7 +152,16 @@ export function offerFromRow(
     .map(publicHttps)
     .filter((u): u is string => !!u);
   const url =
-    urls.find((u) => shoppingDestination(u) === "merchant") || urls[0];
+    urls.find(
+      (u) =>
+        shoppingDestination(u) === "merchant" &&
+        isProductPage(u, structured || shopping),
+    ) ||
+    urls.find(
+      (u) =>
+        shoppingDestination(u) === "shopping" &&
+        /^\/shopping\/(product|u)\//.test(new URL(u).pathname),
+    );
   if (!url || (!shopping && !isProductPage(url, structured))) return null;
   if (
     shoppingDestination(url) === "shopping" &&
@@ -193,8 +207,21 @@ export function offerFromRow(
     price === null && currency && rawPrice && !/[^0-9., ]/.test(rawPrice)
       ? `${currency} ${rawPrice}`
       : rawPrice;
+  const details = offerDetails({ ...r, product, meta }, price, currency);
   return {
-    id: createHash("sha256").update(canonical).digest("hex").slice(0, 24),
+    details,
+    id: createHash("sha256")
+      .update(
+        JSON.stringify([
+          canonical,
+          details.brand,
+          details.code,
+          details.condition,
+          details.applications,
+        ]),
+      )
+      .digest("hex")
+      .slice(0, 24),
     title,
     description,
     url: canonical,
@@ -259,9 +286,16 @@ export function parseProviderPage(
 export function mergeOffers(offers: Offer[]) {
   const map = new Map<string, Offer>();
   for (const offer of offers) {
-    const prior = map.get(offer.url);
+    const identity = [
+      offer.url,
+      offer.details?.brand || "",
+      offer.details?.code || "",
+      offer.details?.condition || "unknown",
+      JSON.stringify(offer.details?.applications || []),
+    ].join("|");
+    const prior = map.get(identity);
     if (!prior) {
-      map.set(offer.url, { ...offer });
+      map.set(identity, { ...offer });
       continue;
     }
     const priced =
@@ -272,7 +306,7 @@ export function mergeOffers(offers: Offer[]) {
           : prior.priceText
             ? prior
             : offer;
-    map.set(offer.url, {
+    map.set(identity, {
       ...prior,
       source: [...new Set([...prior.source.split(" · "), offer.source])].join(
         " · ",
@@ -282,6 +316,7 @@ export function mergeOffers(offers: Offer[]) {
       price: priced.price,
       priceText: priced.priceText,
       delivery: prior.delivery || offer.delivery,
+      details: priced.details || prior.details || offer.details,
       codeMatch: prior.codeMatch || offer.codeMatch,
     });
   }

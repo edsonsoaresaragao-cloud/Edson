@@ -1,6 +1,6 @@
 # Pesquisa técnica automotiva
 
-A pesquisa aparece acima das ofertas em `/pecas`. O endereço `/pesquisa-automotiva` também abre o mesmo componente. A busca de ofertas, seus parâmetros `buy` e a biblioteca técnica foram preservados. A pesquisa técnica usa os parâmetros `auto` e `auto_*`, que permitem compartilhar uma consulta completa.
+A pesquisa reúne informações técnicas e ofertas em `/pecas`. Veja também a [arquitetura do buscador com oito abas](./BUSCADOR-AUTOMOTIVO-INTELIGENTE.md). O endereço `/pesquisa-automotiva` também abre o mesmo componente. A busca de ofertas, seus parâmetros `buy` e a biblioteca técnica foram preservados. A pesquisa técnica usa os parâmetros `auto` e `auto_*`, que permitem compartilhar uma consulta completa.
 
 ## Ativação no Render
 
