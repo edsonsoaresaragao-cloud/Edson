@@ -16,6 +16,7 @@ model User {
  enrollments Enrollment[]
  certificates Certificate[]
  resets PasswordReset[]
+ automotiveSearchHistory AutomotiveSearchHistory[]
 }
 model PasswordReset {
  id String @id
@@ -212,4 +213,18 @@ model RateLimit {
  count Int
  expiresAt DateTime
  @@index([expiresAt])
+}
+model AutomotiveSearchCache {
+ key String @id
+ result Json
+ expiresAt DateTime
+ @@index([expiresAt])
+}
+model AutomotiveSearchHistory {
+ id String @id @default(uuid())
+ ownerId String
+ owner User @relation(fields:[ownerId],references:[id],onDelete:Cascade)
+ query Json
+ createdAt DateTime @default(now())
+ @@index([ownerId,createdAt])
 }
