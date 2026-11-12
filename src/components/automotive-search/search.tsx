@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { PartsMarketplace } from "@/components/parts-marketplace";
+import { correctPartName } from "@/lib/parts/catalog";
 import {
   emptyInput,
   searchSchema,
@@ -10,7 +12,7 @@ import {
   type MediaResult,
 } from "@/lib/automotive-search/contracts";
 const tabs = [
-  "TODOS",
+  "PEÇAS",
   "IMAGENS",
   "VÍDEOS",
   "DIAGNÓSTICO",
@@ -63,13 +65,21 @@ function Picture({
     </figure>
   );
 }
-export function AutomotiveSearch({ initial = "" }: { initial?: string } = {}) {
+export function AutomotiveSearch({
+  initial = "",
+  purchaseInitial = {},
+}: {
+  initial?: string;
+  purchaseInitial?: Record<string, string | undefined>;
+} = {}) {
   const id = useId(),
     [draft, setDraft] = useState<SearchInput>({ ...emptyInput, q: initial }),
     [data, setData] = useState<SearchResponse | null>(null),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [tab, setTab] = useState(0),
+    [purchase, setPurchase] = useState(purchaseInitial),
+    [purchaseRevision, setPurchaseRevision] = useState(0),
     [suggestions, setSuggestions] = useState<string[]>([]),
     [focused, setFocused] = useState(false),
     [keep, setKeep] = useState(false),
@@ -113,6 +123,16 @@ export function AutomotiveSearch({ initial = "" }: { initial?: string } = {}) {
         return;
       }
       const query = parsed.data;
+      const purchaseQuery = {
+        buy: correctPartName(query.q),
+        carBrand: query.brand,
+        carModel: query.model,
+        carYear: query.year,
+        carEngine: query.engine,
+        partCode: query.code,
+      };
+      setPurchase(purchaseQuery);
+      setPurchaseRevision((revision) => revision + 1);
       controller.current?.abort();
       const abort = new AbortController();
       controller.current = abort;
@@ -126,6 +146,11 @@ export function AutomotiveSearch({ initial = "" }: { initial?: string } = {}) {
       setNotice("");
       const url = new URL(window.location.href);
       url.searchParams.set("auto", query.q);
+      url.searchParams.delete("buyPage");
+      for (const [key, value] of Object.entries(purchaseQuery)) {
+        if (value) url.searchParams.set(key, value);
+        else url.searchParams.delete(key);
+      }
       for (const key of [
         "brand",
         "model",
@@ -576,18 +601,37 @@ export function AutomotiveSearch({ initial = "" }: { initial?: string } = {}) {
               <p>Algumas fontes não responderam. Tente novamente mais tarde.</p>
             )}
           </div>
-          <nav className="auto-tabs" aria-label="Tipos de resultado">
-            {tabs.map((t, i) => (
-              <button
-                key={t}
-                type="button"
-                aria-current={tab === i ? "page" : undefined}
-                onClick={() => setTab(i)}
-              >
-                {t}
-              </button>
-            ))}
-          </nav>
+        </div>
+      )}
+      <nav className="auto-tabs" aria-label="Tipos de resultado">
+        {tabs.map((t, i) => (
+          <button
+            key={t}
+            type="button"
+            aria-current={tab === i ? "page" : undefined}
+            onClick={() => setTab(i)}
+          >
+            {t}
+          </button>
+        ))}
+      </nav>
+      <div id="ofertas-de-pecas" hidden={tab !== 0}>
+        <PartsMarketplace
+          key={JSON.stringify([
+            purchaseRevision,
+            purchase.buy || "",
+            purchase.carBrand || "",
+            purchase.carModel || "",
+            purchase.carYear || "",
+            purchase.carEngine || "",
+            purchase.partCode || "",
+            purchase.buyPage || "1",
+          ])}
+          initial={purchase}
+        />
+      </div>
+      {data && (
+        <div aria-live="polite">
           {tab === 0 && (
             <>
               <section className="auto-answer">

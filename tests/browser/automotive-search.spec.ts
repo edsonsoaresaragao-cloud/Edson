@@ -83,6 +83,21 @@ function fixture(query = "sensor map"): SearchResponse {
   };
 }
 test.beforeEach(async ({ page }) => {
+  await page.route("**/api/parts-search?**", (route) =>
+    route.fulfill({
+      json: {
+        status: "unavailable",
+        offers: [],
+        sources: [],
+        queriedAt: "2026-11-12T12:00:00Z",
+        hasNext: false,
+        page: 1,
+        query: "Consulta de teste",
+        cached: false,
+      },
+    }),
+  );
+  await page.route("https://images.openai.com/**", (route) => route.abort());
   await page.route("https://images.fixture.test/**", (route) =>
     route.fulfill({
       contentType: "image/png",
@@ -111,15 +126,17 @@ test("abas, citações, filtros, imagem com fonte e acessibilidade nos dois tema
     .getByLabel("Peça, sintoma ou pergunta automotiva")
     .fill("senso map");
   await expect(
-    root.getByRole("button", { name: "Sensor MAP", exact: true }),
+    root
+      .locator(".auto-suggestions")
+      .getByRole("button", { name: "Sensor MAP", exact: true }),
   ).toBeVisible();
   await root
     .getByText("Refinar veículo e fonte técnica", { exact: true })
     .click();
   await root.getByLabel("Montadora").fill("Hyundai");
-  await root.getByLabel("Modelo", { exact: true }).fill("HB20");
-  await root.getByLabel("Ano", { exact: true }).fill("2026");
-  await root.getByLabel("Motor / versão").fill("1.0");
+  await root.getByLabel("Modelo", { exact: true }).first().fill("HB20");
+  await root.getByLabel("Ano", { exact: true }).first().fill("2026");
+  await root.getByLabel("Motor / versão").first().fill("1.0");
   await root.getByLabel("Fonte técnica (web)").selectOption("bosch");
   await root.getByRole("button", { name: "Pesquisar", exact: true }).click();
   await expect(
@@ -151,7 +168,7 @@ test("abas, citações, filtros, imagem com fonte e acessibilidade nos dois tema
   await expect(
     root.getByRole("link", { name: /fonte original/ }),
   ).toHaveAttribute("href", "https://www.boschaftermarket.com/teste-web");
-  await root.getByRole("button", { name: "TODOS", exact: true }).click();
+  await root.getByRole("button", { name: "PEÇAS", exact: true }).click();
   for (const theme of ["light", "dark"]) {
     await page.evaluate(
       (t) => (document.documentElement.dataset.theme = t),
@@ -280,4 +297,122 @@ test("consulta sem API apresenta limite real e preserva biblioteca e ofertas", a
   await expect(
     root.getByRole("link", { name: /Comparar ofertas de peças/ }),
   ).toHaveAttribute("href", "/pecas#ofertas-de-pecas");
+});
+
+test("PEÇAS pesquisa ofertas e leva peça e veículo para todas as lojas", async ({
+  page,
+}) => {
+  let requests = 0;
+  let purchase = new URLSearchParams();
+  await page.route("**/api/automotive-search?**", (route) => {
+    const p = new URL(route.request().url()).searchParams;
+    return route.fulfill({
+      json: p.has("suggest") ? { suggestions: [] } : fixture(p.get("q") || ""),
+    });
+  });
+  await page.route("**/api/parts-search?**", (route) => {
+    purchase = new URL(route.request().url()).searchParams;
+    requests++;
+    return route.fulfill({
+      json: {
+        status: "ready",
+        queriedAt: "2026-11-12T12:00:00Z",
+        hasNext: false,
+        page: 1,
+        query: purchase.get("q") || "",
+        cached: false,
+        sources: [{ id: "web", label: "Loja de teste", state: "ok" }],
+        offers: [
+          {
+            id: "oferta-map",
+            title: "Sensor MAP — oferta de teste",
+            description: "Anúncio controlado para testar compra.",
+            url: "https://loja.test-store.com.br/produto/map",
+            image: null,
+            store: "Loja de teste",
+            host: "loja.test-store.com.br",
+            price: 149.9,
+            priceText: "R$ 149,90",
+            delivery: "",
+            source: "web",
+            destination: "merchant",
+            codeMatch: false,
+          },
+        ],
+      },
+    });
+  });
+  await page.goto(path);
+  const root = page.locator(".automotive-search");
+  const form = root.locator("form").first();
+  await form
+    .getByLabel("Peça, sintoma ou pergunta automotiva")
+    .fill("senso map");
+  await form
+    .getByText("Refinar veículo e fonte técnica", { exact: true })
+    .click();
+  await form.getByLabel("Montadora").fill("Hyundai");
+  await form.getByLabel("Modelo", { exact: true }).fill("HB20");
+  await form.getByLabel("Ano", { exact: true }).fill("2026");
+  await form.getByLabel("Motor / versão").fill("1.0");
+  await form.getByLabel("Código da peça informado").fill("TEST-MAP");
+  await form.getByRole("button", { name: "Pesquisar", exact: true }).click();
+  const offers = root.locator(".parts-marketplace");
+  await expect(offers.locator(".parts-offer")).toHaveCount(1);
+  expect(Object.fromEntries(purchase)).toMatchObject({
+    q: "sensor map",
+    brand: "Hyundai",
+    model: "HB20",
+    year: "2026",
+    engine: "1.0",
+    code: "TEST-MAP",
+  });
+  await expect(
+    root.getByRole("button", { name: "TODOS", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    root.getByRole("button", { name: "PEÇAS", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
+  await expect(
+    offers.getByRole("link", { name: "Ver anúncio na loja" }),
+  ).toHaveAttribute("href", "https://loja.test-store.com.br/produto/map");
+  await expect(offers.getByLabel("Peça ou código para pesquisar")).toHaveValue(
+    "sensor map",
+  );
+  for (const store of [
+    "Mercado Livre",
+    "Amazon Brasil",
+    "Google Shopping",
+    "Bing Shopping",
+  ]) {
+    const href = await offers
+      .getByRole("link", { name: store, exact: true })
+      .getAttribute("href");
+    expect(decodeURIComponent(href!)).toMatch(/sensor(?: |-)map/);
+    expect(decodeURIComponent(href!)).toContain("HB20");
+    expect(decodeURIComponent(href!)).toContain("2026");
+    expect(decodeURIComponent(href!)).toContain("TEST-MAP");
+  }
+  const callsBeforeSwitch = requests;
+  await root.getByRole("button", { name: "VÍDEOS", exact: true }).click();
+  await expect(offers).toBeHidden();
+  await root.getByRole("button", { name: "PEÇAS", exact: true }).click();
+  await expect(offers.locator(".parts-offer")).toBeVisible();
+  expect(requests).toBe(callsBeforeSwitch);
+  await expect(page).toHaveURL(/buy=sensor\+map/);
+  await expect(page).toHaveURL(/carModel=HB20/);
+  await expect(page).toHaveURL(/partCode=TEST-MAP/);
+  await form
+    .getByLabel("Peça, sintoma ou pergunta automotiva")
+    .fill("amortecedor");
+  const next = page.waitForRequest(
+    (r) =>
+      r.url().includes("/api/parts-search?") &&
+      new URL(r.url()).searchParams.get("q") === "amortecedor",
+  );
+  await form.getByRole("button", { name: "Pesquisar", exact: true }).click();
+  await next;
+  await expect(offers.getByLabel("Peça ou código para pesquisar")).toHaveValue(
+    "amortecedor",
+  );
 });

@@ -6,7 +6,6 @@ import { searchContent } from "@/lib/content";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
 import { AutomotiveSearch } from "@/components/automotive-search/search";
-import { PartsMarketplace } from "@/components/parts-marketplace";
 import { TechnicalCatalogLibrary } from "@/components/technical-catalog-library";
 import { resolveTechnicalCatalogId } from "@/lib/technical-catalogs";
 import { SearchBox } from "@/components/forms";
@@ -88,10 +87,7 @@ export default async function Catalog({
       />
       {section === "pecas" && (
         <>
-          <AutomotiveSearch initial={s.auto || ""} />
-          <div id="ofertas-de-pecas">
-            <PartsMarketplace initial={s} />
-          </div>
+          <AutomotiveSearch initial={s.auto || ""} purchaseInitial={s} />
           <div className="parts-library-heading" id="biblioteca-tecnica">
             <span className="eyebrow">CONHECIMENTO / BIBLIOTECA TÉCNICA</span>
             <h2>Entenda a peça antes de escolher.</h2>
