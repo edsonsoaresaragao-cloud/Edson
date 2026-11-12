@@ -408,9 +408,10 @@ test("histórico exige usuário, protege origem, valida corpo e usa somente prop
   );
   assert.equal(owner, "owner-a");
 });
-test("HTML inicial contém filtros, privacidade do histórico e sete abas após resultado sem simular ofertas", () => {
+test("HTML inicial tem uma busca, filtros e privacidade do histórico sem simular ofertas", () => {
   const html = renderToStaticMarkup(createElement(AutomotiveSearch));
-  assert.match(html, /Peça, sintoma ou pergunta automotiva/);
+  assert.match(html, /O que você procura para seu veículo\?/);
+  assert.equal((html.match(/<form/g) || []).length, 1);
   assert.match(html, /Guardar pesquisas neste navegador/);
   assert.match(html, /Fonte técnica \(web\)/);
   assert.doesNotMatch(html, /PRIVATE_SEARCH_KEY|Resposta inventada/);

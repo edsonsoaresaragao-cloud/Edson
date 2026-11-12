@@ -1,6 +1,6 @@
 # Pesquisa técnica automotiva
 
-O bloco de pesquisa técnica foi retirado da página `/pecas` a pedido do proprietário. O endereço antigo `/pesquisa-automotiva` redireciona para `/pecas`. A busca de ofertas e seus parâmetros `buy` foram preservados. A seção educativa com filtros e cards também foi retirada de `/pecas`; os conteúdos continuam nas demais áreas do portal. Os serviços e dados técnicos existentes permanecem separados da interface pública; a documentação abaixo descreve essa implementação preservada.
+O bloco técnico isolado foi substituído por uma busca única na página `/pecas`, com oito abas e resultados técnicos/comerciais progressivos. A biblioteca de cards retirada não voltou. A rota `/pesquisa-automotiva` redireciona para `/pecas`. Consulte a [documentação da nova experiência](./BUSCADOR-PECAS-SOLUCOES.md) para configuração, arquitetura e limitações atuais.
 
 ## Ativação no Render
 

@@ -101,6 +101,11 @@ export function createPartsSearchService(deps: Dependencies = {}) {
                 page,
               };
             } catch (error) {
+              console.warn("[parts-search] source_failure", {
+                provider: provider.id,
+                reason:
+                  error instanceof PartsQuotaError ? "quota" : "unavailable",
+              });
               return {
                 source: {
                   id: provider.id,
@@ -146,7 +151,10 @@ export function createPartsSearchService(deps: Dependencies = {}) {
         ...base,
         status,
         queriedAt: new Date(now()).toISOString(),
-        offers,
+        offers: offers.map((offer) => ({
+          ...offer,
+          checkedAt: new Date(now()).toISOString(),
+        })),
         publicSearch: usedPublic,
         hasNext: q.page < 5 && results.some((r) => r.page?.hasNext),
         sources: results.map((r) => r.source),

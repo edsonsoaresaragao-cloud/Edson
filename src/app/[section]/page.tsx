@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { kindPaths, kindLabels, normalize } from "@/lib/catalog";
 import { PageHeading, ContentCard, Empty } from "@/components/content";
 import { YouTubeGallery } from "@/components/youtube-gallery";
-import { PartsMarketplace } from "@/components/parts-marketplace";
+import { AutomotiveSearch } from "@/components/automotive-search/search";
 import { TechnicalCatalogLibrary } from "@/components/technical-catalog-library";
 import { resolveTechnicalCatalogId } from "@/lib/technical-catalogs";
 import { SearchBox } from "@/components/forms";
@@ -18,7 +18,7 @@ export async function generateMetadata({
   return {
     title:
       section === "pecas"
-        ? "Buscar e comparar peças automotivas"
+        ? "Buscador Inteligente de Peças e Soluções Automotivas"
         : kind
           ? kindLabels[kind]
           : "Busca",
@@ -39,12 +39,10 @@ export default async function Catalog({
     return (
       <div className="container page-content">
         <PageHeading
-          title="Encontre ofertas de peças"
-          description="Busque peças por nome, código e veículo. Consulte ofertas e compare lojas."
+          title="Buscador Inteligente de Peças e Soluções Automotivas"
+          description="Pesquise peças, preços, defeitos, códigos de falha e informações técnicas. Encontre imagens, vídeos, diagnósticos, manuais e ofertas de lojas automotivas em um só lugar."
         />
-        <div id="ofertas-de-pecas">
-          <PartsMarketplace initial={s} />
-        </div>
+        <AutomotiveSearch initial={s.auto || ""} purchaseInitial={s} />
       </div>
     );
   }

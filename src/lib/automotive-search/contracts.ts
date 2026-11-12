@@ -3,12 +3,12 @@ export const searchSchema = z
   .object({
     q: z.string().trim().min(2).max(250),
     brand: z.string().trim().max(60).default(""),
-    model: z.string().trim().max(70).default(""),
+    model: z.string().trim().max(150).default(""),
     year: z
       .string()
       .regex(/^$|^(19|20)\d{2}$|^2100$/)
       .default(""),
-    engine: z.string().trim().max(80).default(""),
+    engine: z.string().trim().max(160).default(""),
     code: z.string().trim().max(60).default(""),
     source: z
       .enum([
@@ -47,6 +47,8 @@ export type SearchSource = {
   image: string | null;
   imagePage: string | null;
   published: string | null;
+  channel?: string | null;
+  embeddable?: boolean;
   score: number;
 };
 export type MediaResult = {
@@ -67,9 +69,28 @@ export const factCategories = [
   "repair",
   "safety",
   "divergence",
+  "tools",
+  "tests",
+  "decision",
+  "symptoms",
+  "location",
+  "confirmation",
+  "interpretation",
 ] as const;
 export const answerSchema = z
   .object({
+    intent: z
+      .enum([
+        "buy",
+        "diagnosis",
+        "images",
+        "videos",
+        "codes",
+        "manuals",
+        "specifications",
+        "learn",
+      ])
+      .optional(),
     summary: z.string().max(1600),
     facts: z
       .array(
