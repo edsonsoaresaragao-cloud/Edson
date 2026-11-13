@@ -3,6 +3,10 @@ import { join } from "node:path";
 const root = join(process.cwd(), ".next", "standalone");
 await mkdir(join(root, ".next"), { recursive: true });
 await cp("public", join(root, "public"), { recursive: true });
+// Material editorial autorizado, fora de public; original protegido pela rota.
+await cp("academy-materials", join(root, "academy-materials"), {
+  recursive: true,
+});
 await cp(".next/static", join(root, ".next", "static"), { recursive: true });
 // Next traces local env files. Deployment artifacts must receive secrets at runtime.
 for (const name of await readdir(root)) {

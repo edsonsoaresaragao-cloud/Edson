@@ -124,6 +124,8 @@ model Enrollment {
  courseId String
  course Course @relation(fields:[courseId],references:[id],onDelete:Cascade)
  createdAt DateTime @default(now())
+ lastLessonId String?
+ lastViewedAt DateTime?
  progress Progress[]
  @@unique([userId,courseId])
 }
@@ -148,6 +150,7 @@ model Certificate {
  courseTitle String
  hours Int
  issuedAt DateTime @default(now())
+ completedAt DateTime?
  @@unique([userId,courseId])
 }
 model Contact {

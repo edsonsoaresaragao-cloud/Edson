@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { COURSE_ID } from "@/lib/academy/content";
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ code: string }> },
@@ -41,7 +42,13 @@ export async function GET(
     font: bold,
     color: rgb(0.06, 0.09, 0.16),
   });
-  line("CERTIFICADO DE CONCLUSÃO", 425, 28);
+  line(
+    cert.courseId === COURSE_ID
+      ? "CERTIFICADO DE PARTICIPAÇÃO"
+      : "CERTIFICADO DE CONCLUSÃO",
+    425,
+    28,
+  );
   line("Certificamos que", 365);
   line(cert.studentName, 320, 25);
   line("concluiu o curso livre", 280);
@@ -50,6 +57,12 @@ export async function GET(
     `Carga horária: ${cert.hours} horas • Emissão: ${cert.issuedAt.toLocaleDateString("pt-BR", { timeZone: "America/Fortaleza" })}`,
     185,
   );
+  if (cert.completedAt)
+    line(
+      `Conclusão: ${cert.completedAt.toLocaleDateString("pt-BR", { timeZone: "America/Fortaleza" })}`,
+      155,
+      14,
+    );
   line(
     "Curso livre. Sem alegação de reconhecimento oficial ou acadêmico.",
     125,

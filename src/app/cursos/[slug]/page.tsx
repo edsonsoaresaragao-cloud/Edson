@@ -1,4 +1,5 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { LESSON_SLUG, LESSON_URL } from "@/lib/academy/content";
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { ActionForm } from "@/components/forms";
@@ -13,6 +14,7 @@ export default async function Course({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (slug === LESSON_SLUG) redirect(LESSON_URL);
   const c = await db.course.findUnique({
     where: { slug, status: "PUBLISHED" },
     include: {

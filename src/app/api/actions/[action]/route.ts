@@ -27,6 +27,7 @@ import {
   parseJson,
 } from "@/lib/validation";
 import { slugify } from "@/lib/catalog";
+import { COURSE_ID } from "@/lib/academy/content";
 import { s3, bucket, headObject, deleteMediaObjects } from "@/lib/storage";
 export const runtime = "nodejs";
 export async function POST(
@@ -248,6 +249,14 @@ export async function POST(
           studentName: user.name,
           courseTitle: enrollment.course.title,
           hours: enrollment.course.hours,
+          completedAt:
+            id === COURSE_ID
+              ? new Date(
+                  Math.max(
+                    ...enrollment.progress.map((p) => p.completedAt.getTime()),
+                  ),
+                )
+              : null,
           code: newToken().slice(0, 24).toUpperCase(),
         },
       });

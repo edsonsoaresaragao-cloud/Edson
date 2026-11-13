@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { GraduationCap, BookOpen, ShieldCheck } from "lucide-react";
 import { db } from "@/lib/db";
-import { PageHeading, Empty } from "@/components/content";
+import { PageHeading } from "@/components/content";
+import { AcademyLessonCard } from "@/components/academy/lesson-card";
+import { COURSE_ID } from "@/lib/academy/content";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "EDSON OFICINA ACADEMY" };
 export default async function Academy() {
@@ -40,7 +42,18 @@ export default async function Academy() {
           [ShieldCheck, "Certificado verificável"],
         ].map(([Icon, title]) => {
           const I = Icon as typeof BookOpen;
-          return (
+          return title === "Aulas organizadas" ? (
+            <Link
+              className="card academy-lesson-link"
+              href="/academy/aulas"
+              key={String(title)}
+            >
+              <I className="orange" />
+              <h3 className="mt-4">{String(title)}</h3>
+              <p>Aula 01 disponível · Motores que batem válvula</p>
+              <span className="text-link">Explorar aulas →</span>
+            </Link>
+          ) : (
             <div className="card" key={String(title)}>
               <I className="orange" />
               <h3 className="mt-4">{String(title)}</h3>
@@ -49,9 +62,11 @@ export default async function Academy() {
         })}
       </div>
       <h2>Treinamentos disponíveis</h2>
-      {courses.length ? (
-        <div className="grid three">
-          {courses.map((c) => (
+      <div className="grid three">
+        <AcademyLessonCard />
+        {courses
+          .filter((c) => c.id !== COURSE_ID)
+          .map((c) => (
             <Link className="card" href={"/cursos/" + c.slug} key={c.id}>
               <span className="tag">GRATUITO · {c.hours} HORAS</span>
               <h3 className="mt-4">{c.title}</h3>
@@ -59,13 +74,7 @@ export default async function Academy() {
               <span className="text-link">Conhecer o curso →</span>
             </Link>
           ))}
-        </div>
-      ) : (
-        <Empty
-          title="Os primeiros treinamentos estão em preparação"
-          text="Os cursos serão apresentados aqui depois de cadastrados e publicados pelo responsável. Não há matrículas para cursos inexistentes."
-        />
-      )}
+      </div>
       <p className="muted mt-6">
         Cursos livres. Os certificados não indicam reconhecimento oficial ou
         acadêmico.

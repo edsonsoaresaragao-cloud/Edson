@@ -1,0 +1,164 @@
+{
+  "source": "Ponto do Motor",
+  "pageCount": 11,
+  "originalSha256": "429addfbd9ecdb6ba7b867fecab3ee999575df235cc762e2cbbdd90f34e09de9",
+  "authorization": "Titular do site confirmou no atendimento autorização para adaptar e publicar em 13/11/2026.",
+  "adaptation": "Somente o selo BÔNUS 03 da capa e a indicação BÔNUS 03 · dos cabeçalhos técnicos. Demais referências a bônus no corpo e rodapés preservadas.",
+  "pages": [
+    {
+      "page": 1,
+      "file": "page-01.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        269,
+        85,
+        500,
+        141
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "93a3937c66663ddb630fca7f74ba3d90250a2780cc91422837f4688d4c69a8e0"
+    },
+    {
+      "page": 2,
+      "file": "page-02.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        424,
+        12,
+        510,
+        40
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "512ed89c7c0d61d4a2254704e8a3aeb9ddd72a1bf6a430b4f43a3c90e983a0ef"
+    },
+    {
+      "page": 3,
+      "file": "page-03.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        510,
+        12,
+        596,
+        37
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "f5cd3ceed170d43070417998f5cb77b5977cd7ea2a48cd222941c21ba7d3f9a7"
+    },
+    {
+      "page": 4,
+      "file": "page-04.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        485,
+        11,
+        582,
+        41
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "1790c7c091e44592278bf7fcf4a0192c042ba1b8eae83ccd0a38858c9dbefa68"
+    },
+    {
+      "page": 5,
+      "file": "page-05.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        494,
+        10,
+        588,
+        42
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "d14a5756cee22f9e4e973d83e3f8a98fe528d8bc9ca3fe0acd547ebab31e57ea"
+    },
+    {
+      "page": 6,
+      "file": "page-06.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        484,
+        13,
+        580,
+        43
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "3102260a2eafea2640b252f1151970380206a0299eeb8b1fe80ba2cfb7001413"
+    },
+    {
+      "page": 7,
+      "file": "page-07.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        430,
+        10,
+        516,
+        40
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "79562a7a305fa28dd3ef2ad0feef2e3c7301af905d2f1bfb6abee4092e40b61d"
+    },
+    {
+      "page": 8,
+      "file": "page-08.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        475,
+        11,
+        576,
+        42
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "9b58b7624c664fc917ce787fbf7d8ef7a4b215ec67da825ad4313909fc4acc61"
+    },
+    {
+      "page": 9,
+      "file": "page-09.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        459,
+        10,
+        567,
+        43
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "4eef8f834080f0e2d33c51b920d33f377d4b44c733473decb5b0bd22be7c9136"
+    },
+    {
+      "page": 10,
+      "file": "page-10.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        408,
+        17,
+        497,
+        47
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "c69c691a14428ca00e72ab7c8e442b9909329d22b56f76a2d96093b72a53c070"
+    },
+    {
+      "page": 11,
+      "file": "page-11.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [
+        490,
+        10,
+        587,
+        42
+      ],
+      "identicalOutsideHeader": true,
+      "sha256": "d2fc637c932b31cc4475a1b22115ca818d3e10e4b495b2db5bb0d94f95c369cd"
+    }
+  ],
+  "adaptedSha256": "8bcdeafafdc02423a0e96d7facfc23ad525b79cd705cf27f8ec1b39309e288b6"
+}

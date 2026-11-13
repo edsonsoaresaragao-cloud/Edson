@@ -5,6 +5,7 @@ import { PageHeading } from "@/components/content";
 import { ActionForm } from "@/components/forms";
 import { VideoPlayer, YouTubePlayer } from "@/components/player";
 import Link from "next/link";
+import { COURSE_ID, LESSON_URL } from "@/lib/academy/content";
 export const dynamic = "force-dynamic";
 export default async function Learning({
   params,
@@ -14,6 +15,7 @@ export default async function Learning({
   const u = await currentUser();
   if (!u) redirect("/login");
   const { id } = await params;
+  if (id === COURSE_ID) redirect(LESSON_URL);
   const e = await db.enrollment.findUnique({
     where: { userId_courseId: { userId: u.id, courseId: id } },
     include: {

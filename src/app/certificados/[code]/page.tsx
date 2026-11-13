@@ -31,6 +31,14 @@ export default async function Certificate({
                 timeZone: "America/Fortaleza",
               })}
             </p>
+            {c.completedAt && (
+              <p>
+                Conclusão em{" "}
+                {c.completedAt.toLocaleDateString("pt-BR", {
+                  timeZone: "America/Fortaleza",
+                })}
+              </p>
+            )}
             {owner ? (
               <p>Aluno: {c.studentName}</p>
             ) : (
