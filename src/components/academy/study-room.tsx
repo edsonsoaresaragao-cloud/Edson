@@ -16,6 +16,12 @@ import {
 import type { StudentProgress } from "@/lib/academy/progress";
 import { MaterialViewer } from "./material-viewer";
 import { TimingDiagram } from "./timing-diagram";
+import { StepReader, type ReaderSettings } from "./step-reader";
+import { stepNarration } from "@/lib/academy/narration";
+import {
+  sourceTables,
+  unconfirmedClassification,
+} from "@/lib/academy/source-tables";
 type Question = { id: string; prompt: string; options: string[] };
 type Feedback = {
   id: string;
@@ -40,6 +46,10 @@ export function StudyRoom({
   const [answers, setAnswers] = useState<Record<string, number>>({}),
     [feedback, setFeedback] = useState<Feedback[]>([]);
   const heading = useRef<HTMLHeadingElement>(null);
+  const [readerSettings, setReaderSettings] = useState<ReaderSettings>({
+    voiceUri: "",
+    rate: 1,
+  });
   const current = studySteps.find((s) => s.id === active) || studySteps[0];
   const position = studySteps.indexOf(current),
     completed = progress?.completed.some((p) => p.step === active);
@@ -261,6 +271,12 @@ export function StudyRoom({
             <h2 ref={heading} tabIndex={-1}>
               {current.title}
             </h2>
+            <StepReader
+              key={current.id}
+              paragraphs={stepNarration(current, questions[active])}
+              settings={readerSettings}
+              onSettingsChange={setReaderSettings}
+            />
             <section>
               <h3>O que você vai aprender</h3>
               <ul>
@@ -320,6 +336,32 @@ export function StudyRoom({
                     : "Material de referência · capa"}
                 </h3>
                 <MaterialViewer key={current.id} initialPage={current.page} />
+                {current.kind === "manufacturer" && (
+                  <details className="academy-table-transcript">
+                    <summary>
+                      Transcrição da tabela para leitura em voz alta
+                    </summary>
+                    <p>
+                      Fonte: Ponto do Motor. Classificações mantidas conforme a
+                      página; confirme sempre a aplicação exata e as observações
+                      do documento.
+                    </p>
+                    <ol>
+                      {sourceTables[current.id].map(
+                        ([motor, carros, tipo, classificacao], index) => (
+                          <li key={index}>
+                            <strong>{motor}</strong>
+                            <p>
+                              Carros: {carros}. Acionamento: {tipo}.
+                              Classificação na fonte:{" "}
+                              {classificacao || unconfirmedClassification}.
+                            </p>
+                          </li>
+                        ),
+                      )}
+                    </ol>
+                  </details>
+                )}
               </>
             )}
             {current.kind === "manufacturer" && (

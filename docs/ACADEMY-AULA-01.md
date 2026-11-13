@@ -43,6 +43,16 @@ Páginas e PDF adaptado podem ser consultados publicamente conforme a autorizaç
 
 O visualizador permite navegação por todas as páginas em ordem, zoom de 50% a 300%, rolagem para consultar a página inteira, ampliação em diálogo (Esc para fechar) e download do PDF adaptado. Cada módulo abre inicialmente a página correspondente.
 
+## Leitura em voz alta nas 14 etapas
+
+O botão **Ouvir esta etapa**, logo abaixo do título da etapa, lê objetivos, explicações, classificações, fundamentos ou verificações de diagnóstico, além das perguntas e alternativas. Nos dez módulos de montadoras, inclui a transcrição manual das **93 linhas** das tabelas, na mesma ordem, com motor, carros, acionamento e classificação. Alertas e dicas são lidos com o contexto didático da aula. Índices de correção e respostas do banco não entram na narração.
+
+A transcrição pode ser conferida na própria etapa em **Transcrição da tabela para leitura em voz alta**. As 85 linhas sem fonte continuam sem fonte; as oito marcações interferentes continuam conforme a referência. Os PDFs e suas imagens não foram alterados nesta inclusão.
+
+Controles: pausar, continuar, parar, reiniciar, escolher uma voz em português disponível no dispositivo e ajustar a velocidade (0,75 a 1,3 vez). Voz e velocidade escolhidas são mantidas ao navegar entre etapas na mesma sala de estudo. A fala só inicia por clique, usa trechos de até 300 caracteres para leituras longas e é cancelada ao sair/trocar de etapa ou ocultar a página. Ouvir não matricula nem conclui o estudo.
+
+Usa `speechSynthesis` do navegador; não requer nova chave, API paga ou gravação de voz no servidor. As vozes e sua qualidade dependem do navegador/sistema. Sem suporte, o botão fica indisponível com explicação e o conteúdo permanece consultável. Não há clonagem de voz pessoal nesta implementação.
+
 ## Critérios técnicos
 
 As classificações da fonte foram mantidas; **sem fonte** não se transforma em **confirmado**. As explicações da Academy são identificadas separadamente das páginas e das sínteses dos alertas/dicas da fonte. Nenhum dado de compressão, folga ou torque de fabricante foi inventado.
@@ -78,8 +88,8 @@ Depois de enviar o código: **Manual Deploy → Deploy latest commit**. Verifiqu
 
 ## Validação realizada
 
-- 8 testes de material/lógica: integridade dos PDFs, onze páginas e dimensões, 93 linhas previstas, início sem conclusão automática, retomada, separação entre usuários, respostas inválidas, limite 60%/70%, elegibilidade após 14 etapas e proteção contra caminhos arbitrários.
-- 4 testes Playwright (dois fluxos, computador e celular): biblioteca, páginas reais, zoom e ampliação, download real do PDF adaptado, recusa real de acesso anônimo ao original/progresso, animação, navegação, correção, reprovação, retomada e solicitação de certificado. Nenhum erro JavaScript e nenhum problema detectado pelo axe na sala de estudo.
+- 11 testes de material/lógica/narração: integridade dos PDFs, onze páginas e dimensões, 93 linhas previstas, início sem conclusão automática, retomada, separação entre usuários, respostas inválidas, limite 60%/70%, elegibilidade após 14 etapas e proteção contra caminhos arbitrários, conteúdo das 14 leituras, conservação das 93 linhas e segmentação sem perda de texto.
+- 10 testes Playwright (cinco fluxos, computador e celular): biblioteca, páginas reais, zoom e ampliação, download real do PDF adaptado, recusa real de acesso anônimo ao original/progresso, animação, navegação, correção, reprovação, retomada e solicitação de certificado. Controles de voz, leitura integral das 14 etapas, retomada, seleção de voz/velocidade, erros e navegador sem suporte também são exercitados. Nenhum erro JavaScript e nenhum problema detectado pelo axe na sala de estudo. A síntese de voz é simulada nos testes; o áudio real depende das vozes do dispositivo.
 - No teste de aluno, a persistência utiliza repositório controlado em memória conectado ao mesmo serviço de correção. A emissão é simulada para validar o envio e o tratamento de erro; **não comprova gravação PostgreSQL nem emissão real do PDF de certificado**.
 - ESLint passou nos arquivos alterados; TypeScript passou para conteúdo, serviço de correção, componentes de estudo e testes de navegador.
 - `npm run db:generate` e `npm run build` foram tentados. O ambiente bloqueia `binaries.prisma.sh` com HTTP 403 ao obter o schema-engine. A geração do cliente, a checagem completa do projeto, o build de produção, a migração PostgreSQL e os fluxos autenticados reais ficaram impedidos por essa dependência. Nenhum Prisma falso foi incluído para contornar a falha.
