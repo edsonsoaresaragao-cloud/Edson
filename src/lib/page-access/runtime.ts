@@ -9,6 +9,15 @@ const globalAccess = globalThis as unknown as {
   pageAccessPool?: Pool;
   pageAccessRepository?: AccessRepository;
 };
+export function accessOrigin(
+  environment: Record<string, string | undefined> = process.env,
+) {
+  return (
+    environment.APP_URL ||
+    environment.RENDER_EXTERNAL_URL ||
+    "http://localhost:3000"
+  );
+}
 export function productionAccessRepository() {
   if (!globalAccess.pageAccessRepository) {
     if (!process.env.DATABASE_URL)

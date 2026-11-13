@@ -18,9 +18,11 @@ Se o banco estiver indisponível, a página continua funcionando e o rodapé ofe
 
 O fluxo existente `scripts/start-render.sh` executa `prisma migrate deploy` antes de iniciar o serviço. Após enviar o commit para `main`, usar **Render → Manual Deploy → Deploy latest commit**. Não executar reset ou recriar o banco. Confirmar a aplicação de `202611130002_page_access` nos logs, abrir uma página pública e conferir o contador no rodapé. O startup já resolve `APP_URL` a partir de `RENDER_EXTERNAL_URL` quando necessário.
 
+A API do contador também resolve essa origem diretamente: usa `APP_URL` quando configurada, depois `RENDER_EXTERNAL_URL`, e por último o endereço local de desenvolvimento. Assim, o endereço automático do Render é reconhecido mesmo quando o processo não recebe `APP_URL` do script de inicialização. Uma origem externa continua sendo recusada e `APP_URL` mantém prioridade quando ambas estão definidas.
+
 ## Verificação
 
-Foram verificados 12 testes de validação e PostgreSQL real, incluindo 20 repetições simultâneas de um evento, 40 visitas simultâneas distintas, persistência em novas conexões, remoção de recibos vencidos e disponibilidade pública dos conteúdos. Os números também foram comparados antes e depois de reiniciar o servidor Next.js e permaneceram iguais. Os testes de integração só aceitam banco local chamado `page_counter` e limpam exclusivamente as tabelas do contador nesse banco isolado.
+Foram verificados 13 testes de validação e PostgreSQL real, incluindo a origem do Render sem `APP_URL`, a prioridade do endereço configurado, 20 repetições simultâneas de um evento, 40 visitas simultâneas distintas, persistência em novas conexões, remoção de recibos vencidos e disponibilidade pública dos conteúdos. Os números também foram comparados antes e depois de reiniciar o servidor Next.js e permaneceram iguais. Os testes de integração só aceitam banco local chamado `page_counter` e limpam exclusivamente as tabelas do contador nesse banco isolado.
 
 ```bash
 COUNTER_TEST_DATABASE_URL=postgresql://usuario:senha@127.0.0.1:55432/page_counter npx tsx --test tests/page-access.test.ts tests/page-access-postgres.test.ts
@@ -32,6 +34,10 @@ Com as migrações aplicadas nesse banco e o servidor de desenvolvimento usando 
 COUNTER_TEST_DATABASE_URL=postgresql://usuario:senha@127.0.0.1:55432/page_counter npx playwright test tests/browser/page-access.spec.ts
 ```
 
-ESLint e a verificação TypeScript dos novos módulos, componente e testes passaram. Na suíte geral, 278 testes passaram, dois foram ignorados e dois arquivos existentes (`flows.test.ts` e `youtube.test.ts`) falharam ao importar o cliente Prisma ainda não gerado.
+ESLint e a verificação TypeScript dos módulos, componente e testes do contador passaram. Na validação local inicial da suíte geral, 278 testes passaram, dois foram ignorados e dois arquivos existentes (`flows.test.ts` e `youtube.test.ts`) falharam ao importar o cliente Prisma ainda não gerado.
 
-O build completo nesta sessão encontrou HTTP 403 no download do engine do Prisma em `binaries.prisma.sh`. Os testes PostgreSQL e de navegador usaram a implementação real do contador com `pg`, sem substituir o Prisma nem simular o banco. O build de produção deve ser confirmado no ambiente de implantação.
+O build e a migração do commit inicial do contador (`de48b0d`) passaram no [GitHub Actions](https://github.com/edsonsoaresaragao-cloud/Edson/actions/runs/43431674482). Essa execução falhou depois, em seis testes de outras telas; os testes de navegador do contador ainda não estavam habilitados nela.
+
+O workflow `.github/workflows/page-access.yml` agora verifica o contador separadamente em cada push e pull request: gera o cliente Prisma, aplica as migrações, executa os testes com PostgreSQL, compila o aplicativo e testa o servidor de produção no desktop e celular. Usa somente um banco temporário da execução, `RENDER_EXTERNAL_URL=http://localhost:3100` e nenhuma `APP_URL`, reproduzindo o caso corrigido.
+
+O ambiente local desta conversa ainda retornou HTTP 403 para o download do Prisma após a alteração de configuração informada pelo usuário. Os testes locais do contador usam a implementação real com `pg`, sem substituir o Prisma nem simular o banco; o workflow valida também a geração e o build completos.

@@ -1,0 +1,58 @@
+name: Contador de acessos
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  counter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: counter_test
+          POSTGRES_PASSWORD: counter-ci-only
+          POSTGRES_DB: page_counter
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U counter_test -d page_counter"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://counter_test:counter-ci-only@127.0.0.1:5432/page_counter
+      COUNTER_TEST_DATABASE_URL: postgresql://counter_test:counter-ci-only@127.0.0.1:5432/page_counter
+      # Sem APP_URL: reproduz a configuração pública automática do Render.
+      RENDER_EXTERNAL_URL: http://localhost:3100
+      TEST_BASE_URL: http://localhost:3100
+      PORT: 3100
+      NEXT_TELEMETRY_DISABLED: 1
+      SESSION_SECRET: counter-ci-only-session-secret-12345678901234567890
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --cache /tmp/npm-cache
+      - run: npm run db:generate && npm run db:migrate
+      - run: npx tsx --test tests/page-access.test.ts tests/page-access-postgres.test.ts
+      - run: npm run build
+      - name: Testar contador no servidor de produção
+        run: |
+          npm start > /tmp/counter-web.log 2>&1 &
+          counter_pid=$!
+          trap 'kill "$counter_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS 'http://localhost:3100/api/page-access?path=/sobre' > /tmp/counter-ready.json; then break; fi
+            sleep 1
+          done
+          curl -fsS 'http://localhost:3100/api/page-access?path=/sobre' > /tmp/counter-ready.json
+          npx playwright test tests/browser/page-access.spec.ts --reporter=line
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: contador-results
+          path: |
+            test-results/
+            /tmp/counter-web.log

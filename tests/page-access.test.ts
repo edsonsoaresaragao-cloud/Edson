@@ -7,8 +7,9 @@ import {
   type AccessRepository,
 } from "../src/lib/page-access/repository";
 import { createAccessHandlers } from "../src/lib/page-access/handler";
+import { accessOrigin } from "../src/lib/page-access/runtime";
 const origin = "https://edson.example";
-function fixture() {
+function fixture(configuredOrigin = origin) {
   const pages = new Map<string, bigint>(),
     receipts = new Map<string, string>();
   let total = 0n;
@@ -31,7 +32,10 @@ function fixture() {
       return this.read(path);
     },
   };
-  return createAccessHandlers({ repository: () => repo, origin: () => origin });
+  return createAccessHandlers({
+    repository: () => repo,
+    origin: () => configuredOrigin,
+  });
 }
 function request(
   path = "/sobre",
@@ -98,6 +102,40 @@ test("POST contabiliza uma visita por evento; GET e repetição não duplicam", 
     { total: "2", page: "1" },
   );
   assert.equal((await api.POST(request("/termos", id))).status, 409);
+});
+test("endereço público do Render funciona sem APP_URL e origem externa continua recusada", async () => {
+  const renderOrigin = "https://edson-oficina.onrender.com";
+  const canonicalOrigin = "https://oficina.example";
+  const fallback = fixture(accessOrigin({ RENDER_EXTERNAL_URL: renderOrigin }));
+  const response = await fallback.POST(
+    request("/sobre", randomUUID(), { origin: renderOrigin }),
+  );
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).page, "1");
+  assert.equal((await fallback.POST(request())).status, 403);
+  const canonical = fixture(
+    accessOrigin({
+      APP_URL: canonicalOrigin,
+      RENDER_EXTERNAL_URL: renderOrigin,
+    }),
+  );
+  assert.equal(
+    (
+      await canonical.POST(
+        request("/sobre", randomUUID(), { origin: canonicalOrigin }),
+      )
+    ).status,
+    200,
+  );
+  assert.equal(
+    (
+      await canonical.POST(
+        request("/sobre", randomUUID(), { origin: renderOrigin }),
+      )
+    ).status,
+    403,
+  );
+  assert.equal(accessOrigin({}), "http://localhost:3000");
 });
 test("origem externa, rotas privadas, campos extras e payloads inválidos são recusados", async () => {
   const api = fixture();
