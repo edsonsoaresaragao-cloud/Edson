@@ -217,6 +217,17 @@ model RateLimit {
  expiresAt DateTime
  @@index([expiresAt])
 }
+model PageAccessCounter {
+ path String @id
+ views BigInt @default(0)
+ updatedAt DateTime @default(now()) @updatedAt
+}
+model PageAccessReceipt {
+ id String @id @db.Uuid
+ path String
+ expiresAt DateTime
+ @@index([expiresAt])
+}
 model AutomotiveSearchCache {
  key String @id
  result Json

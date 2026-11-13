@@ -31,6 +31,18 @@ export default function Privacy() {
           provedor S3 configurado pelo responsável. O envio de e-mails depende
           do provedor SMTP contratado.
         </p>
+        <h2>Contador de acessos</h2>
+        <p>
+          Registramos totais de visitas por página pública e no site, sem
+          associá-los à sua conta. Não enviamos os parâmetros de pesquisa ou
+          fragmentos da URL ao contador e não contamos as áreas privadas. Um
+          código aleatório por visita evita duplicação de solicitações e expira
+          após 24 horas, sendo removido nas limpezas seguintes. O contador não
+          usa cookies de análise nem serviços externos. A proteção contra
+          excesso de solicitações usa um resumo temporário do endereço de rede
+          somente em memória, sem gravar o IP no banco. Sinais de preferência
+          DNT e GPC são respeitados.
+        </p>
         <h2>Pesquisa de ofertas de peças</h2>
         <p>
           Os termos de peça, código e veículo informados são enviados aos

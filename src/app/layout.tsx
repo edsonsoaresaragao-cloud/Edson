@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import {
   Wrench,
@@ -11,6 +12,7 @@ import {
 import { ThemeToggle } from "@/components/forms";
 import "./globals.css";
 import { JsonLd } from "@/components/jsonld";
+import { PageAccessCounter } from "@/components/page-access-counter";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL || "http://localhost:3000"),
   title: {
@@ -169,6 +171,11 @@ export default function RootLayout({
                 Falar no WhatsApp ↗
               </a>
             </div>
+          </div>
+          <div className="container">
+            <Suspense fallback={null}>
+              <PageAccessCounter />
+            </Suspense>
           </div>
           <div className="container footer-bottom">
             <span>© {new Date().getFullYear()} EDSON OFICINA</span>
