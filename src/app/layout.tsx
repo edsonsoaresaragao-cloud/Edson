@@ -131,7 +131,14 @@ export default function RootLayout({
             </div>
           </div>
         </header>
-        <main id="conteudo">{children}</main>
+        <main id="conteudo">
+          <div className="container">
+            <Suspense fallback={null}>
+              <PageAccessCounter />
+            </Suspense>
+          </div>
+          {children}
+        </main>
         <footer>
           <div className="container footer-grid">
             <div>
@@ -171,11 +178,6 @@ export default function RootLayout({
                 Falar no WhatsApp ↗
               </a>
             </div>
-          </div>
-          <div className="container">
-            <Suspense fallback={null}>
-              <PageAccessCounter />
-            </Suspense>
           </div>
           <div className="container footer-bottom">
             <span>© {new Date().getFullYear()} EDSON OFICINA</span>

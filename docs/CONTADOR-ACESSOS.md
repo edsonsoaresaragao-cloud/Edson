@@ -1,6 +1,6 @@
 # Contador de acessos
 
-O rodapé das páginas públicas mostra o total de acessos ao site e à página atual. A contagem começa na ativação desta versão; não recupera acessos anteriores e não representa pessoas únicas. Recarregar uma página ou navegar para outra registra uma nova visita. Mudar somente a pesquisa ou a âncora da URL não incrementa o contador.
+O topo das páginas públicas, logo abaixo do menu principal, mostra o total de acessos ao site e à página atual. As cores acompanham os temas claro e escuro. A contagem começa na ativação desta versão; não recupera acessos anteriores e não representa pessoas únicas. Recarregar uma página ou navegar para outra registra uma nova visita. Mudar somente a pesquisa ou a âncora da URL não incrementa o contador.
 
 ## Funcionamento
 
@@ -12,11 +12,11 @@ Somente caminhos públicos conhecidos são aceitos. Conteúdos, categorias e cur
 
 Robôs conhecidos, prefetch e solicitações com DNT ou GPC não incrementam. A API exige a origem configurada, limita o corpo a 1 KB e aplica limite de 120 solicitações por minuto por endereço de rede. Esse limite mantém apenas um HMAC temporário em memória, com chave aleatória por processo e mapa limitado a 4.096 entradas; não grava IPs no banco. Não é uma ferramenta para auditoria ou medição de pessoas: bloqueio de JavaScript, falhas de rede e automações podem afetar a medição.
 
-Se o banco estiver indisponível, a página continua funcionando e o rodapé oferece uma nova tentativa, preservando o identificador da visita. Não são exibidos totais inventados. A conexão usa `DATABASE_URL`, com até duas conexões adicionais por processo; não exige um serviço externo nem chave nova.
+Se o banco estiver indisponível, a página continua funcionando e o contador oferece uma nova tentativa, preservando o identificador da visita. Não são exibidos totais inventados. A conexão usa `DATABASE_URL`, com até duas conexões adicionais por processo; não exige um serviço externo nem chave nova.
 
 ## Publicação
 
-O fluxo existente `scripts/start-render.sh` executa `prisma migrate deploy` antes de iniciar o serviço. Após enviar o commit para `main`, usar **Render → Manual Deploy → Deploy latest commit**. Não executar reset ou recriar o banco. Confirmar a aplicação de `202611130002_page_access` nos logs, abrir uma página pública e conferir o contador no rodapé. O startup já resolve `APP_URL` a partir de `RENDER_EXTERNAL_URL` quando necessário.
+O fluxo existente `scripts/start-render.sh` executa `prisma migrate deploy` antes de iniciar o serviço. Após enviar o commit para `main`, usar **Render → Manual Deploy → Deploy latest commit**. Não executar reset ou recriar o banco. Confirmar a aplicação de `202611130002_page_access` nos logs, abrir uma página pública e conferir o contador abaixo do menu. O startup já resolve `APP_URL` a partir de `RENDER_EXTERNAL_URL` quando necessário.
 
 A API do contador também resolve essa origem diretamente: usa `APP_URL` quando configurada, depois `RENDER_EXTERNAL_URL`, e por último o endereço local de desenvolvimento. Assim, o endereço automático do Render é reconhecido mesmo quando o processo não recebe `APP_URL` do script de inicialização. Uma origem externa continua sendo recusada e `APP_URL` mantém prioridade quando ambas estão definidas.
 
