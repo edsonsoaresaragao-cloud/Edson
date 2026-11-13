@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { suspensionParts, type SuspensionState } from "./suspension-parts";
@@ -8,6 +15,7 @@ export function buildSuspensionModel() {
     const g = new T.Group();
     g.name = `suspension-part-${part.id}`;
     g.userData.part = part.id;
+    g.userData.partName = part.name;
     group.add(g);
     return g;
   });
@@ -17,7 +25,7 @@ export function buildSuspensionModel() {
     metalness = 0.85,
     roughness = 0.3,
   ) {
-    const m = new T.MeshStandardMaterial({
+    const m = new T.MeshPhysicalMaterial({
       color,
       metalness,
       roughness,
@@ -44,7 +52,7 @@ export function buildSuspensionModel() {
     mat = mats[id - 1],
     parent: T.Object3D = groups[id - 1],
   ) {
-    const m = new T.Mesh(geo, mat);
+    const m = automotiveMesh(geo, mat);
     m.castShadow = true;
     m.receiveShadow = true;
     parent.add(m);
@@ -72,19 +80,14 @@ export function buildSuspensionModel() {
     z: number,
     parent: T.Object3D = groups[id - 1],
   ) {
-    const m = mesh(
-      id,
-      new T.CylinderGeometry(r, r, h, 28),
-      mats[id - 1],
-      parent,
-    );
+    const m = mesh(id, precisionCylinder(r, r, h, 28), mats[id - 1], parent);
     m.position.set(x, y, z);
     return m;
   }
   const up = new T.Vector3(0, 1, 0),
     delta = new T.Vector3();
   function segment(id: number, r: number) {
-    return mesh(id, new T.CylinderGeometry(r, r, 1, 12));
+    return mesh(id, precisionCylinder(r, r, 1, 12));
   }
   function between(object: T.Object3D, a: T.Vector3, b: T.Vector3) {
     delta.subVectors(b, a);
@@ -96,7 +99,7 @@ export function buildSuspensionModel() {
   function tube(id: number, points: number[][], radius: number) {
     return mesh(
       id,
-      new T.TubeGeometry(
+      precisionTube(
         new T.CatmullRomCurve3(
           points.map((p) => new T.Vector3(...(p as [number, number, number]))),
         ),
@@ -121,7 +124,7 @@ export function buildSuspensionModel() {
       0.13,
     );
     for (const z of [-0.65, 0.65]) {
-      const flange = mesh(1, new T.TorusGeometry(0.19, 0.055, 10, 32));
+      const flange = mesh(1, precisionTorus(0.19, 0.055, 10, 32));
       flange.rotation.x = Math.PI / 2;
       flange.position.set(side * 1.75, 0.05, z);
       cyl(1, 0.095, 0.14, side * 1.75, 0.04, z);
@@ -150,7 +153,7 @@ export function buildSuspensionModel() {
   housing.rotation.z = -Math.PI / 2;
   housing.position.set(0, 0.8, -0.12);
   for (let i = 0; i < 6; i++) {
-    const ring = mesh(2, new T.TorusGeometry(0.46 + i * 0.018, 0.025, 8, 48));
+    const ring = mesh(2, precisionTorus(0.46 + i * 0.018, 0.025, 8, 48));
     ring.rotation.y = Math.PI / 2;
     ring.position.set(-0.58 + i * 0.21, 0.8, -0.12);
   }
@@ -166,7 +169,7 @@ export function buildSuspensionModel() {
       0.025,
     );
     rib.name = "Nervura da carcaça";
-    const bolt = mesh(2, new T.CylinderGeometry(0.045, 0.045, 0.09, 6));
+    const bolt = mesh(2, precisionCylinder(0.045, 0.045, 0.09, 6));
     bolt.rotation.z = Math.PI / 2;
     bolt.position.set(0.72, 0.8 + Math.cos(a) * 0.5, -0.12 + Math.sin(a) * 0.5);
   }
@@ -197,7 +200,7 @@ export function buildSuspensionModel() {
   ].map(([x, y, z]) => new T.Vector3(x, y, z));
   mesh(
     18,
-    new T.TubeGeometry(new T.CatmullRomCurve3(barPoints), 48, 0.045, 10, false),
+    precisionTube(new T.CatmullRomCurve3(barPoints), 48, 0.045, 10, false),
   );
   const sides: [
     number,
@@ -254,7 +257,7 @@ export function buildSuspensionModel() {
       const a = (i * Math.PI) / 10;
       const hole = mesh(
         8,
-        new T.CylinderGeometry(0.018, 0.018, 0.102, 6),
+        precisionCylinder(0.018, 0.018, 0.102, 6),
         holesMat,
         disc,
       );
@@ -277,7 +280,7 @@ export function buildSuspensionModel() {
     }
     const hose = mesh(
       9,
-      new T.TubeGeometry(
+      precisionTube(
         new T.CatmullRomCurve3([
           new T.Vector3(0, 0.2, 0.5),
           new T.Vector3(-0.1, 0.4, 0.4),
@@ -335,19 +338,13 @@ export function buildSuspensionModel() {
     );
     const spring = mesh(
       12,
-      new T.TubeGeometry(
-        new T.CatmullRomCurve3(springPoints),
-        160,
-        0.033,
-        7,
-        false,
-      ),
+      precisionTube(new T.CatmullRomCurve3(springPoints), 160, 0.033, 7, false),
     );
     spring.name = `spring-${side}`;
     const mount = cyl(13, 0.31, 0.12, side * 2.05, 2.65, 0);
     const arms = [segment(14, 0.075), segment(14, 0.075)];
     for (const arm of arms) {
-      const plate = new T.Mesh(
+      const plate = automotiveMesh(
         new RoundedBoxGeometry(0.19, 1, 0.11, 3, 0.04),
         mats[13],
       );
@@ -356,7 +353,7 @@ export function buildSuspensionModel() {
     }
     const seat = mesh(
       11,
-      new T.CylinderGeometry(0.3, 0.28, 0.06, 32),
+      precisionCylinder(0.3, 0.28, 0.06, 32),
       mats[10],
       damper,
     );
@@ -508,6 +505,7 @@ export function buildSuspensionModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geo = new Set<T.BufferGeometry>(),
       mat = new Set<T.Material>();
     group.traverse((o) => {
@@ -521,5 +519,6 @@ export function buildSuspensionModel() {
     mat.forEach((m) => m.dispose());
   }
   update(0, { explosion: 0, steering: 0, amplitude: 0, selected: 11 });
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

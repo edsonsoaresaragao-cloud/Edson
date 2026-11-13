@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -13,12 +20,17 @@ export function buildCoolingModel() {
       const g = new T.Group();
       g.name = `cooling-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
   const materials = new Set<T.MeshStandardMaterial>();
-  function mat(color: number, metalness = 0.7, roughness = 0.32) {
-    const m = new T.MeshStandardMaterial({ color, metalness, roughness });
+  function mat(
+    color: number,
+    metalness = 0.7,
+    roughness = 0.32,
+  ): T.MeshStandardMaterial {
+    const m = new T.MeshPhysicalMaterial({ color, metalness, roughness });
     materials.add(m);
     return m;
   }
@@ -35,7 +47,7 @@ export function buildCoolingModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = new T.Mesh(g, m);
+    const o = automotiveMesh(g, m);
     parent.add(o);
     return o;
   }
@@ -69,7 +81,7 @@ export function buildCoolingModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.CylinderGeometry(r, r, h, 40), m, parent);
+    const o = mesh(id, precisionCylinder(r, r, h, 40), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -83,7 +95,7 @@ export function buildCoolingModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.TorusGeometry(r, t, 10, 48), m, parent);
+    const o = mesh(id, precisionTorus(r, t, 10, 48), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -97,7 +109,7 @@ export function buildCoolingModel() {
     const curve = new T.CatmullRomCurve3(points);
     return {
       curve,
-      object: mesh(id, new T.TubeGeometry(curve, 56, r, 10, false), m, parent),
+      object: mesh(id, precisionTube(curve, 56, r, 10, false), m, parent),
     };
   }
   const bases = [
@@ -183,7 +195,7 @@ export function buildCoolingModel() {
   // Bomba em corte, com rotor e junta destacados na explosão.
   const casing = mesh(
     4,
-    new T.CylinderGeometry(
+    precisionCylinder(
       0.3,
       0.3,
       0.22,
@@ -386,7 +398,7 @@ export function buildCoolingModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      parent.add(new T.Mesh(g, m));
+      parent.add(automotiveMesh(g, m));
     }
   }
   parts.forEach(batch);
@@ -463,7 +475,7 @@ export function buildCoolingModel() {
             : [0, 1].map((t) => {
                 const collar = mesh(
                   spec.id,
-                  new T.TorusGeometry(0.071, 0.012, 8, 24),
+                  precisionTorus(0.071, 0.012, 8, 24),
                   routeMaterial(spec.id, metal),
                   parent,
                 );
@@ -503,6 +515,7 @@ export function buildCoolingModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>();
     group.traverse((o) => {
       if (o instanceof T.Mesh) geometries.add(o.geometry);
@@ -511,5 +524,6 @@ export function buildCoolingModel() {
     materials.forEach((m) => m.dispose());
   }
   update(0, initialCoolingState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

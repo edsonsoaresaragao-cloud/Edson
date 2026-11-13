@@ -1,4 +1,5 @@
 "use client";
+import { ModelZoomControls } from "./model-zoom-controls";
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import {
@@ -225,6 +226,10 @@ export function AutomaticTransmissionExplorer() {
             >
               {paused ? "▶ Reproduzir" : "Ⅱ Pausar"}
             </button>
+            <ModelZoomControls
+              disabled={status !== "ready"}
+              onZoom={(factor) => controller.current?.zoomView(factor)}
+            />
             <button
               type="button"
               disabled={status !== "ready"}

@@ -1,6 +1,12 @@
+import {
+  createAutomotiveStudio,
+  zoomStudioCamera,
+  resizeStudio,
+  visibleModelBounds,
+  createStudioFraming,
+} from "./automotive-studio";
 import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { buildInjectionModel } from "./injection-model";
 import { injectionParts, type InjectionState } from "./injection-parts";
 
@@ -24,11 +30,10 @@ export function createInjectionRenderer(
   const renderer = new T.WebGLRenderer({
     alpha: true,
     antialias: true,
-    powerPreference: "low-power",
+    powerPreference: window.matchMedia("(pointer: coarse)").matches
+      ? "low-power"
+      : "high-performance",
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.outputColorSpace = T.SRGBColorSpace;
-  renderer.toneMapping = T.ACESFilmicToneMapping;
   host.append(renderer.domElement);
   const scene = new T.Scene(),
     camera = new T.PerspectiveCamera(40, 1, 0.1, 60);
@@ -47,36 +52,20 @@ export function createInjectionRenderer(
     controls.update();
   }
   resetView();
-  const room = new RoomEnvironment(),
-    pmrem = new T.PMREMGenerator(renderer);
-  let reflection: T.WebGLRenderTarget;
+  let studio: ReturnType<typeof createAutomotiveStudio>;
   try {
-    reflection = pmrem.fromScene(room, 0.04);
+    studio = createAutomotiveStudio(renderer, scene);
   } catch (error) {
-    room.dispose();
-    pmrem.dispose();
     controls.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     throw error;
   }
-  room.dispose();
-  pmrem.dispose();
-  scene.environment = reflection.texture;
-  scene.add(new T.HemisphereLight(0xc8e5ff, 0x25303b, 2.5));
-  for (const [x, y, z, color, power] of [
-    [2, 7, 6, 0xffedda, 4],
-    [-5, 3, -4, 0x80b7ff, 3],
-    [6, 1, 1, 0xffffff, 2],
-  ]) {
-    const l = new T.DirectionalLight(color, power);
-    l.position.set(x, y, z);
-    scene.add(l);
-  }
   const model = buildInjectionModel();
   scene.add(model.group);
+  const framing = createStudioFraming(host, camera, controls, model.group);
   const overlay = document.createElement("div");
-  overlay.className = "suspension-annotations";
+  overlay.className = "suspension-annotations studio-annotations";
   const lines = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   overlay.append(lines);
   const labels = injectionParts.map((part) => {
@@ -85,6 +74,7 @@ export function createInjectionRenderer(
     const button = document.createElement("button");
     button.type = "button";
     button.title = part.name;
+    button.setAttribute("aria-label", `${part.id} · ${part.name}`);
     button.innerText = `${part.id} · ${part.name}`;
     button.onclick = () => onSelect(part.id);
     overlay.append(button);
@@ -101,7 +91,13 @@ export function createInjectionRenderer(
       bounds.setFromObject(object);
       bounds.getCenter(anchor);
       anchor.project(camera);
-      const labelWidth = width < 550 ? 80 : 140;
+      const expanded = state.selected === part.id && width >= 650;
+      const labelWidth = expanded ? 160 : 32;
+      button.textContent = expanded
+        ? `${part.id} · ${part.name}`
+        : String(part.id);
+      button.style.width = `${labelWidth}px`;
+      button.setAttribute("aria-pressed", String(state.selected === part.id));
       const left = i < 10,
         x = left ? 8 : width - labelWidth - 8,
         y = 48 + ((i < 10 ? i : i - 10) * (height - 90)) / 10;
@@ -127,8 +123,10 @@ export function createInjectionRenderer(
     frame = 0;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   let lastPulse = "";
+  let drawing = false;
   function render() {
-    if (disposed) return;
+    if (disposed || drawing) return;
+    drawing = true;
     model.update(time, state);
     const pulse = {
         injector: model.group.userData.injector as number,
@@ -139,8 +137,19 @@ export function createInjectionRenderer(
       lastPulse = key;
       onPulse?.(pulse);
     }
-    renderer.render(scene, camera);
+    const fitted = framing.update(
+      JSON.stringify([
+        state.explosion,
+        "cutaway" in state ? state.cutaway : false,
+      ]),
+    );
+    if (fitted) studio.fit(fitted);
+    studio.render(
+      camera,
+      !paused && !reduced.matches && visible && !document.hidden,
+    );
     annotate();
+    drawing = false;
   }
   function tick(now: number) {
     if (disposed) return;
@@ -160,7 +169,7 @@ export function createInjectionRenderer(
   function resize() {
     const w = host.clientWidth || 700,
       h = host.clientHeight || 500;
-    renderer.setSize(w, h, false);
+    resizeStudio(renderer, w, h);
     fitInjectionCamera(camera, w / h);
     render();
   }
@@ -222,7 +231,7 @@ export function createInjectionRenderer(
     renderer.domElement.removeEventListener("pointerup", pick);
     renderer.domElement.removeEventListener("webglcontextlost", lost);
     model.dispose();
-    reflection.dispose();
+    studio.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     overlay.remove();
@@ -235,7 +244,12 @@ export function createInjectionRenderer(
     throw error;
   }
   return {
+    zoomView(factor: number) {
+      zoomStudioCamera(camera, controls.target, factor);
+      render();
+    },
     setState(value: InjectionState) {
+      studio.invalidateShadows();
       state = { ...value };
       render();
     },
@@ -243,7 +257,11 @@ export function createInjectionRenderer(
       paused = value;
       sync();
     },
-    resetView,
+    resetView() {
+      framing.reset();
+      studio.fit(visibleModelBounds(model.group));
+      render();
+    },
     dispose,
   };
 }

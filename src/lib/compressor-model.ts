@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -15,12 +22,13 @@ export function buildCompressorModel() {
       const g = new T.Group();
       g.name = `compressor-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
   const materials: T.MeshStandardMaterial[] = [];
   function material(color: number, metalness = 0.85, roughness = 0.3) {
-    const m = new T.MeshStandardMaterial({ color, metalness, roughness });
+    const m = new T.MeshPhysicalMaterial({ color, metalness, roughness });
     materials.push(m);
     return m;
   }
@@ -34,7 +42,7 @@ export function buildCompressorModel() {
     mat = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const m = new T.Mesh(g, mat);
+    const m = automotiveMesh(g, mat);
     parent.add(m);
     return m;
   }
@@ -46,7 +54,7 @@ export function buildCompressorModel() {
     mat = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const m = mesh(id, new T.CylinderGeometry(r, r, len, 48), mat, parent);
+    const m = mesh(id, precisionCylinder(r, r, len, 48), mat, parent);
     m.rotation.z = Math.PI / 2;
     m.position.x = x;
     return m;
@@ -59,7 +67,7 @@ export function buildCompressorModel() {
     mat = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const m = mesh(id, new T.TorusGeometry(r, wire, 12, 64), mat, parent);
+    const m = mesh(id, precisionTorus(r, wire, 12, 64), mat, parent);
     m.rotation.y = Math.PI / 2;
     m.position.x = x;
     return m;
@@ -136,15 +144,12 @@ export function buildCompressorModel() {
       box(id, 0.18, 0.13, 0.13, 0, Math.cos(a) * 0.61, Math.sin(a) * 0.61);
     }
   }
-  const fullShell = mesh(
-    6,
-    new T.CylinderGeometry(0.61, 0.61, 1.22, 64, 1, true),
-  );
+  const fullShell = mesh(6, precisionCylinder(0.61, 0.61, 1.22, 64, 1, true));
   fullShell.rotation.z = Math.PI / 2;
   fullShell.name = "full-shell";
   const cutShell = mesh(
     6,
-    new T.CylinderGeometry(
+    precisionCylinder(
       0.61,
       0.61,
       1.22,
@@ -205,13 +210,7 @@ export function buildCompressorModel() {
   ].map((p) => new T.Vector3(p[0], p[1], p[2]));
   mesh(
     13,
-    new T.TubeGeometry(
-      new T.CatmullRomCurve3(cablePoints),
-      40,
-      0.032,
-      10,
-      false,
-    ),
+    precisionTube(new T.CatmullRomCurve3(cablePoints), 40, 0.032, 10, false),
     rubber,
   );
   box(13, 0.18, 0.27, 0.15, 0.5, 0.5, 0.1, dark);
@@ -268,7 +267,7 @@ export function buildCompressorModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      parent.add(new T.Mesh(geo, m));
+      parent.add(automotiveMesh(geo, m));
     }
   }
   parts.forEach((p, i) => {
@@ -340,6 +339,7 @@ export function buildCompressorModel() {
     );
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>();
     group.traverse((o) => {
       if (o instanceof T.Mesh) geometries.add(o.geometry);
@@ -348,6 +348,7 @@ export function buildCompressorModel() {
     new Set(materials).forEach((m) => m.dispose());
   }
   update(0, initialCompressorState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return {
     group,
     update(time: number, state: CompressorState) {

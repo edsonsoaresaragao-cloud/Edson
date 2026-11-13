@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -12,12 +19,13 @@ export function buildAlternatorModel() {
       const g = new T.Group();
       g.name = `alternator-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
   const materials = new Set<T.MeshStandardMaterial>();
   function mat(color: number, metalness = 0.85, roughness = 0.3) {
-    const m = new T.MeshStandardMaterial({ color, metalness, roughness });
+    const m = new T.MeshPhysicalMaterial({ color, metalness, roughness });
     materials.add(m);
     return m;
   }
@@ -32,7 +40,7 @@ export function buildAlternatorModel() {
     m = silver,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = new T.Mesh(g, m);
+    const o = automotiveMesh(g, m);
     parent.add(o);
     return o;
   }
@@ -45,7 +53,7 @@ export function buildAlternatorModel() {
     parent: T.Object3D = parts[id - 1],
     segments = 48,
   ) {
-    const o = mesh(id, new T.CylinderGeometry(r, r, h, segments), m, parent);
+    const o = mesh(id, precisionCylinder(r, r, h, segments), m, parent);
     o.rotation.z = Math.PI / 2;
     o.position.x = x;
     return o;
@@ -58,7 +66,7 @@ export function buildAlternatorModel() {
     m = silver,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.TorusGeometry(r, t, 10, 64), m, parent);
+    const o = mesh(id, precisionTorus(r, t, 10, 64), m, parent);
     o.rotation.y = Math.PI / 2;
     o.position.x = x;
     return o;
@@ -196,13 +204,7 @@ export function buildAlternatorModel() {
       );
       mesh(
         6,
-        new T.TubeGeometry(
-          new T.CatmullRomCurve3(points, true),
-          36,
-          0.013,
-          6,
-          true,
-        ),
+        precisionTube(new T.CatmullRomCurve3(points, true), 36, 0.013, 6, true),
         copper,
         windingGroup,
       );
@@ -286,7 +288,7 @@ export function buildAlternatorModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      parent.add(new T.Mesh(g, m));
+      parent.add(automotiveMesh(g, m));
     }
   }
   parts.forEach(batch);
@@ -356,6 +358,7 @@ export function buildAlternatorModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>();
     group.traverse((o) => {
       if (o instanceof T.Mesh) geometries.add(o.geometry);
@@ -364,5 +367,6 @@ export function buildAlternatorModel() {
     materials.forEach((m) => m.dispose());
   }
   update(0, initialAlternatorState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

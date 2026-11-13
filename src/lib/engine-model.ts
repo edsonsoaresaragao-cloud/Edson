@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -5,48 +12,43 @@ import { engineMotion } from "./engine-motion";
 
 export function buildEngineModel() {
   const group = new THREE.Group();
-  const metal = new THREE.MeshStandardMaterial({
+  const metal = new THREE.MeshPhysicalMaterial({
     color: 0xb9c5ce,
     metalness: 0.88,
     roughness: 0.38,
   });
-  const steel = new THREE.MeshStandardMaterial({
+  const steel = new THREE.MeshPhysicalMaterial({
     color: 0x607383,
     metalness: 0.95,
     roughness: 0.2,
   });
-  const bore = new THREE.MeshStandardMaterial({
+  const bore = new THREE.MeshPhysicalMaterial({
     color: 0x718595,
     metalness: 0.9,
     roughness: 0.22,
     side: THREE.DoubleSide,
   });
-  const black = new THREE.MeshStandardMaterial({
+  const black = new THREE.MeshPhysicalMaterial({
     color: 0x111c26,
     metalness: 0.35,
     roughness: 0.38,
   });
-  const orange = new THREE.MeshStandardMaterial({
+  const orange = new THREE.MeshPhysicalMaterial({
     color: 0xe87822,
     metalness: 0.4,
     roughness: 0.28,
   });
-  const dark = new THREE.MeshStandardMaterial({
+  const dark = new THREE.MeshPhysicalMaterial({
     color: 0x1d2a35,
     metalness: 0.8,
     roughness: 0.3,
-  });
-  const oil = new THREE.MeshStandardMaterial({
-    color: 0x805b22,
-    metalness: 0.35,
-    roughness: 0.23,
   });
   function mesh(
     geometry: THREE.BufferGeometry,
     material: THREE.Material,
     parent: THREE.Object3D = group,
   ) {
-    const object = new THREE.Mesh(geometry, material);
+    const object = automotiveMesh(geometry, material);
     object.castShadow = true;
     object.receiveShadow = true;
     parent.add(object);
@@ -80,7 +82,7 @@ export function buildEngineModel() {
     parent: THREE.Object3D = group,
   ) {
     const object = mesh(
-      new THREE.CylinderGeometry(radius, radius, height, 32),
+      precisionCylinder(radius, radius, height, 32),
       material,
       parent,
     );
@@ -130,23 +132,11 @@ export function buildEngineModel() {
   for (let i = 0; i < 4; i++) {
     const x = -1.8 + i * 1.2;
     const shell = mesh(
-      new THREE.CylinderGeometry(
-        0.47,
-        0.47,
-        1.16,
-        40,
-        1,
-        true,
-        Math.PI / 2,
-        Math.PI,
-      ),
+      precisionCylinder(0.47, 0.47, 1.16, 40, 1, true, Math.PI / 2, Math.PI),
       bore,
     );
     shell.position.set(x, 1.47, 0);
-    const rim = mesh(
-      new THREE.TorusGeometry(0.47, 0.025, 8, 40, Math.PI),
-      metal,
-    );
+    const rim = mesh(precisionTorus(0.47, 0.025, 8, 40, Math.PI), metal);
     rim.rotation.x = Math.PI / 2;
     rim.rotation.z = Math.PI;
     rim.position.set(x, 2.06, 0);
@@ -158,21 +148,13 @@ export function buildEngineModel() {
     cylinder(0.435, 0.31, 0, 0.015, 0, metal, piston);
     cylinder(0.438, 0.035, 0, 0.18, 0, steel, piston);
     for (const y of [0.08, 0.115, 0.145]) {
-      const ring = mesh(
-        new THREE.TorusGeometry(0.436, 0.014, 7, 32),
-        dark,
-        piston,
-      );
+      const ring = mesh(precisionTorus(0.436, 0.014, 7, 32), dark, piston);
       ring.rotation.x = Math.PI / 2;
       ring.position.y = y;
     }
     const wrist = cylinder(0.09, 0.94, 0, 0, 0, steel, piston);
     wrist.rotation.z = Math.PI / 2;
-    const crown = mesh(
-      new THREE.TorusGeometry(0.25, 0.015, 8, 28),
-      steel,
-      piston,
-    );
+    const crown = mesh(precisionTorus(0.25, 0.015, 8, 28), steel, piston);
     crown.rotation.x = Math.PI / 2;
     crown.position.y = 0.202;
     const rod = new THREE.Group();
@@ -211,7 +193,7 @@ export function buildEngineModel() {
           ),
       );
       const spring = mesh(
-        new THREE.TubeGeometry(
+        precisionTube(
           new THREE.CatmullRomCurve3(coilPoints),
           64,
           0.009,
@@ -252,23 +234,14 @@ export function buildEngineModel() {
     });
     glowMaterials.push(glow);
     const chamber = mesh(
-      new THREE.CylinderGeometry(
-        0.415,
-        0.415,
-        0.25,
-        24,
-        1,
-        true,
-        Math.PI / 2,
-        Math.PI,
-      ),
+      precisionCylinder(0.415, 0.415, 0.25, 24, 1, true, Math.PI / 2, Math.PI),
       glow,
     );
     chamber.position.set(x, 1.88, 0);
     for (const z of [-0.56, 0.56]) {
       const bolt = cylinder(0.055, 0.09, x, 2.2, z, steel);
       bolt.geometry.dispose();
-      bolt.geometry = new THREE.CylinderGeometry(0.055, 0.055, 0.09, 6);
+      bolt.geometry = precisionCylinder(0.055, 0.055, 0.09, 6);
     }
   }
   const flywheel = new THREE.Group();
@@ -379,6 +352,7 @@ export function buildEngineModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<THREE.BufferGeometry>(),
       materials = new Set<THREE.Material>();
     group.traverse((object) => {
@@ -394,5 +368,6 @@ export function buildEngineModel() {
     materials.forEach((m) => m.dispose());
   }
   update(0);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

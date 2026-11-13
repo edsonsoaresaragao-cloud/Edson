@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Mesh, Vector3 } from "three";
+import { Mesh, Vector3, TubeGeometry } from "three";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { buildCoolingModel } from "../src/lib/cooling-model";
@@ -79,12 +79,14 @@ test("mangueira superior acompanha as conexões na explosão", () => {
   for (const explosion of [0, 0.4, 1]) {
     m.update(0.1, { ...initialCoolingState, explosion });
     const hose = m.group.getObjectByName("coolant-route-0") as Mesh;
-    const position = hose.geometry.attributes.position;
+    const geometry = hose.geometry as TubeGeometry;
+    const { radialSegments, tubularSegments } = geometry.parameters;
+    const position = geometry.attributes.position;
     const average = (offset: number) => {
       const v = new Vector3();
-      for (let i = 0; i < 10; i++)
+      for (let i = 0; i < radialSegments; i++)
         v.add(new Vector3().fromBufferAttribute(position, offset + i));
-      return hose.localToWorld(v.divideScalar(10));
+      return hose.localToWorld(v.divideScalar(radialSegments));
     };
     const a = m.group
         .getObjectByName("cooling-part-5")!
@@ -95,7 +97,9 @@ test("mangueira superior acompanha as conexões na explosão", () => {
         .position.clone()
         .add(new Vector3(0.5, 0.6, 0));
     assert.ok(average(0).distanceTo(a) < 0.02);
-    assert.ok(average(56 * 11).distanceTo(b) < 0.02);
+    assert.ok(
+      average(tubularSegments * (radialSegments + 1)).distanceTo(b) < 0.02,
+    );
   }
   m.dispose();
 });

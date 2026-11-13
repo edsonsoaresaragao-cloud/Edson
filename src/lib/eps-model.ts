@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
@@ -11,6 +18,7 @@ export function buildEpsModel() {
       const g = new T.Group();
       g.name = `eps-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
@@ -48,7 +56,7 @@ export function buildEpsModel() {
       materials.add(m);
   });
   function mat(color: number, metalness = 0.8, roughness = 0.32) {
-    const m = new T.MeshStandardMaterial({ color, metalness, roughness });
+    const m = new T.MeshPhysicalMaterial({ color, metalness, roughness });
     materials.add(m);
     return m;
   }
@@ -61,7 +69,7 @@ export function buildEpsModel() {
     m = silver,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = new T.Mesh(g, m);
+    const o = automotiveMesh(g, m);
     parent.add(o);
     return o;
   }
@@ -95,7 +103,7 @@ export function buildEpsModel() {
     m = silver,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.CylinderGeometry(r, r, h, 36), m, parent);
+    const o = mesh(id, precisionCylinder(r, r, h, 36), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -111,7 +119,7 @@ export function buildEpsModel() {
   const wheel = new T.Group();
   wheel.name = "steering-wheel";
   parts[0].add(wheel);
-  const rim = mesh(1, new T.TorusGeometry(0.48, 0.045, 14, 64), rubber, wheel);
+  const rim = mesh(1, precisionTorus(0.48, 0.045, 14, 64), rubber, wheel);
   rim.name = "wheel-rim";
   for (let i = 0; i < 3; i++) {
     const a = (i * Math.PI * 2) / 3;
@@ -138,11 +146,11 @@ export function buildEpsModel() {
   const sleeve = cylinder(2, 0.12, 1, 0, 0, 0);
   between(sleeve, lower.clone().lerp(top, 0.42), lower.clone().lerp(top, 0.8));
   for (const t of [0.1, 0.38]) {
-    const joint = mesh(2, new T.TorusGeometry(0.09, 0.025, 8, 24));
+    const joint = mesh(2, precisionTorus(0.09, 0.025, 8, 24));
     joint.position.copy(lower).lerp(top, t);
     joint.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), axis);
   }
-  const joint = mesh(3, new T.TorusGeometry(0.1, 0.025, 10, 32));
+  const joint = mesh(3, precisionTorus(0.1, 0.025, 10, 32));
   joint.position.copy(lower).lerp(top, 0.2);
   joint.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), axis);
   for (const side of [-1, 1])
@@ -165,15 +173,12 @@ export function buildEpsModel() {
   const motor = new T.Group();
   motor.name = "eps-motor-rotor";
   parts[5].add(motor);
-  const motorShell = mesh(
-    6,
-    new T.CylinderGeometry(0.22, 0.22, 0.65, 48, 1, true),
-  );
+  const motorShell = mesh(6, precisionCylinder(0.22, 0.22, 0.65, 48, 1, true));
   motorShell.rotation.z = Math.PI / 2;
   motorShell.name = "eps-motor-shell";
   const cutShell = mesh(
     6,
-    new T.CylinderGeometry(
+    precisionCylinder(
       0.22,
       0.22,
       0.65,
@@ -187,7 +192,7 @@ export function buildEpsModel() {
   cutShell.rotation.z = Math.PI / 2;
   cutShell.name = "eps-motor-cut";
   for (const x of [-0.33, 0.33]) {
-    const ring = mesh(6, new T.TorusGeometry(0.22, 0.022, 10, 40));
+    const ring = mesh(6, precisionTorus(0.22, 0.022, 10, 40));
     ring.rotation.y = Math.PI / 2;
     ring.position.x = x;
   }
@@ -216,13 +221,7 @@ export function buildEpsModel() {
       );
       mesh(
         6,
-        new T.TubeGeometry(
-          new T.CatmullRomCurve3(points, true),
-          28,
-          0.01,
-          6,
-          true,
-        ),
+        precisionTube(new T.CatmullRomCurve3(points, true), 28, 0.01, 6, true),
         copper,
         coil,
       );
@@ -257,7 +256,7 @@ export function buildEpsModel() {
   // Janela da caixa torna a cremalheira visível no corte.
   const rackHousing = mesh(
     7,
-    new T.CylinderGeometry(
+    precisionCylinder(
       0.14,
       0.14,
       2.85,
@@ -271,7 +270,7 @@ export function buildEpsModel() {
   rackHousing.rotation.z = Math.PI / 2;
   rackHousing.position.set(0, 0.25, -0.82);
   for (const x of [-1.4, 1.4]) {
-    const collar = mesh(7, new T.TorusGeometry(0.15, 0.03, 10, 32));
+    const collar = mesh(7, precisionTorus(0.15, 0.03, 10, 32));
     collar.rotation.y = Math.PI / 2;
     collar.position.set(x, 0.25, -0.82);
   }
@@ -363,7 +362,7 @@ export function buildEpsModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      parent.add(new T.Mesh(g, m));
+      parent.add(automotiveMesh(g, m));
     }
   }
   for (const id of [1, 20]) batch(old[id - 1]);
@@ -476,7 +475,7 @@ export function buildEpsModel() {
         const curve = new T.CatmullRomCurve3([a, mid, b]);
         const line = mesh(
           5,
-          new T.TubeGeometry(curve, 32, 0.018, 8, false),
+          precisionTube(curve, 32, 0.018, 8, false),
           dark,
           group,
         );
@@ -513,6 +512,7 @@ export function buildEpsModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>(),
       allMaterials = new Set<T.Material>(materials);
     group.traverse((o) => {
@@ -527,5 +527,6 @@ export function buildEpsModel() {
     base.dispose();
   }
   update(0, initialEpsState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

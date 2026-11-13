@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -13,12 +20,13 @@ export function buildInjectionModel() {
       const g = new T.Group();
       g.name = `injection-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
   const materials = new Set<T.MeshStandardMaterial>();
   function mat(color: number, metalness = 0.8, roughness = 0.32) {
-    const m = new T.MeshStandardMaterial({ color, metalness, roughness });
+    const m = new T.MeshPhysicalMaterial({ color, metalness, roughness });
     materials.add(m);
     return m;
   }
@@ -35,7 +43,7 @@ export function buildInjectionModel() {
     m = silver,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = new T.Mesh(g, m);
+    const o = automotiveMesh(g, m);
     parent.add(o);
     return o;
   }
@@ -69,7 +77,7 @@ export function buildInjectionModel() {
     m = silver,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.CylinderGeometry(r, r, h, 40), m, parent);
+    const o = mesh(id, precisionCylinder(r, r, h, 40), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -83,7 +91,7 @@ export function buildInjectionModel() {
     m = silver,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.TorusGeometry(r, t, 10, 48), m, parent);
+    const o = mesh(id, precisionTorus(r, t, 10, 48), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -97,12 +105,7 @@ export function buildInjectionModel() {
     const curve = new T.CatmullRomCurve3(points);
     return {
       curve,
-      line: mesh(
-        id,
-        new T.TubeGeometry(curve, 48, radius, 10, false),
-        m,
-        parent,
-      ),
+      line: mesh(id, precisionTube(curve, 48, radius, 10, false), m, parent),
     };
   }
   const offsets = [
@@ -184,7 +187,7 @@ export function buildInjectionModel() {
     sparks.push(spark);
     const shell = mesh(
       18,
-      new T.CylinderGeometry(
+      precisionCylinder(
         0.18,
         0.18,
         0.45,
@@ -219,7 +222,7 @@ export function buildInjectionModel() {
   box(6, 0.6, 0.65, 0.65, 3.45, 0.63, 0.95, dark);
   for (let i = 0; i < 7; i++)
     box(6, 0.025, 0.55, 0.68, 3.2 + i * 0.08, 0.63, 0.95, dark);
-  const tbi = mesh(7, new T.CylinderGeometry(0.21, 0.21, 0.3, 48, 1, true));
+  const tbi = mesh(7, precisionCylinder(0.21, 0.21, 0.3, 48, 1, true));
   tbi.rotation.z = Math.PI / 2;
   tbi.position.set(2.12, 0.63, 0.95);
   for (const x of [1.96, 2.28])
@@ -320,7 +323,7 @@ export function buildInjectionModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      parent.add(new T.Mesh(g, m));
+      parent.add(automotiveMesh(g, m));
     }
   }
   parts.forEach(batch);
@@ -397,7 +400,7 @@ export function buildInjectionModel() {
               : kind === "air"
                 ? 17
                 : 12,
-          new T.TubeGeometry(
+          precisionTube(
             curve,
             40,
             kind === "air" ? 0.1 : kind === "signal" ? 0.012 : 0.025,
@@ -573,6 +576,7 @@ export function buildInjectionModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>();
     group.traverse((o) => {
       if (o instanceof T.Mesh) geometries.add(o.geometry);
@@ -581,5 +585,6 @@ export function buildInjectionModel() {
     materials.forEach((m) => m.dispose());
   }
   update(0, initialInjectionState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

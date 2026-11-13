@@ -1,4 +1,5 @@
 "use client";
+import { ModelZoomControls } from "./model-zoom-controls";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePartNarration } from "./use-part-narration";
 import { PartNarrationControls } from "./part-narration-controls";
@@ -122,6 +123,10 @@ export function CompressorExplorer() {
             >
               {paused ? "▶ Reproduzir" : "Ⅱ Pausar"}
             </button>
+            <ModelZoomControls
+              disabled={status !== "ready"}
+              onZoom={(factor) => controller.current?.zoomView(factor)}
+            />
             <button
               type="button"
               disabled={status !== "ready"}

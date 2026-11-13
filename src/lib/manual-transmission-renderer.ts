@@ -1,6 +1,10 @@
+import {
+  createAutomotiveStudio,
+  resizeStudio,
+  zoomStudioCamera,
+} from "./automotive-studio";
 import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { buildManualTransmissionModel } from "./manual-transmission-model";
 import {
   transmissionParts,
@@ -35,6 +39,7 @@ export function fitTransmissionCamera(
   camera.aspect = safeAspect;
   camera.position.copy(centre).addScaledVector(direction, distance * 1.08);
   camera.lookAt(centre);
+  camera.userData.studioFitDistance = distance * 1.08;
   camera.updateProjectionMatrix();
   camera.updateMatrixWorld();
   return centre;
@@ -50,14 +55,10 @@ export function createManualTransmissionRenderer(
   const renderer = new T.WebGLRenderer({
     alpha: true,
     antialias: true,
-    powerPreference: "low-power",
+    powerPreference: window.matchMedia("(pointer: coarse)").matches
+      ? "low-power"
+      : "high-performance",
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.outputColorSpace = T.SRGBColorSpace;
-  renderer.toneMapping = T.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.9;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = T.PCFShadowMap;
   host.append(renderer.domElement);
   renderer.domElement.setAttribute("role", "img");
   renderer.domElement.setAttribute(
@@ -73,54 +74,16 @@ export function createManualTransmissionRenderer(
   controls.minPolarAngle = 0.18;
   controls.maxPolarAngle = Math.PI * 0.85;
   renderer.domElement.style.touchAction = "pan-y";
-  const room = new RoomEnvironment();
-  const pmrem = new T.PMREMGenerator(renderer);
-  let environment: T.WebGLRenderTarget;
+  let studio: ReturnType<typeof createAutomotiveStudio>;
   try {
-    environment = pmrem.fromScene(room, 0.04);
+    studio = createAutomotiveStudio(renderer, scene);
   } catch (error) {
-    room.dispose();
-    pmrem.dispose();
     controls.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     throw error;
   }
-  room.dispose();
-  pmrem.dispose();
-  scene.environment = environment.texture;
-  scene.environmentIntensity = 0.45;
-  scene.add(new T.HemisphereLight(0xcfe6ff, 0x2e3541, 0.8));
-  for (const [x, y, z, colour, intensity] of [
-    [-3, 7, 5, 0xffeedb, 1.8],
-    [4, 3, -5, 0x8bbfff, 1],
-    [1, -1, 8, 0xffffff, 0.7],
-  ]) {
-    const light = new T.DirectionalLight(colour, intensity);
-    light.position.set(x, y, z);
-    if (y === 7) {
-      light.castShadow = true;
-      light.shadow.mapSize.set(1024, 1024);
-      Object.assign(light.shadow.camera, {
-        left: -7,
-        right: 7,
-        top: 6,
-        bottom: -6,
-        near: 0.1,
-        far: 30,
-      });
-      light.shadow.normalBias = 0.025;
-      light.shadow.bias = -0.0002;
-    }
-    scene.add(light);
-  }
   const model = buildManualTransmissionModel();
-  model.group.traverse((object) => {
-    if (object instanceof T.Mesh) {
-      object.castShadow = true;
-      object.receiveShadow = true;
-    }
-  });
   scene.add(model.group);
   const overlay = document.createElement("div");
   overlay.className = "suspension-annotations transmission-annotations";
@@ -161,6 +124,7 @@ export function createManualTransmissionRenderer(
       box,
       (host.clientWidth || 900) / (host.clientHeight || 610),
     );
+    studio.fit(box);
     controls.target.copy(centre);
     controls.update();
   }
@@ -203,7 +167,7 @@ export function createManualTransmissionRenderer(
       needsFit = false;
       resetView();
     }
-    renderer.render(scene, camera);
+    studio.render(camera, running || model.isTransitioning());
     annotate();
     const motion = model.group.userData.motion;
     host.dataset.inputAngle = String(motion.inputAngle);
@@ -245,7 +209,7 @@ export function createManualTransmissionRenderer(
   function resize() {
     const width = host.clientWidth || 900,
       height = host.clientHeight || 610;
-    renderer.setSize(width, height, false);
+    resizeStudio(renderer, width, height);
     camera.aspect = width / height;
     needsFit = true;
     render();
@@ -325,7 +289,7 @@ export function createManualTransmissionRenderer(
     renderer.domElement.removeEventListener("pointerup", pick);
     renderer.domElement.removeEventListener("webglcontextlost", lost);
     model.dispose();
-    environment.dispose();
+    studio.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     overlay.remove();
@@ -338,7 +302,12 @@ export function createManualTransmissionRenderer(
     throw error;
   }
   return {
+    zoomView(factor: number) {
+      zoomStudioCamera(camera, controls.target, factor);
+      render();
+    },
     setState(next: TransmissionState) {
+      studio.invalidateShadows();
       if (disposed) return;
       const changedView =
         next.explosion !== state.explosion ||

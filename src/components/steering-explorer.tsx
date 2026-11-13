@@ -1,4 +1,5 @@
 "use client";
+import { ModelZoomControls } from "./model-zoom-controls";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { steeringParts, initialSteeringState } from "@/lib/steering-parts";
@@ -125,6 +126,10 @@ export function SteeringExplorer() {
             >
               {paused ? "▶ Reproduzir" : "Ⅱ Pausar"}
             </button>
+            <ModelZoomControls
+              disabled={status !== "ready"}
+              onZoom={(factor) => controller.current?.zoomView(factor)}
+            />
             <button
               type="button"
               disabled={status !== "ready"}

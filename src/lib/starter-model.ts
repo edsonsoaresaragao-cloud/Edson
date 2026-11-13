@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -15,12 +22,17 @@ export function buildStarterModel() {
     const item = new T.Group();
     item.name = `starter-part-${part.id}`;
     item.userData.part = part.id;
+    item.userData.partName = part.name;
     group.add(item);
     return item;
   });
   const materials = new Set<T.MeshStandardMaterial>();
-  function material(color: number, metalness = 0.85, roughness = 0.32) {
-    const result = new T.MeshStandardMaterial({
+  function material(
+    color: number,
+    metalness = 0.85,
+    roughness = 0.32,
+  ): T.MeshStandardMaterial {
+    const result = new T.MeshPhysicalMaterial({
       color,
       metalness,
       roughness,
@@ -42,7 +54,7 @@ export function buildStarterModel() {
     geometry: T.BufferGeometry,
     mat = aluminum,
   ) {
-    const object = new T.Mesh(geometry, mat);
+    const object = automotiveMesh(geometry, mat);
     parent.add(object);
     return object;
   }
@@ -56,7 +68,7 @@ export function buildStarterModel() {
   ) {
     const object = mesh(
       parent,
-      new T.CylinderGeometry(radius, radius, length, segments),
+      precisionCylinder(radius, radius, length, segments),
       mat,
     );
     object.rotation.z = Math.PI / 2;
@@ -70,11 +82,7 @@ export function buildStarterModel() {
     x: number,
     mat = steel,
   ) {
-    const object = mesh(
-      parent,
-      new T.TorusGeometry(radius, thickness, 5, 40),
-      mat,
-    );
+    const object = mesh(parent, precisionTorus(radius, thickness, 5, 40), mat);
     object.rotation.y = Math.PI / 2;
     object.position.x = x;
     return object;
@@ -144,7 +152,7 @@ export function buildStarterModel() {
   ) {
     return mesh(
       parent,
-      new T.TubeGeometry(
+      precisionTube(
         new T.CatmullRomCurve3(
           points.map(([x, y, z]) => new T.Vector3(x, y, z)),
           closed,
@@ -498,7 +506,7 @@ export function buildStarterModel() {
         parent.remove(object);
         object.geometry.dispose();
       });
-      parent.add(new T.Mesh(geometry, mat));
+      parent.add(automotiveMesh(geometry, mat));
     }
   }
   parts.forEach(batch);
@@ -628,6 +636,7 @@ export function buildStarterModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>();
     group.traverse((object) => {
       if (object instanceof T.Mesh) geometries.add(object.geometry);
@@ -636,5 +645,6 @@ export function buildStarterModel() {
     materials.forEach((mat) => mat.dispose());
   }
   update(0, initialStarterState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, parts, update, dispose };
 }

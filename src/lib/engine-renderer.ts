@@ -1,9 +1,16 @@
+import {
+  createAutomotiveStudio,
+  zoomStudioCamera,
+  resizeStudio,
+  visibleModelBounds,
+  fitStudioCamera,
+} from "./automotive-studio";
 import * as THREE from "three";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { buildEngineModel } from "./engine-model";
 
 export type EngineRenderer = {
   setPaused(value: boolean): void;
+  zoomView(factor: number): void;
   dispose(): void;
 };
 export function createEngineCamera(aspect = 720 / 490) {
@@ -26,66 +33,26 @@ export function createEngineRenderer(
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
-    powerPreference: "low-power",
+    powerPreference: window.matchMedia("(pointer: coarse)").matches
+      ? "low-power"
+      : "high-performance",
   });
-  renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, window.innerWidth < 700 ? 1.25 : 1.75),
-  );
   renderer.setClearColor(0x000000, 0);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.domElement.setAttribute("aria-hidden", "true");
   host.append(renderer.domElement);
   const scene = new THREE.Scene();
   const camera = createEngineCamera();
-  const room = new RoomEnvironment(),
-    pmrem = new THREE.PMREMGenerator(renderer);
-  const reflection = (() => {
-    try {
-      return pmrem.fromScene(room, 0.035);
-    } catch (error) {
-      room.dispose();
-      pmrem.dispose();
-      renderer.dispose();
-      renderer.domElement.remove();
-      throw error;
-    }
-  })();
-  scene.environment = reflection.texture;
-  scene.environmentIntensity = 0.85;
-  room.dispose();
-  pmrem.dispose();
-  const hemisphere = new THREE.HemisphereLight(0xc8dff8, 0x28313c, 2);
-  scene.add(hemisphere);
-  const key = new THREE.DirectionalLight(0xfff1df, 4);
-  key.position.set(1, 7, 6);
-  key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
-  key.shadow.camera.left = -5;
-  key.shadow.camera.right = 5;
-  key.shadow.camera.top = 5;
-  key.shadow.camera.bottom = -5;
-  key.shadow.normalBias = 0.025;
-  key.shadow.bias = -0.0003;
-  scene.add(key);
-  const rim = new THREE.DirectionalLight(0x8dbcf2, 3);
-  rim.position.set(-5, 3, -5);
-  scene.add(rim);
-  const fill = new THREE.DirectionalLight(0xffffff, 1);
-  fill.position.set(6, 1, 2);
-  scene.add(fill);
+  let studio: ReturnType<typeof createAutomotiveStudio>;
+  try {
+    studio = createAutomotiveStudio(renderer, scene);
+  } catch (error) {
+    renderer.dispose();
+    renderer.domElement.remove();
+    throw error;
+  }
   const model = buildEngineModel();
   scene.add(model.group);
-  const floorGeometry = new THREE.PlaneGeometry(18, 12),
-    floorMaterial = new THREE.ShadowMaterial({ opacity: 0.3 });
-  const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -1.03;
-  floor.receiveShadow = true;
-  scene.add(floor);
+  studio.fit(visibleModelBounds(model.group));
   const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
   let frame = 0,
     last = 0,
@@ -94,7 +61,10 @@ export function createEngineRenderer(
     disposed = false;
   function render() {
     model.update(angle);
-    renderer.render(scene, camera);
+    studio.render(
+      camera,
+      !paused && !preference.matches && visible && !document.hidden,
+    );
   }
   function animate(now: number) {
     if (disposed) return;
@@ -117,9 +87,16 @@ export function createEngineRenderer(
     if (disposed) return;
     const width = host.clientWidth || 640,
       height = host.clientHeight || (width * 490) / 720;
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+    resizeStudio(renderer, width, height);
+    const bounds = visibleModelBounds(model.group);
+    fitStudioCamera(
+      camera,
+      bounds,
+      width / height,
+      new THREE.Vector3(5.8, 3.15, 8.4),
+      0.86,
+    );
+    studio.fit(bounds);
     render();
   }
   const sizeObserver = new ResizeObserver(resize);
@@ -151,10 +128,7 @@ export function createEngineRenderer(
     document.removeEventListener("visibilitychange", sync);
     renderer.domElement.removeEventListener("webglcontextlost", contextLost);
     model.dispose();
-    floorGeometry.dispose();
-    floorMaterial.dispose();
-    reflection.dispose();
-    key.shadow.dispose();
+    studio.dispose();
     renderer.dispose();
     renderer.domElement.remove();
   }
@@ -165,6 +139,14 @@ export function createEngineRenderer(
   }
   renderer.domElement.addEventListener("webglcontextlost", contextLost);
   return {
+    zoomView(factor) {
+      zoomStudioCamera(
+        camera,
+        visibleModelBounds(model.group).getCenter(new THREE.Vector3()),
+        factor,
+      );
+      render();
+    },
     setPaused(value) {
       paused = value;
       sync();

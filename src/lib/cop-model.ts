@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -13,12 +20,13 @@ export function buildCopModel() {
       const g = new T.Group();
       g.name = `cop-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
   const materials = new Set<T.MeshStandardMaterial>();
   function mat(color: number, metalness = 0.8, roughness = 0.32) {
-    const m = new T.MeshStandardMaterial({ color, metalness, roughness });
+    const m = new T.MeshPhysicalMaterial({ color, metalness, roughness });
     materials.add(m);
     return m;
   }
@@ -37,7 +45,7 @@ export function buildCopModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = new T.Mesh(g, m);
+    const o = automotiveMesh(g, m);
     parent.add(o);
     return o;
   }
@@ -71,7 +79,7 @@ export function buildCopModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.CylinderGeometry(r, r, h, 36), m, parent);
+    const o = mesh(id, precisionCylinder(r, r, h, 36), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -116,7 +124,7 @@ export function buildCopModel() {
     sparks.push(spark);
     const shell = mesh(
       14,
-      new T.CylinderGeometry(
+      precisionCylinder(
         0.18,
         0.18,
         0.4,
@@ -143,13 +151,13 @@ export function buildCopModel() {
   box(7, 0.25, 0.3, 0.28, -1.73, 2.25, -0.2, dark);
   for (let i = 0; i < 3; i++)
     box(7, 0.07, 0.025, 0.025, -1.85, 2.17 + i * 0.07, -0.2, copper);
-  const full = mesh(8, new T.CylinderGeometry(0.22, 0.22, 1.2, 48, 1, true));
+  const full = mesh(8, precisionCylinder(0.22, 0.22, 1.2, 48, 1, true));
   full.rotation.z = Math.PI / 2;
   full.position.set(-1.05, 2.25, -0.2);
   full.name = "cop-full-shell";
   const cut = mesh(
     8,
-    new T.CylinderGeometry(
+    precisionCylinder(
       0.22,
       0.22,
       1.2,
@@ -181,13 +189,13 @@ export function buildCopModel() {
     );
     mesh(
       id,
-      new T.TubeGeometry(new T.CatmullRomCurve3(points), 240, 0.008, 6, false),
+      precisionTube(new T.CatmullRomCurve3(points), 240, 0.008, 6, false),
       copper,
     );
   }
   cyl(13, 0.135, 0.9, 0, 2.25, -0.2, dark).rotation.z = Math.PI / 2;
   for (const x of [-0.45, -0.35]) {
-    const r = mesh(13, new T.TorusGeometry(0.15, 0.025, 10, 36), dark);
+    const r = mesh(13, precisionTorus(0.15, 0.025, 10, 36), dark);
     r.rotation.y = Math.PI / 2;
     r.position.set(x, 2.25, -0.2);
   }
@@ -196,7 +204,7 @@ export function buildCopModel() {
   crank.name = "cop-crank-reference";
   parts[13].add(crank);
   crank.position.set(-1.55, -0.12, 0.2);
-  const ring = mesh(14, new T.TorusGeometry(0.19, 0.02, 10, 40));
+  const ring = mesh(14, precisionTorus(0.19, 0.02, 10, 40));
   parts[13].remove(ring);
   crank.add(ring);
   ring.rotation.y = Math.PI / 2;
@@ -248,7 +256,7 @@ export function buildCopModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      parent.add(new T.Mesh(g, m));
+      parent.add(automotiveMesh(g, m));
     }
   }
   parts.forEach(batch);
@@ -314,7 +322,7 @@ export function buildCopModel() {
           kind === "power" ? red : kind === "sensor" ? green : blue;
         const line = mesh(
           5,
-          new T.TubeGeometry(curve, 32, 0.014, 8, false),
+          precisionTube(curve, 32, 0.014, 8, false),
           material,
           parts[4],
         );
@@ -398,6 +406,7 @@ export function buildCopModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>();
     group.traverse((o) => {
       if (o instanceof T.Mesh) geometries.add(o.geometry);
@@ -406,5 +415,6 @@ export function buildCopModel() {
     materials.forEach((m) => m.dispose());
   }
   update(0, initialCopState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

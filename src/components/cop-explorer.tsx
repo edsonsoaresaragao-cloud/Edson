@@ -1,4 +1,5 @@
 "use client";
+import { ModelZoomControls } from "./model-zoom-controls";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { copParts, initialCopState, type CopEvent } from "@/lib/cop-parts";
 import type { CopRenderer } from "@/lib/cop-renderer";
@@ -125,6 +126,10 @@ export function CopExplorer() {
             >
               {paused ? "▶ Reproduzir" : "Ⅱ Pausar"}
             </button>
+            <ModelZoomControls
+              disabled={!ready || failed}
+              onZoom={(factor) => controller.current?.zoomView(factor)}
+            />
             <button
               type="button"
               disabled={!ready}

@@ -1,4 +1,5 @@
 "use client";
+import { ModelZoomControls } from "./model-zoom-controls";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   absParts,
@@ -131,6 +132,10 @@ export function AbsExplorer() {
             >
               {paused ? "▶ Reproduzir" : "Ⅱ Pausar"}
             </button>
+            <ModelZoomControls
+              disabled={status !== "ready"}
+              onZoom={(factor) => controller.current?.zoomView(factor)}
+            />
             <button
               type="button"
               disabled={status !== "ready"}

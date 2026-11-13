@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import type { EngineRenderer } from "@/lib/engine-renderer";
+import { ModelZoomControls } from "./model-zoom-controls";
 import { RunningEngine } from "./running-engine";
 
 export function RealisticEngine({ paused }: { paused: boolean }) {
@@ -57,6 +58,14 @@ export function RealisticEngine({ paused }: { paused: boolean }) {
         aria-hidden={!ready}
       />
       {!ready && <RunningEngine paused={paused} />}
+      {ready && (
+        <div className="engine-studio-zoom">
+          <ModelZoomControls
+            disabled={!ready}
+            onZoom={(factor) => controller.current?.zoomView(factor)}
+          />
+        </div>
+      )}
     </div>
   );
 }

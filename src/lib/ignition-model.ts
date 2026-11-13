@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -13,12 +20,13 @@ export function buildIgnitionModel() {
       const g = new T.Group();
       g.name = `ignition-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
   const materials = new Set<T.MeshStandardMaterial>();
   function mat(color: number, metalness = 0.8, roughness = 0.32) {
-    const m = new T.MeshStandardMaterial({ color, metalness, roughness });
+    const m = new T.MeshPhysicalMaterial({ color, metalness, roughness });
     materials.add(m);
     return m;
   }
@@ -34,7 +42,7 @@ export function buildIgnitionModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = new T.Mesh(g, m);
+    const o = automotiveMesh(g, m);
     parent.add(o);
     return o;
   }
@@ -68,7 +76,7 @@ export function buildIgnitionModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.CylinderGeometry(r, r, h, 40), m, parent);
+    const o = mesh(id, precisionCylinder(r, r, h, 40), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -82,7 +90,7 @@ export function buildIgnitionModel() {
     m = metal,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const o = mesh(id, new T.TorusGeometry(r, t, 10, 48), m, parent);
+    const o = mesh(id, precisionTorus(r, t, 10, 48), m, parent);
     o.position.set(x, y, z);
     return o;
   }
@@ -284,7 +292,7 @@ export function buildIgnitionModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      parent.add(new T.Mesh(g, m));
+      parent.add(automotiveMesh(g, m));
     }
   }
   parts.forEach(batch);
@@ -365,7 +373,7 @@ export function buildIgnitionModel() {
         const curve = new T.CatmullRomCurve3([a, mid, b]);
         const line = mesh(
           kind === "start" ? 7 : 6,
-          new T.TubeGeometry(
+          precisionTube(
             curve,
             36,
             kind === "power" || kind === "start" ? 0.022 : 0.012,
@@ -432,6 +440,7 @@ export function buildIgnitionModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>();
     group.traverse((o) => {
       if (o instanceof T.Mesh) geometries.add(o.geometry);
@@ -440,5 +449,6 @@ export function buildIgnitionModel() {
     materials.forEach((m) => m.dispose());
   }
   update(0, initialIgnitionState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

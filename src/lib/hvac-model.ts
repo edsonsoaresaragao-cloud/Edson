@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
@@ -8,12 +15,13 @@ export function buildHvacModel() {
       const g = new T.Group();
       g.name = `hvac-part-${p.id}`;
       g.userData.part = p.id;
+      g.userData.partName = p.name;
       group.add(g);
       return g;
     });
   const mats = hvacParts.map(
     (p) =>
-      new T.MeshStandardMaterial({
+      new T.MeshPhysicalMaterial({
         color: [3, 7, 9, 10].includes(p.id)
           ? 0x26333d
           : p.id === 13
@@ -29,7 +37,7 @@ export function buildHvacModel() {
     parent: T.Object3D = parts[id - 1],
     mat: T.Material = mats[id - 1],
   ) {
-    const m = new T.Mesh(g, mat);
+    const m = automotiveMesh(g, mat);
     m.castShadow = true;
     m.receiveShadow = true;
     parent.add(m);
@@ -62,7 +70,7 @@ export function buildHvacModel() {
     z: number,
     parent: T.Object3D = parts[id - 1],
   ) {
-    const m = mesh(id, new T.CylinderGeometry(r, r, h, 40), parent);
+    const m = mesh(id, precisionCylinder(r, r, h, 40), parent);
     m.position.set(x, y, z);
     return m;
   }
@@ -78,12 +86,7 @@ export function buildHvacModel() {
     );
     return {
       curve,
-      object: mesh(
-        id,
-        new T.TubeGeometry(curve, 64, r, 10, false),
-        parent,
-        mat,
-      ),
+      object: mesh(id, precisionTube(curve, 64, r, 10, false), parent, mat),
     };
   }
   const bases = [
@@ -139,9 +142,9 @@ export function buildHvacModel() {
   for (let i = 0; i < 4; i++) {
     const ring = mesh(
       1,
-      new T.TorusGeometry(0.35, 0.025, 10, 48),
+      precisionTorus(0.35, 0.025, 10, 48),
       pulley,
-      new T.MeshStandardMaterial({
+      new T.MeshPhysicalMaterial({
         color: 0x222a30,
         metalness: 0.6,
         roughness: 0.4,
@@ -186,7 +189,7 @@ export function buildHvacModel() {
       );
       blade.rotation.set(centrifugal ? 0 : 0.35, 0, a - 0.4);
     }
-    const shroud = mesh(id, new T.TorusGeometry(r, 0.055, 12, 64));
+    const shroud = mesh(id, precisionTorus(r, 0.055, 12, 64));
     shroud.position.z = 0.08;
     return rotor;
   }
@@ -232,7 +235,7 @@ export function buildHvacModel() {
   }
   const flowMaterials = [0xf04c3b, 0xffa22c, 0xf3ce3c, 0x42bfff, 0x258dff].map(
     (color) =>
-      new T.MeshStandardMaterial({
+      new T.MeshPhysicalMaterial({
         color,
         emissive: color,
         emissiveIntensity: 0.3,
@@ -258,7 +261,7 @@ export function buildHvacModel() {
       10,
       new T.ConeGeometry(0.06, 0.18, 8),
       group,
-      new T.MeshStandardMaterial({
+      new T.MeshPhysicalMaterial({
         color: 0x7edcff,
         emissive: 0x2385bf,
         emissiveIntensity: 0.5,
@@ -348,6 +351,7 @@ export function buildHvacModel() {
     group.updateMatrixWorld(true);
   }
   function dispose() {
+    surfaceFinish.dispose();
     const geometries = new Set<T.BufferGeometry>(),
       materials = new Set<T.Material>();
     group.traverse((o) => {
@@ -389,7 +393,7 @@ export function buildHvacModel() {
         parent.remove(o);
         o.geometry.dispose();
       });
-      const combined = new T.Mesh(geometry, material);
+      const combined = automotiveMesh(geometry, material);
       combined.castShadow = true;
       combined.receiveShadow = true;
       parent.add(combined);
@@ -397,5 +401,6 @@ export function buildHvacModel() {
   }
   parts.forEach(batch);
   update(0, initialHvacState);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return { group, update, dispose };
 }

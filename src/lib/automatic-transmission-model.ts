@@ -1,3 +1,10 @@
+import {
+  applyAutomotiveFinish,
+  automotiveMesh,
+  precisionCylinder,
+  precisionTorus,
+  precisionTube,
+} from "./automotive-finish";
 import * as T from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
@@ -75,6 +82,7 @@ export function buildAutomaticTransmissionModel() {
     const node = new T.Group();
     node.name = `automatic-part-${part.id}`;
     node.userData.part = part.id;
+    node.userData.partName = part.name;
     group.add(node);
     return node;
   });
@@ -100,7 +108,7 @@ export function buildAutomaticTransmissionModel() {
     if (!materials.has(key))
       materials.set(key, {
         id,
-        material: new T.MeshStandardMaterial({
+        material: new T.MeshPhysicalMaterial({
           color: palette[kind],
           metalness: [
             "rubber",
@@ -129,7 +137,7 @@ export function buildAutomaticTransmissionModel() {
     parent: T.Object3D = parts[id - 1],
   ) {
     geometries.add(geometry);
-    const object = new T.Mesh(geometry, material(id, kind));
+    const object = automotiveMesh(geometry, material(id, kind));
     parent.add(object);
     return object;
   }
@@ -144,7 +152,7 @@ export function buildAutomaticTransmissionModel() {
   ) {
     const object = mesh(
       id,
-      new T.CylinderGeometry(radius, radius, length, segments),
+      precisionCylinder(radius, radius, length, segments),
       kind,
       parent,
     );
@@ -160,12 +168,7 @@ export function buildAutomaticTransmissionModel() {
     parent: T.Object3D = parts[id - 1],
     kind: Finish = "steel",
   ) {
-    const object = mesh(
-      id,
-      new T.TorusGeometry(radius, tube, 8, 48),
-      kind,
-      parent,
-    );
+    const object = mesh(id, precisionTorus(radius, tube, 8, 48), kind, parent);
     object.rotation.y = Math.PI / 2;
     object.position.x = x;
     return object;
@@ -238,7 +241,7 @@ export function buildAutomaticTransmissionModel() {
     const curve = new T.CatmullRomCurve3(points);
     mesh(
       id,
-      new T.TubeGeometry(curve, points.length * 8, radius, 6, false),
+      precisionTube(curve, points.length * 8, radius, 6, false),
       kind,
       parent,
     );
@@ -774,7 +777,7 @@ export function buildAutomaticTransmissionModel() {
       buffers.forEach((buffer) => buffer.dispose());
       if (!merged) continue;
       geometries.add(merged);
-      parent.add(new T.Mesh(merged, mat));
+      parent.add(automotiveMesh(merged, mat));
       members.forEach((member) => {
         parent.remove(member);
         geometries.delete(member.geometry);
@@ -930,6 +933,7 @@ export function buildAutomaticTransmissionModel() {
     group.updateMatrixWorld(true);
   }
   update(0, initialAutomaticState, false);
+  const surfaceFinish = applyAutomotiveFinish(group);
   return {
     group,
     parts,
@@ -948,6 +952,7 @@ export function buildAutomaticTransmissionModel() {
     dispose() {
       if (disposed) return;
       disposed = true;
+      surfaceFinish.dispose();
       geometries.forEach((geometry) => geometry.dispose());
       materials.forEach(({ material: mat }) => mat.dispose());
     },

@@ -1,6 +1,12 @@
+import {
+  createAutomotiveStudio,
+  zoomStudioCamera,
+  resizeStudio,
+  visibleModelBounds,
+  fitStudioCamera,
+} from "./automotive-studio";
 import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { buildStarterModel } from "./starter-model";
 import { starterParts, type StarterState } from "./starter-parts";
 
@@ -14,12 +20,11 @@ export function createStarterRenderer(
   const renderer = new T.WebGLRenderer({
     alpha: true,
     antialias: true,
-    powerPreference: "low-power",
+    powerPreference: window.matchMedia("(pointer: coarse)").matches
+      ? "low-power"
+      : "high-performance",
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.localClippingEnabled = true;
-  renderer.outputColorSpace = T.SRGBColorSpace;
-  renderer.toneMapping = T.ACESFilmicToneMapping;
   host.append(renderer.domElement);
   renderer.domElement.setAttribute("role", "img");
   renderer.domElement.setAttribute(
@@ -38,60 +43,34 @@ export function createStarterRenderer(
   controls.touches.ONE = T.TOUCH.ROTATE;
   renderer.domElement.style.touchAction = "pan-y";
   function resetView() {
-    if (!model) return;
-    const bounds = new T.Box3();
-    for (const part of model.parts)
-      if (part.visible) bounds.union(new T.Box3().setFromObject(part));
-    const center = bounds.getCenter(new T.Vector3()),
-      size = bounds.getSize(new T.Vector3());
-    const aspect = host.clientWidth / Math.max(1, host.clientHeight);
-    const distance =
-      (Math.max(size.y * 1.6, size.x / Math.max(0.3, aspect)) /
-        (2 * Math.tan((camera.fov * Math.PI) / 360))) *
-        (aspect < 0.8 ? 1.18 : 1.4) +
-      size.z;
-    camera.position
-      .copy(center)
-      .add(
-        new T.Vector3(-0.38, 0.25, 1)
-          .normalize()
-          .multiplyScalar(Math.max(2, distance)),
-      );
+    const bounds = visibleModelBounds(model.group);
+    if (bounds.isEmpty()) return;
+    const center = fitStudioCamera(
+      camera,
+      bounds,
+      (host.clientWidth || 700) / (host.clientHeight || 500),
+      new T.Vector3(-0.38, 0.25, 1),
+      0.8,
+    );
+    studio.fit(bounds);
     controls.target.copy(center);
     controls.update();
   }
-  const room = new RoomEnvironment(),
-    pmrem = new T.PMREMGenerator(renderer);
-  let reflection: T.WebGLRenderTarget;
+  let studio: ReturnType<typeof createAutomotiveStudio>;
   try {
-    reflection = pmrem.fromScene(room, 0.04);
+    studio = createAutomotiveStudio(renderer, scene);
   } catch (error) {
-    room.dispose();
-    pmrem.dispose();
     controls.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     throw error;
   }
-  room.dispose();
-  pmrem.dispose();
-  scene.environment = reflection.texture;
-  scene.environmentIntensity = 0.7;
-  scene.add(new T.HemisphereLight(0xc8e5ff, 0x25303b, 1));
-  for (const [x, y, z, color, power] of [
-    [2, 7, 6, 0xffedda, 2.7],
-    [-5, 3, -4, 0x80b7ff, 1.6],
-    [6, 1, 1, 0xffffff, 1.2],
-  ]) {
-    const l = new T.DirectionalLight(color, power);
-    l.position.set(x, y, z);
-    scene.add(l);
-  }
   const model = buildStarterModel();
   model.update(0, initial);
   scene.add(model.group);
   const overlay = document.createElement("div");
-  overlay.className = "suspension-annotations starter-annotations";
+  overlay.className =
+    "suspension-annotations starter-annotations studio-annotations";
   const lines = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   overlay.append(lines);
   const labels = starterParts.map((part) => {
@@ -117,13 +96,17 @@ export function createStarterRenderer(
       bounds.setFromObject(object);
       bounds.getCenter(anchor);
       anchor.project(camera);
-      const mobile = width < 550;
-      const labelWidth = mobile ? 29 : 140;
+      const expanded = state.selected === part.id && width >= 650;
+      const labelWidth = expanded ? 160 : 32;
+      button.style.width = `${labelWidth}px`;
+      button.setAttribute("aria-pressed", String(state.selected === part.id));
       const left = i < 6,
         row = left ? i : i - 6;
       const x = left ? 8 : width - labelWidth - 8;
       const y = 54 + (row * (height - 100)) / 6;
-      button.innerText = mobile ? String(part.id) : `${part.id} · ${part.name}`;
+      button.innerText = expanded
+        ? `${part.id} · ${part.name}`
+        : String(part.id);
       button.style.display =
         state.isolate && state.selected !== part.id ? "none" : "block";
       line.style.display = button.style.display;
@@ -152,8 +135,10 @@ export function createStarterRenderer(
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   let lastStep = -1;
   let lastContact = false;
+  let drawing = false;
   function render() {
-    if (disposed) return;
+    if (disposed || drawing) return;
+    drawing = true;
     model.update(time, state);
     if (
       model.group.userData.sequence.stage !== lastStep ||
@@ -163,8 +148,12 @@ export function createStarterRenderer(
       lastContact = model.group.userData.sequence.contact;
       onStep?.(lastStep, lastContact);
     }
-    renderer.render(scene, camera);
+    studio.render(
+      camera,
+      !paused && !reduced.matches && visible && !document.hidden,
+    );
     annotate();
+    drawing = false;
   }
   function tick(now: number) {
     if (disposed) return;
@@ -191,7 +180,7 @@ export function createStarterRenderer(
   function resize() {
     const w = host.clientWidth || 700,
       h = host.clientHeight || 500;
-    renderer.setSize(w, h, false);
+    resizeStudio(renderer, w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     resetView();
@@ -262,7 +251,7 @@ export function createStarterRenderer(
     renderer.domElement.removeEventListener("pointerup", pick);
     renderer.domElement.removeEventListener("webglcontextlost", lost);
     model.dispose();
-    reflection.dispose();
+    studio.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     overlay.remove();
@@ -275,7 +264,12 @@ export function createStarterRenderer(
     throw error;
   }
   return {
+    zoomView(factor: number) {
+      zoomStudioCamera(camera, controls.target, factor);
+      render();
+    },
     setState(value: StarterState) {
+      studio.invalidateShadows();
       const speedChanged = value.speed !== state.speed;
       const refit =
         value.isolate !== state.isolate ||

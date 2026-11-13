@@ -1,4 +1,5 @@
 "use client";
+import { ModelZoomControls } from "./model-zoom-controls";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { epsParts, initialEpsState } from "@/lib/eps-parts";
 import type { EpsRenderer } from "@/lib/eps-renderer";
@@ -142,6 +143,10 @@ export function EpsExplorer() {
             >
               {paused ? "▶ Reproduzir" : "Ⅱ Pausar"}
             </button>
+            <ModelZoomControls
+              disabled={status !== "ready"}
+              onZoom={(factor) => controller.current?.zoomView(factor)}
+            />
             <button
               type="button"
               disabled={status !== "ready"}
