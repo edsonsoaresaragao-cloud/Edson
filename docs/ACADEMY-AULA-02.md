@@ -37,13 +37,15 @@ A fala é segmentada em até 180 caracteres, com índice e status acessível. A 
 
 ## Conta, estudo e avaliação
 
-Usa a autenticação atual e os modelos `Course`, `Module`, `Lesson`, `Question`, `Enrollment` e `Progress`; não há sistema paralelo de alunos nem nova migração. O curso `academy-aula-02-conferencia-final-v1` é instalado idempotentemente na primeira ação **Iniciar aula**. O GET nunca matricula. Uma edição despublicada pelo responsável não é reinstalada ou sobrescrita.
+Usa a autenticação atual e os modelos `Course`, `Module`, `Lesson`, `Question`, `Enrollment` e `Progress`; não há sistema paralelo de alunos. O curso `academy-aula-02-conferencia-final-v1` é instalado idempotentemente na primeira ação **Iniciar aula**. O GET nunca matricula. Uma edição despublicada pelo responsável não é reinstalada ou sobrescrita.
 
 `POST /api/academy/aula-02/progress` verifica origem, sessão, limite por conta e formato estrito; ignora qualquer alegação de identidade ou nota do cliente recusando campos desconhecidos. O servidor confere os IDs dos sete pontos da etapa e calcula a avaliação. Aprovações e melhor nota são gravadas no PostgreSQL; posição e data de visita permitem retomar. Somente as cinco etapas aprovadas produzem 100%.
 
 As caixas indicam **pontos estudados**, sem certificar execução de um reparo. Marcações parciais ficam na sala aberta; a aprovação da etapa, sua nota e posição de estudo são os registros persistentes. Uma etapa concluída reabre com os pontos marcados. Não foi usado localStorage para simular progresso de conta.
 
 Enquanto a carga horária não for validada pelo responsável, a interface mostra **Carga horária a validar**. O cadastro legado exige um inteiro, portanto zero é usado internamente como pendência, sem apresentar “0 horas”. Uma proteção restrita ao novo ID impede emitir certificado dessa aula nessa situação; certificados e regras da Aula 01 continuam funcionando como antes. Uma validação editorial posterior pode preencher apenas o valor pendente, preservando horas já definidas.
+
+A migração `202611140001_academy_checklist_hours` ajusta a restrição SQL para aceitar esse zero apenas no ID da Aula 02. Todos os outros cursos continuam exigindo horas positivas; notas continuam limitadas a 1–100. Não há exclusão de dados nem alteração de registros existentes. O startup do Render já aplica as migrações antes de iniciar o serviço.
 
 O material adaptado é entregue por uma lista fechada de nomes em `/api/academy/aula-02/material/[file]`. O original só pode ser obtido por ADMIN/EDITOR autenticado para conferência editorial. Arquivos arbitrários e o manifesto não são expostos por essa rota.
 
