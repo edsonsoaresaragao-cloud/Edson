@@ -15,6 +15,7 @@ export const staticCounterPaths = new Set([
   "/academy",
   "/academy/aulas",
   "/academy/aulas/motores-que-batem-valvula",
+  "/academy/aulas/conferencia-final",
   "/categorias/ar-condicionado/compressor",
   "/categorias/ignicao/atual",
   "/categorias/direcao-hidraulica-e-eletrica/eps",

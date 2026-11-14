@@ -1,0 +1,57 @@
+name: Academy Aula 02
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  checklist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: academy_test
+          POSTGRES_PASSWORD: academy-ci-only
+          POSTGRES_DB: academy_checklist
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U academy_test -d academy_checklist"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://academy_test:academy-ci-only@127.0.0.1:5432/academy_checklist
+      APP_URL: http://localhost:3100
+      TEST_BASE_URL: http://localhost:3100
+      PORT: 3100
+      SESSION_SECRET: academy-ci-only-session-secret-12345678901234567890
+      ACADEMY_CHECKLIST_INTEGRATION: 1
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --cache /tmp/npm-cache
+      - run: npm run db:generate && npm run db:migrate
+      - run: npx tsx --test tests/academy-checklist.test.ts tests/academy.test.ts tests/academy-narration.test.ts
+      - run: npm run build
+      - name: Exercitar material, narração e progresso autenticado no PostgreSQL
+        run: |
+          npm start > /tmp/academy-checklist-web.log 2>&1 &
+          academy_pid=$!
+          trap 'kill "$academy_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS 'http://localhost:3100/academy/aulas/conferencia-final' > /tmp/academy-ready.html; then break; fi
+            sleep 1
+          done
+          curl -fsS 'http://localhost:3100/academy/aulas/conferencia-final' > /tmp/academy-ready.html
+          npx playwright test tests/browser/academy-checklist.spec.ts tests/browser/academy-checklist-auth.spec.ts tests/browser/academy-reader.spec.ts --reporter=line
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: academy-checklist-results
+          path: |
+            test-results/
+            /tmp/academy-checklist-web.log

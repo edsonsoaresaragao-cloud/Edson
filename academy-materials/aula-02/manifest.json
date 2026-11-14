@@ -1,0 +1,47 @@
+{
+  "source": "Ponto do Motor",
+  "pageCount": 4,
+  "originalSha256": "1ef65233b118f5cb0e9df54e9c728e2279c362346444580f4c4abffcef028274",
+  "adaptation": "BÔNUS 06 substituído por AULA 02 somente nos quatro cabeçalhos superiores. Autoria, corpo, fotografias, legendas, avisos e referências de rodapé preservados.",
+  "pages": [
+    {
+      "page": 1,
+      "file": "pagina-01.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [295, 87, 483, 128],
+      "identicalOutsideHeader": true,
+      "sha256": "94bb5efdc5fec7840421073a88c8d22b45cecf00275b9b3af6cec4a0f98210f3"
+    },
+    {
+      "page": 2,
+      "file": "pagina-02.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [484, 12, 566, 33],
+      "identicalOutsideHeader": true,
+      "sha256": "8034e4213158111fb91c1d4c54702fd63e2259bf754fc91754fda4736a7c2623"
+    },
+    {
+      "page": 3,
+      "file": "pagina-03.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [522, 12, 591, 32],
+      "identicalOutsideHeader": true,
+      "sha256": "90e4b7b441c46205a8af329854a907280413f076e13929714ae9b0782b014182"
+    },
+    {
+      "page": 4,
+      "file": "pagina-04.png",
+      "width": 1024,
+      "height": 1536,
+      "editedHeaderRect": [526, 12, 595, 33],
+      "identicalOutsideHeader": true,
+      "sha256": "3f93510316fdc24aef3e9e817f69b11b6bd0e4e977da831281fd7a92dbb23270"
+    }
+  ],
+  "adaptedFile": "Aula_02_Conferencia_Final_sem_Bonus_no_Cabecalho.pdf",
+  "adaptedSha256": "c7e80f89272f55b1fa16a9f2513be60166f4c7ec1205ca3407612d6fb8cd4b75",
+  "authorization": "O responsável pela EDSON OFICINA confirmou neste atendimento que possui autorização do titular para reproduzir, adaptar e publicar também o PDF da Aula 02. Registro da declaração do responsável; não representa verificação independente de contrato."
+}

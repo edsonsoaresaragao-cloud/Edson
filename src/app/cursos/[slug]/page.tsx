@@ -1,5 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 import { LESSON_SLUG, LESSON_URL } from "@/lib/academy/content";
+import {
+  LESSON_SLUG as CHECKLIST_SLUG,
+  LESSON_URL as CHECKLIST_URL,
+} from "@/lib/academy/checklist/content";
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { ActionForm } from "@/components/forms";
@@ -15,6 +19,7 @@ export default async function Course({
 }) {
   const { slug } = await params;
   if (slug === LESSON_SLUG) redirect(LESSON_URL);
+  if (slug === CHECKLIST_SLUG) redirect(CHECKLIST_URL);
   const c = await db.course.findUnique({
     where: { slug, status: "PUBLISHED" },
     include: {

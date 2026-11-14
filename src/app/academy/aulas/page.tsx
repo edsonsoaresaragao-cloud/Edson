@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PageHeading } from "@/components/content";
 import { AcademyLessonCard } from "@/components/academy/lesson-card";
+import { ChecklistLessonCard } from "@/components/academy/checklist/lesson-card";
 export const metadata = { title: "Aulas organizadas | EDSON OFICINA Academy" };
 export default function Lessons() {
   return (
@@ -15,6 +16,7 @@ export default function Lessons() {
       </Link>
       <div className="grid two section">
         <AcademyLessonCard />
+        <ChecklistLessonCard />
       </div>
     </div>
   );

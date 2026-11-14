@@ -28,6 +28,7 @@ import {
 } from "@/lib/validation";
 import { slugify } from "@/lib/catalog";
 import { COURSE_ID } from "@/lib/academy/content";
+import { COURSE_ID as CHECKLIST_COURSE_ID } from "@/lib/academy/checklist/content";
 import { s3, bucket, headObject, deleteMediaObjects } from "@/lib/storage";
 export const runtime = "nodejs";
 export async function POST(
@@ -227,6 +228,11 @@ export async function POST(
       });
       if (!enrollment || enrollment.course.status !== "PUBLISHED")
         throw new AppError("Matrícula indisponível.");
+      if (id === CHECKLIST_COURSE_ID && enrollment.course.hours <= 0)
+        throw new AppError(
+          "A carga horária da Aula 02 aguarda validação do responsável. A emissão não está disponível.",
+          409,
+        );
       const lessons = enrollment.course.modules.flatMap((m) => m.lessons);
       if (
         !lessons.length ||

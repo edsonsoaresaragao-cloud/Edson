@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { PageHeading } from "@/components/content";
 import { AcademyLessonCard } from "@/components/academy/lesson-card";
 import { COURSE_ID } from "@/lib/academy/content";
+import { COURSE_ID as CHECKLIST_COURSE_ID } from "@/lib/academy/checklist/content";
+import { ChecklistLessonCard } from "@/components/academy/checklist/lesson-card";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "EDSON OFICINA ACADEMY" };
 export default async function Academy() {
@@ -50,7 +52,7 @@ export default async function Academy() {
             >
               <I className="orange" />
               <h3 className="mt-4">{String(title)}</h3>
-              <p>Aula 01 disponível · Motores que batem válvula</p>
+              <p>Aulas 01 e 02 disponíveis · Sincronismo e conferência final</p>
               <span className="text-link">Explorar aulas →</span>
             </Link>
           ) : (
@@ -64,8 +66,9 @@ export default async function Academy() {
       <h2>Treinamentos disponíveis</h2>
       <div className="grid three">
         <AcademyLessonCard />
+        <ChecklistLessonCard />
         {courses
-          .filter((c) => c.id !== COURSE_ID)
+          .filter((c) => c.id !== COURSE_ID && c.id !== CHECKLIST_COURSE_ID)
           .map((c) => (
             <Link className="card" href={"/cursos/" + c.slug} key={c.id}>
               <span className="tag">GRATUITO · {c.hours} HORAS</span>
