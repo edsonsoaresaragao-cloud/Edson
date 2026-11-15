@@ -8,11 +8,17 @@ import { COURSE_ID as CHECKLIST_COURSE_ID } from "@/lib/academy/checklist/conten
 import { ChecklistLessonCard } from "@/components/academy/checklist/lesson-card";
 import { LibraryLessonCards } from "@/components/academy/library/lesson-cards";
 import { isLibraryCourseId } from "@/lib/academy/library/catalog";
-import { getReadyLibrarySlugs } from "@/lib/academy/library/access";
+import { getLibraryDirectory } from "@/lib/academy/library/access";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "EDSON OFICINA ACADEMY" };
 export default async function Academy() {
-  const readySlugs = await getReadyLibrarySlugs();
+  const directory = await getLibraryDirectory();
+  const readySlugs = directory
+    .filter((lesson) => lesson.ready)
+    .map((lesson) => lesson.slug);
+  const viewableSlugs = directory
+    .filter((lesson) => lesson.viewable)
+    .map((lesson) => lesson.slug);
   const courses = await db.course.findMany({
     where: { status: "PUBLISHED" },
     orderBy: { createdAt: "desc" },
@@ -71,7 +77,10 @@ export default async function Academy() {
       <div className="grid three">
         <AcademyLessonCard />
         <ChecklistLessonCard />
-        <LibraryLessonCards readySlugs={readySlugs} />
+        <LibraryLessonCards
+          readySlugs={readySlugs}
+          viewableSlugs={viewableSlugs}
+        />
         {courses
           .filter(
             (c) =>

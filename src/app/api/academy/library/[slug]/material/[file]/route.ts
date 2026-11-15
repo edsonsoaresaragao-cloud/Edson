@@ -4,8 +4,9 @@ import { getLibraryCourse } from "@/lib/academy/library/catalog";
 import {
   hasLibraryEditorAccess,
   libraryMaterialRoot,
-  libraryReadiness,
   loadLibraryDocument,
+  loadLibraryAuthorization,
+  canViewLibraryMaterial,
 } from "@/lib/academy/library/access";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -23,8 +24,12 @@ export async function GET(
   )
     return new Response("Arquivo não encontrado.", { status: 404 });
   const document = await loadLibraryDocument(course);
-  const status = await libraryReadiness(course, document);
-  if (!status.ready && !(await hasLibraryEditorAccess()))
+  const canView = await canViewLibraryMaterial(
+    course,
+    document,
+    await loadLibraryAuthorization(),
+  );
+  if (!canView && !(await hasLibraryEditorAccess()))
     return new Response(
       "Material em preparação, restrito à conferência editorial.",
       { status: 403, headers: { "Cache-Control": "private, no-store" } },

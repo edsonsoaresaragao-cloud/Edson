@@ -80,6 +80,17 @@ test("contas reais, restrição editorial, 17 páginas, avaliação e tentativas
     await action({ action: "start" }, 409);
     await db.user.update({ where: { id: ana.id }, data: { role: "STUDENT" } });
     await fixture.authorize(true);
+    await fixture.technicalReview("pending");
+    const consultation = await (await page.request.get(endpoint)).json();
+    expect(consultation.canView).toBe(true);
+    expect(consultation.canStudy).toBe(false);
+    expect(consultation.document.pages).toHaveLength(17);
+    expect(consultation.questions).toEqual({});
+    expect(
+      (await page.request.get(`${endpoint}/material/original.pdf`)).status(),
+    ).toBe(200);
+    await action({ action: "start" }, 409);
+    await fixture.technicalReview("verified");
     expect(
       (await (await page.request.get(`${endpoint}/progress`)).json()).progress
         .started,

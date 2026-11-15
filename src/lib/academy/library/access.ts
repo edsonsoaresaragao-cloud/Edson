@@ -4,7 +4,12 @@ import { createHash } from "node:crypto";
 import { join, resolve } from "node:path";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import { getLibraryCourse, examStep, pageStep } from "./catalog";
+import {
+  getLibraryCourse,
+  libraryCourses,
+  examStep,
+  pageStep,
+} from "./catalog";
 import { publicQuestionBank } from "./questions";
 import {
   libraryDocumentSchema,
@@ -295,6 +300,22 @@ export async function verifyLibraryMaterials(
   }
 }
 
+/** Authorized, intact source pages can be consulted while teaching content is reviewed. */
+export async function canViewLibraryMaterial(
+  course: LibraryCourse,
+  document: LibraryDocument | null,
+  authorization: LibraryAuthorization,
+) {
+  if (
+    !document ||
+    !authorization.confirmed ||
+    !authorization.scope.includes(course.number) ||
+    !authorization.statement?.trim()
+  )
+    return false;
+  return verifyLibraryMaterials(course, document);
+}
+
 export async function libraryReadiness(
   course: LibraryCourse,
   document: LibraryDocument | null,
@@ -328,33 +349,64 @@ export async function requirePublishedLibraryCourse(slug: string) {
   return { course, document, status };
 }
 
-export async function getReadyLibrarySlugs() {
-  const { libraryCourses } = await import("./catalog");
-  const statuses = await Promise.all(
+export async function getLibraryDirectory() {
+  const authorization = await loadLibraryAuthorization();
+  return Promise.all(
     libraryCourses.map(async (course) => {
       const document = await loadLibraryDocument(course);
+      const viewable = await canViewLibraryMaterial(
+        course,
+        document,
+        authorization,
+      );
       return {
+        number: course.number,
         slug: course.slug,
-        ready: (await libraryReadiness(course, document)).ready,
+        title: course.title,
+        pageCount: document?.pageCount || 0,
+        viewable,
+        ready:
+          viewable && publicationStatus(course, document, authorization).ready,
       };
     }),
   );
-  return statuses.filter((status) => status.ready).map((status) => status.slug);
+}
+
+export async function getReadyLibrarySlugs() {
+  return (await getLibraryDirectory())
+    .filter((status) => status.ready)
+    .map((status) => status.slug);
 }
 
 export async function getLibraryAccess(slug: string) {
   const course = getLibraryCourse(slug);
   if (!course) return null;
   const document = await loadLibraryDocument(course);
-  const status = await libraryReadiness(course, document);
-  const preview = !status.ready && (await hasLibraryEditorAccess());
-  const permitted = status.ready || preview;
+  const authorization = await loadLibraryAuthorization();
+  const canView = await canViewLibraryMaterial(course, document, authorization);
+  const status = publicationStatus(course, document, authorization);
+  if (status.ready && !canView) {
+    status.ready = false;
+    status.reasons.push(
+      "Arquivos integrais ausentes ou diferentes da referência conferida.",
+    );
+  }
+  const editorPreview = !status.ready && (await hasLibraryEditorAccess());
+  const permitted = canView || editorPreview;
+  const preview = !status.ready && permitted;
   return {
     course,
     status,
     preview,
+    canView,
     canStudy: status.ready,
     document: document && permitted ? publicLibraryDocument(document) : null,
-    questions: document && permitted ? publicQuestionBank(document) : {},
+    questions:
+      document && (status.ready || editorPreview)
+        ? publicQuestionBank(document)
+        : {},
+    availableLessons: !document
+      ? (await getLibraryDirectory()).filter((lesson) => lesson.viewable)
+      : [],
   };
 }

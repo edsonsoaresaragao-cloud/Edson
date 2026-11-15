@@ -70,6 +70,14 @@ export async function installSyntheticLibraryFixture() {
         }),
       );
   }
+  async function technicalReview(value: "pending" | "verified") {
+    document.technicalReview = value;
+    for (const root of roots)
+      await write(
+        join(root, "src/lib/academy/library/data/aula-05.json"),
+        JSON.stringify(document),
+      );
+  }
   try {
     for (const root of roots) {
       await write(
@@ -92,7 +100,7 @@ export async function installSyntheticLibraryFixture() {
       }
     }
     await authorize(false);
-    return { document, authorize, restore };
+    return { document, authorize, technicalReview, restore };
   } catch (error) {
     await restore();
     throw error;

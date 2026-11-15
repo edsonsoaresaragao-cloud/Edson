@@ -5,6 +5,7 @@ import type {
   LibraryCourse,
   LibraryPublicationStatus,
   PublicLibraryDocument,
+  LibraryAvailableLesson,
 } from "@/lib/academy/library/types";
 import type { StudentProgress } from "@/lib/academy/progress";
 import { PageReader, type PageVoiceSettings } from "../checklist/page-reader";
@@ -30,7 +31,9 @@ export type LibraryRoomProps = {
   document: PublicLibraryDocument | null;
   status: LibraryPublicationStatus;
   canStudy: boolean;
+  canView: boolean;
   preview: boolean;
+  availableLessons: LibraryAvailableLesson[];
   questions: Record<string, Question[]>;
 };
 const normalized = (text: string) =>
@@ -44,7 +47,9 @@ export function LibraryStudyRoom({
   document,
   status,
   canStudy,
+  canView,
   preview,
+  availableLessons,
   questions,
 }: LibraryRoomProps) {
   const [active, setActive] = useState("pagina-1");
@@ -259,43 +264,71 @@ export function LibraryStudyRoom({
           className={`card ${styles.preparation}`}
           aria-label="Preparação da aula"
         >
-          <span className="tag">EM PREPARAÇÃO</span>
-          <h2>Material em preparação editorial</h2>
+          <span className="tag">
+            {status.receivedPages === 0
+              ? "PDF A IMPORTAR"
+              : "ACESSO EM PREPARAÇÃO"}
+          </span>
+          <h2>
+            {status.receivedPages === 0
+              ? "O PDF desta aula ainda não está disponível"
+              : "Material em preparação editorial"}
+          </h2>
           <p>
             {status.receivedPages} de {course.expectedPages} páginas recebidas ·{" "}
             {status.reviewedPages} páginas conferidas.
           </p>
           <p>
-            A aula será liberada para estudo quando o material estiver completo,
-            a transcrição e as informações técnicas forem conferidas e a
-            publicação estiver autorizada.
+            {status.receivedPages === 0
+              ? "Esta aula precisa do PDF completo para exibir suas páginas. Enquanto isso, consulte abaixo as aulas que já têm material."
+              : "O material ainda precisa de autorização e conferência dos arquivos para consulta."}
           </p>
-          {course.number === 3 && status.receivedPages === 0 && (
-            <p>
-              O PDF desta aula ainda não pôde ser importado. Seus guias serão
-              mantidos por fabricante, motor e partes relacionadas.
-            </p>
-          )}
           <Link className="button secondary" href="/academy/aulas">
             Explorar as aulas disponíveis
           </Link>
+          {availableLessons.length > 0 && (
+            <section aria-label="Aulas que você já pode visualizar">
+              <h3>Você já pode visualizar estas aulas</h3>
+              <ul>
+                {availableLessons.map((lesson) => (
+                  <li key={lesson.slug}>
+                    <Link
+                      className="text-link"
+                      href={`/academy/aulas/${lesson.slug}`}
+                    >
+                      {lesson.title} · {lesson.pageCount} páginas →
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </section>
       ) : (
         <div className="academy-learning-grid">
           <aside className="academy-sidebar">
             <h2>Seu percurso</h2>
-            <label className="academy-progress-label">
-              Progresso: {progress?.percent || 0}%
-              <progress
-                aria-label={`Progresso da Aula ${String(course.number).padStart(2, "0")}`}
-                max={100}
-                value={progress?.percent || 0}
-              />
-            </label>
-            <p>
-              {progress?.completed.length || 0} de {allSteps.length} etapas
-              concluídas
-            </p>
+            {canStudy ? (
+              <>
+                <label className="academy-progress-label">
+                  Progresso: {progress?.percent || 0}%
+                  <progress
+                    aria-label={`Progresso da Aula ${String(course.number).padStart(2, "0")}`}
+                    max={100}
+                    value={progress?.percent || 0}
+                  />
+                </label>
+                <p>
+                  {progress?.completed.length || 0} de {allSteps.length} etapas
+                  concluídas
+                </p>
+              </>
+            ) : (
+              <p>
+                Página {page?.number || 1} de {pages.length} · Consulta ao
+                material
+              </p>
+            )}
             <div className={styles.filters}>
               <label>
                 Pesquisar nesta aula
@@ -384,11 +417,16 @@ export function LibraryStudyRoom({
           <div className="academy-study-main" aria-label="Área de estudo">
             {preview && !canStudy && (
               <section className={styles.review} aria-label="Prévia editorial">
-                <h2>Prévia editorial restrita</h2>
+                <h2>
+                  {canView
+                    ? "Material disponível para consulta"
+                    : "Prévia editorial restrita"}
+                </h2>
                 <p>
                   {status.receivedPages} de {course.expectedPages} páginas
-                  recebidas · {status.reviewedPages} conferidas. Esta prévia não
-                  libera matrícula, conclusão ou certificado.
+                  recebidas · {status.reviewedPages} conferidas. Consulte as
+                  páginas originais e as explicações. A avaliação e o registro
+                  de conclusão aguardam revisão didática.
                 </p>
                 <ul>
                   {status.reasons.map((reason) => (
@@ -468,11 +506,11 @@ export function LibraryStudyRoom({
                 {Boolean(
                   document.reviewNotes?.length || page.reviewNotes?.length,
                 ) && (
-                  <section
+                  <details
                     className={styles.review}
-                    aria-label="Notas de conferência editorial"
+                    open={Boolean(page.reviewNotes?.length)}
                   >
-                    <h3>Notas de conferência editorial</h3>
+                    <summary>Observações técnicas do material</summary>
                     <p>
                       Observações da EDSON OFICINA, separadas do conteúdo
                       original. O documento-fonte permanece preservado.
@@ -485,7 +523,7 @@ export function LibraryStudyRoom({
                         <li key={index}>{note}</li>
                       ))}
                     </ul>
-                  </section>
+                  </details>
                 )}
                 <div className={styles.metadata}>
                   {[
@@ -527,6 +565,20 @@ export function LibraryStudyRoom({
                   </button>
                   <span>de {document.pageCount}</span>
                 </form>
+                <LibraryMaterialViewer
+                  key={page.number}
+                  slug={course.slug}
+                  total={document.pageCount}
+                  page={{
+                    ...page,
+                    image:
+                      page.image ||
+                      `pagina-${String(page.number).padStart(3, "0")}.jpg`,
+                    preview:
+                      page.preview ||
+                      `preview-${String(page.number).padStart(3, "0")}.webp`,
+                  }}
+                />
                 <div
                   className={styles.modes}
                   role="group"
@@ -572,7 +624,7 @@ export function LibraryStudyRoom({
                         ? "Explicação didática complementar da EDSON OFICINA. A leitura original permanece disponível separadamente."
                         : readyOriginal
                           ? "Leitura integral do texto conferido desta página, incluindo tabelas, códigos, valores, unidades, avisos e créditos. Ouvir não conclui o estudo."
-                          : "Prévia editorial: rascunho de reconhecimento automático, ainda não conferido. Pode conter erros em números, códigos e unidades. Consulte a imagem original."
+                          : "Rascunho de reconhecimento automático, ainda não conferido. Pode conter erros em números, códigos e unidades. Consulte a imagem original."
                     }
                   />
                 ) : (
@@ -596,20 +648,7 @@ export function LibraryStudyRoom({
                     </p>
                   </section>
                 )}
-                <LibraryMaterialViewer
-                  key={page.number}
-                  slug={course.slug}
-                  total={document.pageCount}
-                  page={{
-                    ...page,
-                    image:
-                      page.image ||
-                      `pagina-${String(page.number).padStart(3, "0")}.jpg`,
-                    preview:
-                      page.preview ||
-                      `preview-${String(page.number).padStart(3, "0")}.webp`,
-                  }}
-                />
+
                 <details className="academy-page-transcript">
                   <summary>
                     {readyOriginal

@@ -11,6 +11,10 @@ export type LibraryCourse = {
   category: string;
   difficulty: string;
 };
+export type LibraryAvailableLesson = Pick<
+  LibraryCourse,
+  "number" | "slug" | "title"
+> & { pageCount: number };
 
 export const libraryPageSchema = z.object({
   number: z.number().int().positive(),

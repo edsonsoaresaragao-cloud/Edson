@@ -3,10 +3,17 @@ import { libraryCourses } from "@/lib/academy/library/catalog";
 
 export function LibraryLessonCards({
   readySlugs = [],
+  viewableSlugs = [],
 }: {
   readySlugs?: string[];
+  viewableSlugs?: string[];
 }) {
-  return libraryCourses.map((course) => (
+  const ordered = [...libraryCourses].sort(
+    (a, b) =>
+      Number(viewableSlugs.includes(b.slug)) -
+      Number(viewableSlugs.includes(a.slug)),
+  );
+  return ordered.map((course) => (
     <Link
       key={course.id}
       href={`/academy/aulas/${course.slug}`}
@@ -21,13 +28,17 @@ export function LibraryLessonCards({
       <p>
         {readySlugs.includes(course.slug)
           ? "Disponível para estudo"
-          : "Preparação editorial"}{" "}
+          : viewableSlugs.includes(course.slug)
+            ? "Páginas disponíveis para consulta"
+            : "PDF ainda não disponível"}{" "}
         · Carga horária a validar.
       </p>
       <span className="text-link">
         {readySlugs.includes(course.slug)
           ? "Conhecer e iniciar aula →"
-          : "Consultar preparação da aula →"}
+          : viewableSlugs.includes(course.slug)
+            ? "Visualizar aula →"
+            : "Ver outras aulas disponíveis →"}
       </span>
     </Link>
   ));

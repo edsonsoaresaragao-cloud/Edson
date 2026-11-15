@@ -2,7 +2,7 @@
 
 ## Estado desta entrega
 
-Foram preparados oito cadastros de aula e a estrutura de biblioteca, leitura, busca e progresso. **As oito aulas continuam em preparação; esta entrega não representa 358 páginas publicadas nem atualização em produção.** As Aulas 01 e 02 mantêm suas rotas próprias.
+Foram preparados oito cadastros de aula e a estrutura de biblioteca, leitura, busca e progresso. **As páginas recebidas das Aulas 04 a 10 podem ser visualizadas após a autorização, mesmo durante a revisão didática. A Aula 03 ainda não possui PDF; avaliações e conclusão dependem da revisão integral. Esta entrega não representa 358 páginas disponíveis nem atualização automática em produção.** As Aulas 01 e 02 mantêm suas rotas próprias.
 
 Sete PDFs, das Aulas 04 a 10, foram importados em diretório privado: **171 de 358 páginas previstas**. O PDF da Aula 03, de 187 páginas, excedeu o limite de download de 32 MiB da ferramenta usada neste atendimento e permanece ausente. Seu cadastro não contém páginas substitutas ou conteúdo inventado.
 
@@ -26,7 +26,7 @@ O responsável confirmou neste atendimento, em 15/11/2026, a autorização para 
 
 ## Arquivos preservados e importação
 
-Materiais: `academy-materials/library/aula-03` a `aula-10`, fora de `public`. Dados usados pelo servidor: `src/lib/academy/library/data/aula-03.json` a `aula-10.json`. Após a autorização, os dois diretórios acompanham o projeto e o pacote de implantação. Permanecem fora de `public`; a prévia de material pendente exige ADMIN/EDITOR e a liberação para alunos depende dos demais critérios de publicação. `work/library-review` contém apoio editorial e não deve ser tratado como conteúdo publicado.
+Materiais: `academy-materials/library/aula-03` a `aula-10`, fora de `public`. Dados usados pelo servidor: `src/lib/academy/library/data/aula-03.json` a `aula-10.json`. Após a autorização, os dois diretórios acompanham o projeto e o pacote de implantação. Permanecem fora de `public`; a consulta aos originais exige autorização e integridade dos arquivos. Transcrições pendentes permanecem identificadas como rascunho; avaliação, progresso e certificados seguem os critérios de publicação didática. `work/library-review` contém apoio editorial e não deve ser tratado como conteúdo publicado.
 
 Para cada PDF recebido, a importação mantém `original.pdf` como cópia binária, extrai `pagina-NNN.jpg` da imagem JPEG nativa e cria uma prévia `preview-NNN.webp`. As páginas integrais medem 1024 × 1536 pixels; as prévias medem 640 × 960 e servem somente ao carregamento inicial. As imagens integrais não sofreram recorte nem nova compressão. Os manifestos registram SHA-256, dimensões, comparação dos pixels com a renderização do PDF e `headerModified: false`.
 
@@ -64,11 +64,11 @@ A mesclagem atualiza as páginas por número, preserva imagens/hashes e permite 
 
 ## Biblioteca e estudo
 
-A biblioteca em `/academy/aulas` apresenta os oito títulos com estado de preparação. O público pode consultar a apresentação e as contagens; o conteúdo-fonte, as questões e os materiais ainda pendentes só ficam disponíveis na prévia de ADMIN/EDITOR autenticado. A prévia não libera matrícula, conclusão ou certificado. Os endpoints recusam o estudo de documentos não publicados, mesmo que o cliente tente enviar uma ação diretamente.
+A biblioteca em `/academy/aulas` destaca primeiro as aulas que possuem arquivos autorizados e íntegros. As Aulas 04 a 10 exibem **Visualizar aula**, com páginas, PDF completo, zoom, busca e leitura. Essa consulta não depende da aprovação didática. A Aula 03 mostra que o PDF está ausente e oferece links diretos para as sete aulas disponíveis; não apresenta páginas fabricadas. Autorização ausente, arquivos alterados ou incompletos continuam impedindo a consulta pública. ADMIN/EDITOR conserva a prévia editorial restrita. As avaliações só são enviadas ao navegador quando a aula está liberada para estudo ou o acesso é editorial; endpoints de matrícula/conclusão continuam exigindo a revisão didática completa.
 
 A sala preparada permite pesquisar texto, motor, modelo, guia, ferramenta ou DTC, filtrar por montadora/assunto, abrir uma página pelo número e consultar partes relacionadas. Metadados e relações dependem da conferência editorial. O visualizador carrega inicialmente a prévia da página selecionada, oferece resolução original, zoom de 50% a 300%, ampliação em diálogo, imagem integral e PDF completo. O original e os créditos permanecem identificados como Ponto do Motor. A rota aceita apenas nomes conhecidos da aula; os arquivos não são expostos em `public`.
 
-Há modos separados de **Leitura original** e **Explicação do professor**, com voz em português disponível no dispositivo, velocidades de 0,75×, 1×, 1,25× e 1,5×, pausa, continuação, parada, repetição e indicação do trecho atual. O texto de rascunho só pode ser ouvido na prévia editorial, com aviso explícito de OCR não conferido. Não há reprodução automática, clonagem de voz ou conclusão por ouvir. As explicações da EDSON OFICINA permanecem separadas da fonte; disponibilizar essas explicações na prévia não significa aprovação técnica do documento.
+Há modos separados de **Leitura original** e **Explicação do professor**, com voz em português disponível no dispositivo, velocidades de 0,75×, 1×, 1,25× e 1,5×, pausa, continuação, parada, repetição e indicação do trecho atual. O texto de rascunho pode ser ouvido na consulta autorizada, sempre identificado como **Ouvir rascunho desta página**, com aviso explícito de OCR não conferido. Não há reprodução automática, clonagem de voz ou conclusão por ouvir. As explicações da EDSON OFICINA permanecem separadas da fonte; disponibilizar essas explicações na prévia não significa aprovação técnica do documento.
 
 A atividade de orçamento da Aula 07 organiza um rascunho na sessão, com componente/aplicação, decisão, justificativa, quantidade, preço informado pelo aluno, mão de obra e origem da cotação. Campos sem preço ficam a cotar. Não inventa preços, não grava esse rascunho como progresso e não certifica um reparo.
 
@@ -84,7 +84,7 @@ A migração `202611140002_academy_library` adiciona as tentativas e permite a c
 
 Há testes de serviço para catálogo, bloqueios de publicação, correção, progresso e tentativas; testes de integridade usam arquivos sintéticos para verificar hashes, substituições, ausência e nomes de arquivo. Os testes de navegador cobrem os estados públicos de preparação e proteção. O fluxo autenticado usa PostgreSQL local isolado chamado `academy_library` e substitui temporariamente a Aula 05 por uma fixture sintética de 17 páginas, com restauração ao terminar. Ele testa 18 etapas e tentativas independentes entre contas; esse exercício não valida os procedimentos reais dos PDFs. A síntese de voz é simulada para testar os controles e a sequência, sem comprovar áudio real no dispositivo.
 
-O workflow `.github/workflows/academy-library.yml` prepara o PostgreSQL, gera o Prisma, aplica migrações, executa testes, build e verificações de navegador com regressão das Aulas 01 e 02. A existência do workflow não comprova sua execução. O resultado efetivo dos comandos locais e do CI deve ser registrado separadamente, com seus bloqueios; esta documentação não declara build, CI ou deploy aprovados.
+O workflow `.github/workflows/academy-library.yml` prepara o PostgreSQL, gera o Prisma, aplica migrações, executa testes, build e verificações de navegador com regressão das Aulas 01 e 02. A existência do workflow não comprova sua execução. O resultado efetivo dos comandos locais e do CI deve ser registrado separadamente, com seus bloqueios; esta documentação não declara deploy realizado. Os testes públicos conferem as imagens reais e a leitura das aulas recebidas, a navegação/zoom, os links da Aula 03 para as disponíveis e a separação entre consulta e conclusão.
 
 Para publicar uma aula, ainda são necessários:
 
@@ -97,6 +97,6 @@ Para publicar uma aula, ainda são necessários:
 
 A estratégia de entrega dos materiais é uma fonte privada completa: PDFs, imagens, prévias e JSONs editoriais precisam existir no contexto do build autorizado, nos caminhos acima. `scripts/prepare-standalone.mjs` copia `academy-materials`, os dados editoriais disponíveis e `authorization.json` ao artefato standalone, sempre fora dos assets públicos. Ele não importa PDFs nem baixa materiais de um serviço remoto.
 
-Os sete PDFs recebidos, as 171 imagens integrais, as 171 prévias e seus dados editoriais agora acompanham o repositório autorizado e são copiados para o standalone durante o build. O envio não depende dos links temporários dos anexos. Os arquivos são materiais-fonte para conferência; sua presença no projeto não libera uma aula com revisão pendente. A Aula 03 permanece registrada como ausente, sem PDF ou páginas substitutas.
+Os sete PDFs recebidos, as 171 imagens integrais, as 171 prévias e seus dados editoriais agora acompanham o repositório autorizado e são copiados para o standalone durante o build. O envio não depende dos links temporários dos anexos. Os arquivos são materiais-fonte autorizados para consulta; sua presença no projeto não aprova avaliações nem libera conclusão de uma aula com revisão pendente. A Aula 03 permanece registrada como ausente, sem PDF ou páginas substitutas.
 
 Depois das revisões e verificações restantes, conferir o workflow e executar no Render **Manual Deploy → Deploy latest commit** com a fonte privada disponível ao build. O startup aplica as migrações existentes antes de iniciar o serviço. Após implantar, conferir biblioteca, login, restrição editorial, arquivos completos, retomada, avaliação e voz no dispositivo. Arquivos locais, commits e testes sintéticos não constituem uma publicação em produção.

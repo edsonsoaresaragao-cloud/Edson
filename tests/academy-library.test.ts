@@ -9,6 +9,7 @@ import {
   publicationStatus,
   publicLibraryDocument,
   loadLibraryDocument,
+  canViewLibraryMaterial,
 } from "../src/lib/academy/library/access";
 import {
   publicQuestionBank,
@@ -26,6 +27,35 @@ const authorization = {
   statement: "Autorização sintética exclusivamente para teste.",
 };
 const course = libraryCourses.find((value) => value.number === 5)!;
+test("fontes autorizadas e íntegras podem ser consultadas antes da revisão didática", async () => {
+  const source = await loadLibraryDocument(course);
+  assert.ok(source);
+  const pending = { ...source, technicalReview: "pending" as const };
+  assert.equal(publicationStatus(course, pending, authorization).ready, false);
+  assert.equal(
+    await canViewLibraryMaterial(course, pending, authorization),
+    true,
+  );
+  assert.equal(
+    await canViewLibraryMaterial(course, pending, {
+      confirmed: false,
+      scope: [],
+    }),
+    false,
+  );
+  assert.equal(
+    await canViewLibraryMaterial(course, null, authorization),
+    false,
+  );
+  assert.equal(
+    await canViewLibraryMaterial(
+      course,
+      { ...pending, originalSha256: "0".repeat(64) },
+      authorization,
+    ),
+    false,
+  );
+});
 test("oito aulas têm IDs isolados, 358 páginas esperadas e nenhuma carga horária inventada", () => {
   assert.equal(libraryCourses.length, 8);
   assert.equal(
