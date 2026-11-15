@@ -2,13 +2,13 @@
 
 ## Estado desta entrega
 
-Foram preparados oito cadastros de aula e a estrutura de biblioteca, leitura, busca e progresso. **As páginas recebidas das Aulas 04 a 10 podem ser visualizadas após a autorização, mesmo durante a revisão didática. A Aula 03 ainda não possui PDF; avaliações e conclusão dependem da revisão integral. Esta entrega não representa 358 páginas disponíveis nem atualização automática em produção.** As Aulas 01 e 02 mantêm suas rotas próprias.
+Foram preparados oito cadastros de aula e a estrutura de biblioteca, leitura, busca e progresso. **As páginas recebidas das Aulas 04 a 10 podem ser visualizadas após a autorização, mesmo durante a revisão didática. A Aula 03 possui agora as 187 páginas e dois PDFs para download; avaliações e conclusão dependem da revisão integral. São 358 páginas importadas; esta entrega não representa atualização automática em produção.** As Aulas 01 e 02 mantêm suas rotas próprias.
 
-Sete PDFs, das Aulas 04 a 10, foram importados em diretório privado: **171 de 358 páginas previstas**. O PDF da Aula 03, de 187 páginas, excedeu o limite de download de 32 MiB da ferramenta usada neste atendimento e permanece ausente. Seu cadastro não contém páginas substitutas ou conteúdo inventado.
+Os oito PDFs foram importados em diretório privado: **358 de 358 páginas previstas**. A Aula 03 foi obtida integralmente do Google Drive e dividida em **Parte 1, páginas 1–94**, e **Parte 2, páginas 95–187**. O original de 187 páginas também foi preservado. As 187 páginas das partes foram comparadas pixel a pixel com o original, sem diferenças. Os links das duas partes aparecem no visualizador da Aula 03. A importação não adicionou transcrições automáticas nem aprovação técnica.
 
 | Aula      | Rota em `/academy/aulas/`   | Páginas previstas | Importadas | Transcrições conferidas nos dados | Conferidas no overlay disponível |
 | --------- | --------------------------- | ----------------: | ---------: | --------------------------------: | -------------------------------: |
-| 03        | `guias-visuais-sincronismo` |               187 |          0 |                                 0 |                                0 |
+| 03        | `guias-visuais-sincronismo` |               187 |        187 |                                 0 |                                0 |
 | 04        | `motores-menos-frequentes`  |                61 |         61 |                                 2 |                                2 |
 | 05        | `ferramentas-travamento`    |                17 |         17 |                                17 |                               17 |
 | 06        | `correias-acessorios`       |                41 |         41 |                                 2 |                                2 |
@@ -16,11 +16,11 @@ Sete PDFs, das Aulas 04 a 10, foram importados em diretório privado: **171 de 3
 | 08        | `diagnostico-sincronismo`   |                14 |         14 |                                 4 |                                4 |
 | 09        | `valvulas-empenadas`        |                 8 |          8 |                                 3 |                                3 |
 | 10        | `torque-cabecote`           |                19 |         19 |                                 3 |                                3 |
-| **Total** |                             |           **358** |    **171** |                            **42** |                           **42** |
+| **Total** |                             |           **358** |    **358** |                            **42** |                           **42** |
 
-Os três overlays editoriais foram mesclados nos dados locais: são 42 transcrições conferidas de 171 páginas importadas e 136 questões preparadas. As 129 transcrições restantes aguardam revisão integral. As revisões `work/library-review/review-04-06.json`, `review-05-07.json` e `review-08-10.json` não são aplicadas automaticamente quando apenas copiadas: a mesclagem exige o script explícito abaixo. A conferência de uma questão não aprova o documento inteiro; questões referentes a páginas pendentes não são liberadas como atividade definitiva.
+Os três overlays editoriais foram mesclados nos dados locais: são 42 transcrições conferidas de 358 páginas importadas e 136 questões preparadas. As 129 transcrições existentes restantes e as 187 páginas da Aula 03 aguardam revisão integral; a Aula 03 ainda não possui transcrição. As revisões `work/library-review/review-04-06.json`, `review-05-07.json` e `review-08-10.json` não são aplicadas automaticamente quando apenas copiadas: a mesclagem exige o script explícito abaixo. A conferência de uma questão não aprova o documento inteiro; questões referentes a páginas pendentes não são liberadas como atividade definitiva.
 
-Todos os documentos permanecem com `technicalReview: "pending"`. Mesmo as Aulas 05 e 07, cujas transcrições já foram conferidas integralmente, aguardam revisão técnica do conjunto. As páginas restantes contêm rascunhos OCR, com possíveis erros de números, códigos, unidades, ordem e completude. Esses rascunhos não são referência técnica definitiva.
+Todos os documentos permanecem com `technicalReview: "pending"`. Mesmo as Aulas 05 e 07, cujas transcrições já foram conferidas integralmente, aguardam revisão técnica do conjunto. As páginas restantes das Aulas 04 a 10 contêm rascunhos OCR, com possíveis erros de números, códigos, unidades, ordem e completude. Esses rascunhos não são referência técnica definitiva.
 
 O responsável confirmou neste atendimento, em 15/11/2026, a autorização para reproduzir, adaptar e publicar os oito novos PDFs. O registro em `src/lib/academy/library/authorization.json` contém `confirmed: true` e escopo das Aulas 03 a 10. A declaração não representa verificação independente de contrato nem aprovação técnica dos documentos. **Nenhum cabeçalho dos novos PDFs ou imagens foi adaptado nesta preparação.**
 
@@ -30,7 +30,7 @@ Materiais: `academy-materials/library/aula-03` a `aula-10`, fora de `public`. Da
 
 Para cada PDF recebido, a importação mantém `original.pdf` como cópia binária, extrai `pagina-NNN.jpg` da imagem JPEG nativa e cria uma prévia `preview-NNN.webp`. As páginas integrais medem 1024 × 1536 pixels; as prévias medem 640 × 960 e servem somente ao carregamento inicial. As imagens integrais não sofreram recorte nem nova compressão. Os manifestos registram SHA-256, dimensões, comparação dos pixels com a renderização do PDF e `headerModified: false`.
 
-O relatório existente `work/library-review/asset-integrity-report.json` registra 171 comparações de pixels, hashes dos sete PDFs e das imagens/prévias válidos, cabeçalhos preservados e `fullSetReady: false`. Esse resultado verifica os arquivos importados; não verifica a correção técnica ou a transcrição. `import-guard-report.json` registra reimportação idempotente, rejeição de fonte diferente e de página ausente, preservação dos originais e dos metadados editoriais, com 349 arquivos binários comparados.
+O relatório `work/library-review/asset-integrity-report.json` registra 358 comparações de pixels, hashes dos oito PDFs e das imagens/prévias válidos, cabeçalhos preservados e `fullSetReady: true`. Esse resultado verifica os arquivos importados; não verifica a correção técnica ou a transcrição. A divisão da Aula 03 tem adicionalmente 187 comparações visuais registradas em seu manifesto.
 
 A preparação requer Python com PyMuPDF e Pillow, além do Tesseract com os idiomas utilizados. Esses programas não são dependências de execução no Render. O script procura recursivamente os nomes exatos dos oito anexos definidos em `SOURCES`, verifica a quantidade de páginas e rejeita fonte original diferente. Execute a partir da raiz do projeto:
 
@@ -49,7 +49,7 @@ python scripts/academy/import-library-material.py --verify-only
 python scripts/academy/import-library-material.py --verify-only --require-all
 ```
 
-O segundo comando deve falhar enquanto faltar a Aula 03: 171 páginas não satisfazem o requisito de 358. A importação desse PDF ainda precisa ser concluída a partir de uma cópia completa disponível localmente, mantendo o nome de fonte esperado. Não se deve preencher a lacuna com resumos ou páginas de outro documento.
+O segundo comando agora confere o conjunto completo de 358 páginas. Para importar e dividir especificamente a Aula 03, execute `python scripts/academy/import-aula-03.py /caminho/original.pdf`. O script preserva a cópia integral, os créditos e as revisões existentes, compara todas as páginas das partes com a fonte e registra hashes em `pdfParts`.
 
 Mescle apenas revisões explicitamente conferidas:
 
@@ -64,7 +64,7 @@ A mesclagem atualiza as páginas por número, preserva imagens/hashes e permite 
 
 ## Biblioteca e estudo
 
-A biblioteca em `/academy/aulas` destaca primeiro as aulas que possuem arquivos autorizados e íntegros. As Aulas 04 a 10 exibem **Visualizar aula**, com páginas, PDF completo, zoom, busca e leitura. Essa consulta não depende da aprovação didática. A Aula 03 mostra que o PDF está ausente e oferece links diretos para as sete aulas disponíveis; não apresenta páginas fabricadas. Autorização ausente, arquivos alterados ou incompletos continuam impedindo a consulta pública. ADMIN/EDITOR conserva a prévia editorial restrita. As avaliações só são enviadas ao navegador quando a aula está liberada para estudo ou o acesso é editorial; endpoints de matrícula/conclusão continuam exigindo a revisão didática completa.
+A biblioteca em `/academy/aulas` destaca primeiro as aulas que possuem arquivos autorizados e íntegros. As Aulas 03 a 10 exibem **Visualizar aula**, com páginas, PDF completo, zoom, busca e leitura. Essa consulta não depende da aprovação didática. A Aula 03 exibe as 187 páginas, as duas partes com seus intervalos e o original completo. Autorização ausente, arquivos alterados ou incompletos continuam impedindo a consulta pública. ADMIN/EDITOR conserva a prévia editorial restrita. As avaliações só são enviadas ao navegador quando a aula está liberada para estudo ou o acesso é editorial; endpoints de matrícula/conclusão continuam exigindo a revisão didática completa.
 
 A sala preparada permite pesquisar texto, motor, modelo, guia, ferramenta ou DTC, filtrar por montadora/assunto, abrir uma página pelo número e consultar partes relacionadas. Metadados e relações dependem da conferência editorial. O visualizador carrega inicialmente a prévia da página selecionada, oferece resolução original, zoom de 50% a 300%, ampliação em diálogo, imagem integral e PDF completo. O original e os créditos permanecem identificados como Ponto do Motor. A rota aceita apenas nomes conhecidos da aula; os arquivos não são expostos em `public`.
 
@@ -84,7 +84,7 @@ A migração `202611140002_academy_library` adiciona as tentativas e permite a c
 
 Há testes de serviço para catálogo, bloqueios de publicação, correção, progresso e tentativas; testes de integridade usam arquivos sintéticos para verificar hashes, substituições, ausência e nomes de arquivo. Os testes de navegador cobrem os estados públicos de preparação e proteção. O fluxo autenticado usa PostgreSQL local isolado chamado `academy_library` e substitui temporariamente a Aula 05 por uma fixture sintética de 17 páginas, com restauração ao terminar. Ele testa 18 etapas e tentativas independentes entre contas; esse exercício não valida os procedimentos reais dos PDFs. A síntese de voz é simulada para testar os controles e a sequência, sem comprovar áudio real no dispositivo.
 
-O workflow `.github/workflows/academy-library.yml` prepara o PostgreSQL, gera o Prisma, aplica migrações, executa testes, build e verificações de navegador com regressão das Aulas 01 e 02. A existência do workflow não comprova sua execução. O resultado efetivo dos comandos locais e do CI deve ser registrado separadamente, com seus bloqueios; esta documentação não declara deploy realizado. Os testes públicos conferem as imagens reais e a leitura das aulas recebidas, a navegação/zoom, os links da Aula 03 para as disponíveis e a separação entre consulta e conclusão.
+O workflow `.github/workflows/academy-library.yml` prepara o PostgreSQL, gera o Prisma, aplica migrações, executa testes, build e verificações de navegador com regressão das Aulas 01 e 02. A existência do workflow não comprova sua execução. O resultado efetivo dos comandos locais e do CI deve ser registrado separadamente, com seus bloqueios; esta documentação não declara deploy realizado. Os testes públicos conferem as imagens reais e a leitura das aulas recebidas, a navegação/zoom, os dois downloads da Aula 03 e a separação entre consulta e conclusão.
 
 Para publicar uma aula, ainda são necessários:
 
@@ -97,6 +97,12 @@ Para publicar uma aula, ainda são necessários:
 
 A estratégia de entrega dos materiais é uma fonte privada completa: PDFs, imagens, prévias e JSONs editoriais precisam existir no contexto do build autorizado, nos caminhos acima. `scripts/prepare-standalone.mjs` copia `academy-materials`, os dados editoriais disponíveis e `authorization.json` ao artefato standalone, sempre fora dos assets públicos. Ele não importa PDFs nem baixa materiais de um serviço remoto.
 
-Os sete PDFs recebidos, as 171 imagens integrais, as 171 prévias e seus dados editoriais agora acompanham o repositório autorizado e são copiados para o standalone durante o build. O envio não depende dos links temporários dos anexos. Os arquivos são materiais-fonte autorizados para consulta; sua presença no projeto não aprova avaliações nem libera conclusão de uma aula com revisão pendente. A Aula 03 permanece registrada como ausente, sem PDF ou páginas substitutas.
+Os oito PDFs recebidos, as duas partes da Aula 03, as 358 imagens integrais, as 358 prévias e seus dados editoriais agora acompanham o repositório autorizado e são copiados para o standalone durante o build. O envio não depende dos links temporários dos anexos. Os arquivos são materiais-fonte autorizados para consulta; sua presença no projeto não aprova avaliações nem libera conclusão de uma aula com revisão pendente. A Aula 03 está integralmente importada, com transcrição e revisão técnica pendentes.
 
 Depois das revisões e verificações restantes, conferir o workflow e executar no Render **Manual Deploy → Deploy latest commit** com a fonte privada disponível ao build. O startup aplica as migrações existentes antes de iniciar o serviço. Após implantar, conferir biblioteca, login, restrição editorial, arquivos completos, retomada, avaliação e voz no dispositivo. Arquivos locais, commits e testes sintéticos não constituem uma publicação em produção.
+
+## Conferência da divisão da Aula 03
+
+Fonte: https://drive.google.com/file/d/1xxF2H2M89McUnbC_FCKvuBOYbUM2vYZj/view
+
+O manifesto registra os hashes do original e das duas partes, com 94 e 93 páginas, e 187 comparações visuais bem-sucedidas. As imagens integrais e prévias também passaram na verificação do conjunto de 358 páginas. A autorização existente foi reutilizada sem alteração. As partes são verificadas por hash pelo mesmo controle de integridade dos demais materiais; intervalos ausentes, sobrepostos ou incompletos não liberam a consulta.

@@ -569,6 +569,7 @@ export function LibraryStudyRoom({
                   key={page.number}
                   slug={course.slug}
                   total={document.pageCount}
+                  pdfParts={document.pdfParts}
                   page={{
                     ...page,
                     image:

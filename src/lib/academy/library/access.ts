@@ -203,6 +203,22 @@ function materialEntries(
       { filename: page.preview, sha256: page.previewSha256 },
     );
   }
+  if (document.pdfParts) {
+    if (document.pdfParts.length !== 2) return null;
+    let nextPage = 1;
+    for (const [index, part] of document.pdfParts.entries()) {
+      if (
+        part.filename !== `parte-0${index + 1}.pdf` ||
+        part.firstPage !== nextPage ||
+        part.lastPage < part.firstPage ||
+        !sha256Pattern.test(part.sha256)
+      )
+        return null;
+      entries.push({ filename: part.filename, sha256: part.sha256 });
+      nextPage = part.lastPage + 1;
+    }
+    if (nextPage !== document.pageCount + 1) return null;
+  }
   if (document.adaptedFilename || document.adaptedSha256) {
     if (
       document.adaptedFilename !== "adaptado.pdf" ||

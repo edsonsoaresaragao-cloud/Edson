@@ -54,6 +54,16 @@ export const libraryDocumentSchema = z.object({
   pageCount: z.number().int().positive(),
   originalSha256: z.string().regex(/^[a-f0-9]{64}$/),
   technicalReview: z.enum(["pending", "verified"]).default("pending"),
+  pdfParts: z
+    .array(
+      z.object({
+        filename: z.string().regex(/^parte-0[12]\.pdf$/),
+        firstPage: z.number().int().positive(),
+        lastPage: z.number().int().positive(),
+        sha256: z.string().regex(/^[a-f0-9]{64}$/),
+      }),
+    )
+    .optional(),
   adaptedFilename: z.string().optional(),
   adaptedSha256: z.string().optional(),
   reviewNotes: z.array(z.string()).optional(),
