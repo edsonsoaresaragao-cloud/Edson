@@ -241,7 +241,10 @@ test("avaliação exige páginas estudadas, 60% não aprova e 70% conclui com da
   );
 });
 test("material ausente falha fechado e nomes de arquivo fora da lista não são lidos", async () => {
-  assert.equal(await loadLibraryDocument(libraryCourses[0]), null);
+  assert.equal(
+    await loadLibraryDocument({ ...libraryCourses[0], number: 999 }),
+    null,
+  );
   const { GET } =
     await import("../src/app/api/academy/library/[slug]/material/[file]/route");
   assert.equal(

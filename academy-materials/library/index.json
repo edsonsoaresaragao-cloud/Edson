@@ -4,8 +4,9 @@
     {
       "courseNumber": 3,
       "expectedPageCount": 187,
-      "pageCount": 0,
-      "status": "missing"
+      "pageCount": 187,
+      "status": "imported",
+      "originalSha256": "160de988539af09b8bacd271323e4f1f4101722df27dba3523a5bd23a9a49920"
     },
     {
       "courseNumber": 4,

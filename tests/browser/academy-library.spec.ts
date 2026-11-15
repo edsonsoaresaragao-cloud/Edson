@@ -9,7 +9,7 @@ import {
 import { installChecklistSpeech } from "./support/checklist-speech";
 import { narrationChunks } from "../../src/lib/academy/narration";
 
-test("as sete aulas autorizadas mostram páginas reais e a Aula 03 oferece acesso às disponíveis", async ({
+test("as oito aulas autorizadas mostram páginas reais e a Aula 03 oferece dois PDFs", async ({
   page,
 }) => {
   test.setTimeout(120000);
@@ -29,52 +29,59 @@ test("as sete aulas autorizadas mostram páginas reais e a Aula 03 oferece acess
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       course.title,
     );
-    if (course.number === 3) {
-      expect(value.canView).toBe(false);
-      expect(value.document).toBeNull();
-      expect(value.availableLessons).toHaveLength(7);
-      const alternatives = page.getByRole("region", {
-        name: "Aulas que você já pode visualizar",
-      });
-      await expect(alternatives.getByRole("link")).toHaveCount(7);
-      await expect(page.locator(".academy-study img")).toHaveCount(0);
-    } else {
-      expect(value.canView).toBe(true);
-      expect(value.preview).toBe(true);
-      expect(value.document.pages).toHaveLength(course.expectedPages);
-      await expect(
-        page.getByRole("heading", {
-          name: "Material disponível para consulta",
-          exact: true,
-        }),
-      ).toBeVisible();
-      const navigation = page.getByRole("navigation", {
-        name: `Páginas da Aula ${String(course.number).padStart(2, "0")}`,
-      });
-      await expect(navigation.getByRole("button")).toHaveCount(
-        course.expectedPages,
+    expect(value.canView).toBe(true);
+    expect(value.preview).toBe(true);
+    expect(value.document.pages).toHaveLength(course.expectedPages);
+    await expect(
+      page.getByRole("heading", {
+        name: "Material disponível para consulta",
+        exact: true,
+      }),
+    ).toBeVisible();
+    const navigation = page.getByRole("navigation", {
+      name: `Páginas da Aula ${String(course.number).padStart(2, "0")}`,
+    });
+    await expect(navigation.getByRole("button")).toHaveCount(
+      course.expectedPages,
+    );
+    const preview = page.locator(".academy-document-scroll img").first();
+    await preview.scrollIntoViewIfNeeded();
+    await expect(preview).toHaveJSProperty("naturalWidth", 640);
+    for (const number of [1, course.expectedPages]) {
+      const image = await page.request.get(
+        `/api/academy/library/${course.slug}/material/pagina-${String(number).padStart(3, "0")}.jpg`,
       );
-      const preview = page.locator(".academy-document-scroll img").first();
-      await preview.scrollIntoViewIfNeeded();
-      await expect(preview).toHaveJSProperty("naturalWidth", 640);
-      for (const number of [1, course.expectedPages]) {
-        const image = await page.request.get(
-          `/api/academy/library/${course.slug}/material/pagina-${String(number).padStart(3, "0")}.jpg`,
-        );
-        expect(image.status()).toBe(200);
-        expect(image.headers()["content-type"]).toBe("image/jpeg");
-        expect(
-          createHash("sha256")
-            .update(await image.body())
-            .digest("hex"),
-        ).toBe(value.document.pages[number - 1].sourceSha256);
-      }
+      expect(image.status()).toBe(200);
+      expect(image.headers()["content-type"]).toBe("image/jpeg");
+      expect(
+        createHash("sha256")
+          .update(await image.body())
+          .digest("hex"),
+      ).toBe(value.document.pages[number - 1].sourceSha256);
+    }
+    if (course.number !== 3) {
       await expect(
         page.getByRole("button", {
           name: /Ouvir (esta|rascunho desta) página/,
-          exact: false,
         }),
       ).toBeVisible();
+    } else {
+      for (const [index, count] of [94, 93].entries()) {
+        const link = page.getByRole("link", {
+          name: new RegExp(`Baixar PDF — Parte ${index + 1}`),
+        });
+        await expect(link).toBeVisible();
+        const pdf = await page.request.get((await link.getAttribute("href"))!);
+        expect(pdf.status()).toBe(200);
+        expect((await PDFDocument.load(await pdf.body())).getPageCount()).toBe(
+          count,
+        );
+        expect(
+          createHash("sha256")
+            .update(await pdf.body())
+            .digest("hex"),
+        ).toBe(value.document.pdfParts[index].sha256);
+      }
     }
     await expect(
       page.getByRole("button", { name: "Iniciar aula", exact: true }),

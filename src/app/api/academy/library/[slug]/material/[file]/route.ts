@@ -18,7 +18,7 @@ export async function GET(
   const course = getLibraryCourse(slug);
   if (
     !course ||
-    !/^(original\.pdf|adaptado\.pdf|pagina-\d{3}\.jpg|preview-\d{3}\.webp)$/.test(
+    !/^(original\.pdf|adaptado\.pdf|parte-0[12]\.pdf|pagina-\d{3}\.jpg|preview-\d{3}\.webp)$/.test(
       file,
     )
   )
@@ -38,6 +38,7 @@ export async function GET(
     return new Response("Material ainda não recebido.", { status: 404 });
   const allowed = new Set([
     "original.pdf",
+    ...(document.pdfParts?.map((part) => part.filename) || []),
     ...(document.adaptedFilename === "adaptado.pdf" ? ["adaptado.pdf"] : []),
     ...document.pages.flatMap((page) => [page.image, page.preview]),
   ]);

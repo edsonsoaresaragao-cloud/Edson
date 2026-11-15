@@ -17,10 +17,12 @@ export function LibraryMaterialViewer({
   slug,
   page,
   total,
+  pdfParts,
 }: {
   slug: string;
   page: LibraryVisualPage;
   total: number;
+  pdfParts?: { filename: string; firstPage: number; lastPage: number }[];
 }) {
   const [zoom, setZoom] = useState(100);
   const [fullResolution, setFullResolution] = useState(false);
@@ -134,6 +136,16 @@ export function LibraryMaterialViewer({
         >
           Abrir imagem integral ↗
         </a>
+        {pdfParts?.map((part, index) => (
+          <a
+            className="text-link"
+            href={url(part.filename)}
+            key={part.filename}
+          >
+            Baixar PDF — Parte {index + 1} (páginas {part.firstPage}–
+            {part.lastPage})
+          </a>
+        ))}
         <a className="text-link" href={url("original.pdf")}>
           Baixar PDF original completo
         </a>

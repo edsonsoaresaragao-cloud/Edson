@@ -224,3 +224,48 @@ test("preview sem hash não libera publicação e PDF adaptado também precisa d
     await cleanup();
   }
 });
+
+test("partes do PDF exigem cobertura contínua e hashes íntegros", async () => {
+  const { root, course, document, cleanup } = await fixture();
+  try {
+    const parts = [
+      {
+        filename: "parte-01.pdf",
+        firstPage: 1,
+        lastPage: 1,
+        sha256: hash("Part one"),
+      },
+      {
+        filename: "parte-02.pdf",
+        firstPage: 2,
+        lastPage: 2,
+        sha256: hash("Part two"),
+      },
+    ];
+    await writeFile(join(root, "parte-01.pdf"), "Part one");
+    await writeFile(join(root, "parte-02.pdf"), "Part two");
+    const split = { ...document, pdfParts: parts };
+    assert.equal(await verifyLibraryMaterials(course, split, root), true);
+    for (const invalid of [
+      [parts[0]],
+      [parts[0], { ...parts[1], firstPage: 1 }],
+      [parts[0], { ...parts[1], lastPage: 3 }],
+      [{ ...parts[0], filename: "../parte-01.pdf" }, parts[1]],
+    ]) {
+      assert.equal(
+        await verifyLibraryMaterials(
+          course,
+          { ...document, pdfParts: invalid },
+          root,
+        ),
+        false,
+      );
+    }
+    await writeFile(join(root, "parte-02.pdf"), "Truncated");
+    assert.equal(await verifyLibraryMaterials(course, split, root), false);
+    await rm(join(root, "parte-02.pdf"));
+    assert.equal(await verifyLibraryMaterials(course, split, root), false);
+  } finally {
+    await cleanup();
+  }
+});
