@@ -1,0 +1,115 @@
+{
+  "courseNumber": 9,
+  "source": "Ponto do Motor",
+  "sourceFile": "1794148361173-extra-teste-de-valvula-empenada.pdf",
+  "expectedPageCount": 8,
+  "pageCount": 8,
+  "originalSha256": "4058fcdd7a2adda348df77c3f94d513508528730ddb193e5ffa360191ebe677b",
+  "originalFile": "original.pdf",
+  "authorization": {
+    "status": "confirmed",
+    "scope": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "statement": "O responsável pela EDSON OFICINA confirmou neste atendimento que possui autorização do titular para reproduzir, adaptar e publicar os oito PDFs das Aulas 03 a 10. Registro da declaração do responsável; não representa verificação independente de contrato.",
+    "confirmedAt": "2026-11-15T15:04:36Z"
+  },
+  "adaptation": "Cabeçalhos originais preservados. Adaptação visual ainda não executada.",
+  "files": [
+    {
+      "number": 1,
+      "image": "pagina-001.jpg",
+      "preview": "preview-001.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "d303e978c2ec6d4548d69238de0616c1f0411bebe67a0a460c4e54d7f8ad6143",
+      "previewSha256": "e53bf0a25917d97f47aab9b96fbd170ff0060f1d32cb02f3c4859b1fc71fe86e",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 2,
+      "image": "pagina-002.jpg",
+      "preview": "preview-002.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "403f232598c0db168266a59d2d19222af3f058f31b590b97a1fb1b965b656439",
+      "previewSha256": "38986b4758d745f134006010e549995415a45690f0a383a70f3e6fb1442782b1",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 3,
+      "image": "pagina-003.jpg",
+      "preview": "preview-003.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "162e1325f7c35af97fe7d8e32072e8af1a27ec8ce1788c096746a55c95536929",
+      "previewSha256": "77ce730b5ec90a3d32f50c2c2a62b45be44ab7bbf38ff2bd420013a1c3fbc387",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 4,
+      "image": "pagina-004.jpg",
+      "preview": "preview-004.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "dcd255a603e5977432eeb832c313674c8cc554c88196b9593e97c0393cb097b7",
+      "previewSha256": "3549f02b540a9bc5c913927b81ee6a49357d2199d9bdf2fbf736d9156df7e069",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 5,
+      "image": "pagina-005.jpg",
+      "preview": "preview-005.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "2a63d282c001954664151f0321868ddf9bfcaeac0ae5b81a49a818928942c2e8",
+      "previewSha256": "ed3ecac355a5be1e3e1bc1e87e6acfffa7fcddf0466978a11108e99f1e445ef1",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 6,
+      "image": "pagina-006.jpg",
+      "preview": "preview-006.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "d64dcf95af4628493ca6f43dcb2051ae9ee1da4018460c06f4fe045ca902617a",
+      "previewSha256": "918a1fee31fd25b040dcbe92fd1a09b5b5b52f1e90bae73a18361dea2bc413f8",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 7,
+      "image": "pagina-007.jpg",
+      "preview": "preview-007.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "1636da7c00f9487e1a52ea494b708591017be6a9eba08776839b7c759ce2a54f",
+      "previewSha256": "8cd2564ca78a73461d7226632de18dfa13e579e773f3ebc889a1f53a1ea2498d",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 8,
+      "image": "pagina-008.jpg",
+      "preview": "preview-008.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "57d58417adb5ed43ad9f657b2deb64f69172062357ddf52fe8c7a5ae9b6cf35b",
+      "previewSha256": "212d62138f4ff3c79d4e80555f3afaac2c25ce9498994bab4295182823c433b6",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    }
+  ]
+}

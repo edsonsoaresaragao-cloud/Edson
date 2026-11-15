@@ -32,6 +32,21 @@ SOURCES = {
 }
 
 
+def material_authorization(course: int | None = None) -> dict:
+    """Declaração editorial não aprova transcrição, dados técnicos ou publicação da aula."""
+    try:
+        record = json.loads(Path('src/lib/academy/library/authorization.json').read_text())
+        confirmed = (record.get('confirmed') is True
+                     and bool(str(record.get('statement', '')).strip())
+                     and (course is None or course in record.get('scope', [])))
+        if confirmed:
+            return {'status': 'confirmed', 'scope': record.get('scope', []),
+                    'statement': record['statement'], 'confirmedAt': record.get('confirmedAt')}
+    except (OSError, ValueError, TypeError):
+        pass
+    return {'status': 'pending', 'scope': []}
+
+
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -153,7 +168,7 @@ def verify_imports(directory: Path, report_path: Path, require_all: bool) -> Non
                             'originalSha256': manifest['originalSha256'], 'nativePixelComparisons': len(files),
                             'nativeImagesAndPreviewsValid': True, 'headersUnchanged': True, 'status': 'verified-assets'})
     report = {'expectedPages': 358, 'importedPages': total, 'fullSetReady': total == 358,
-              'authorization': 'pending', 'transcriptionReview': 'separate-editorial-gate', 'courses': courses}
+              'authorization': material_authorization(), 'transcriptionReview': 'separate-editorial-gate', 'courses': courses}
     write_json(report_path, report)
     print(json.dumps({'importedPages': total, 'fullSetReady': total == 358, 'report': str(report_path)}, ensure_ascii=False))
     if require_all and total != 358:
@@ -201,8 +216,8 @@ def main() -> None:
             files = [page_images(doc, n + 1, destination) for n in range(len(doc))]
         manifest = {'courseNumber': course, 'source': 'Ponto do Motor', 'sourceFile': filename,
                     'expectedPageCount': expected, 'pageCount': expected, 'originalSha256': digest,
-                    'originalFile': 'original.pdf', 'authorization': 'pending',
-                    'adaptation': 'Nenhuma alteração de cabeçalho; autorização de derivação não confirmada.',
+                    'originalFile': 'original.pdf', 'authorization': material_authorization(course),
+                    'adaptation': 'Cabeçalhos originais preservados. Adaptação visual ainda não executada.',
                     'files': files}
         write_json(destination / 'manifest.json', manifest)
         contact_sheets(course, destination, files, args.review_dir)

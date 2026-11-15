@@ -22,11 +22,11 @@ Os três overlays editoriais foram mesclados nos dados locais: são 42 transcri�
 
 Todos os documentos permanecem com `technicalReview: "pending"`. Mesmo as Aulas 05 e 07, cujas transcrições já foram conferidas integralmente, aguardam revisão técnica do conjunto. As páginas restantes contêm rascunhos OCR, com possíveis erros de números, códigos, unidades, ordem e completude. Esses rascunhos não são referência técnica definitiva.
 
-A autorização específica dos oito novos documentos também está pendente em `src/lib/academy/library/authorization.json` (`confirmed: false`, `scope: []`). As confirmações anteriores das Aulas 01 e 02 não cobrem estes anexos. **Nenhum cabeçalho dos novos PDFs ou imagens foi adaptado.**
+O responsável confirmou neste atendimento, em 15/11/2026, a autorização para reproduzir, adaptar e publicar os oito novos PDFs. O registro em `src/lib/academy/library/authorization.json` contém `confirmed: true` e escopo das Aulas 03 a 10. A declaração não representa verificação independente de contrato nem aprovação técnica dos documentos. **Nenhum cabeçalho dos novos PDFs ou imagens foi adaptado nesta preparação.**
 
 ## Arquivos preservados e importação
 
-Materiais: `academy-materials/library/aula-03` a `aula-10`, fora de `public`. Dados usados pelo servidor: `src/lib/academy/library/data/aula-03.json` a `aula-10.json`. Ambos os diretórios estão ignorados pelo Git e permanecem locais até autorização da publicação. `work/library-review` contém apoio editorial e não deve ser tratado como conteúdo publicado.
+Materiais: `academy-materials/library/aula-03` a `aula-10`, fora de `public`. Dados usados pelo servidor: `src/lib/academy/library/data/aula-03.json` a `aula-10.json`. Após a autorização, os dois diretórios acompanham o projeto e o pacote de implantação. Permanecem fora de `public`; a prévia de material pendente exige ADMIN/EDITOR e a liberação para alunos depende dos demais critérios de publicação. `work/library-review` contém apoio editorial e não deve ser tratado como conteúdo publicado.
 
 Para cada PDF recebido, a importação mantém `original.pdf` como cópia binária, extrai `pagina-NNN.jpg` da imagem JPEG nativa e cria uma prévia `preview-NNN.webp`. As páginas integrais medem 1024 × 1536 pixels; as prévias medem 640 × 960 e servem somente ao carregamento inicial. As imagens integrais não sofreram recorte nem nova compressão. Os manifestos registram SHA-256, dimensões, comparação dos pixels com a renderização do PDF e `headerModified: false`.
 
@@ -89,7 +89,7 @@ O workflow `.github/workflows/academy-library.yml` prepara o PostgreSQL, gera o 
 Para publicar uma aula, ainda são necessários:
 
 1. PDF completo e páginas corretas, na ordem e na quantidade previstas.
-2. Autorização específica registrada em `authorization.json`, com escopo da aula e declaração do responsável.
+2. Autorização específica registrada em `authorization.json`, com escopo da aula e declaração do responsável — confirmada neste atendimento para as Aulas 03 a 10.
 3. Todas as transcrições e descrições conferidas, revisão técnica integral aprovada e questões verificadas contra suas páginas de origem, incluindo pelo menos dez perguntas finais.
 4. Nomes fixos e hashes completos de PDF, páginas e prévias, com verificação dos arquivos reais. A aplicação volta a conferir a identidade dos arquivos ao consultar a prontidão.
 5. Carga horária validada para emissão de certificado, além dos demais requisitos de conclusão.
@@ -97,6 +97,6 @@ Para publicar uma aula, ainda são necessários:
 
 A estratégia de entrega dos materiais é uma fonte privada completa: PDFs, imagens, prévias e JSONs editoriais precisam existir no contexto do build autorizado, nos caminhos acima. `scripts/prepare-standalone.mjs` copia `academy-materials`, os dados editoriais disponíveis e `authorization.json` ao artefato standalone, sempre fora dos assets públicos. Ele não importa PDFs nem baixa materiais de um serviço remoto.
 
-Como os dois diretórios novos estão ignorados, **enviar somente o código ao GitHub não transporta os 171 arquivos de página nem os PDFs/dados locais**. Antes de um deploy com conteúdo, é necessário definir o fornecimento privado autorizado desses diretórios no build: por exemplo, uma cópia em repositório privado adequado ou restauração de um pacote privado completo antes de `npm run build`. Essa restauração ainda não foi implementada. Preserve os caminhos, manifestos e hashes; não dependa de links temporários de anexos para servir o material em produção. Sem esse fornecimento, a aplicação continua mostrando preparação.
+Os sete PDFs recebidos, as 171 imagens integrais, as 171 prévias e seus dados editoriais agora acompanham o repositório autorizado e são copiados para o standalone durante o build. O envio não depende dos links temporários dos anexos. Os arquivos são materiais-fonte para conferência; sua presença no projeto não libera uma aula com revisão pendente. A Aula 03 permanece registrada como ausente, sem PDF ou páginas substitutas.
 
-Depois da autorização e das verificações, enviar o código aprovado, conferir o workflow e executar no Render **Manual Deploy → Deploy latest commit** com a fonte privada disponível ao build. O startup aplica as migrações existentes antes de iniciar o serviço. Após implantar, conferir biblioteca, login, restrição editorial, arquivos completos, retomada, avaliação e voz no dispositivo. Arquivos locais, commits e testes sintéticos não constituem uma publicação em produção.
+Depois das revisões e verificações restantes, conferir o workflow e executar no Render **Manual Deploy → Deploy latest commit** com a fonte privada disponível ao build. O startup aplica as migrações existentes antes de iniciar o serviço. Após implantar, conferir biblioteca, login, restrição editorial, arquivos completos, retomada, avaliação e voz no dispositivo. Arquivos locais, commits e testes sintéticos não constituem uma publicação em produção.

@@ -1,0 +1,60 @@
+{
+  "expectedPageCount": 358,
+  "courses": [
+    {
+      "courseNumber": 3,
+      "expectedPageCount": 187,
+      "pageCount": 0,
+      "status": "missing"
+    },
+    {
+      "courseNumber": 4,
+      "expectedPageCount": 61,
+      "pageCount": 61,
+      "status": "imported",
+      "originalSha256": "031a1086fb81c03945842f094bd74d078d9f774113ec8781c3fac4532f17abc3"
+    },
+    {
+      "courseNumber": 5,
+      "expectedPageCount": 17,
+      "pageCount": 17,
+      "status": "imported",
+      "originalSha256": "ac12709de2b2341a2ac09dcf422fd4aec88140e8d17ef884e86bcd08de5aaf89"
+    },
+    {
+      "courseNumber": 6,
+      "expectedPageCount": 41,
+      "pageCount": 41,
+      "status": "imported",
+      "originalSha256": "353c908156f867c1baa55edeedf10ed6e7dcfdf27dec9120475b23e7451f29b6"
+    },
+    {
+      "courseNumber": 7,
+      "expectedPageCount": 11,
+      "pageCount": 11,
+      "status": "imported",
+      "originalSha256": "8b0171a903470b8f70f02561ccb1bd6f5f394d1392c289e11e0118d779711c74"
+    },
+    {
+      "courseNumber": 8,
+      "expectedPageCount": 14,
+      "pageCount": 14,
+      "status": "imported",
+      "originalSha256": "0d520597466b8be1c9f097f4398b6c27943875bac0bf23349d5871f85c9e4e58"
+    },
+    {
+      "courseNumber": 9,
+      "expectedPageCount": 8,
+      "pageCount": 8,
+      "status": "imported",
+      "originalSha256": "4058fcdd7a2adda348df77c3f94d513508528730ddb193e5ffa360191ebe677b"
+    },
+    {
+      "courseNumber": 10,
+      "expectedPageCount": 19,
+      "pageCount": 19,
+      "status": "imported",
+      "originalSha256": "7d719099c5684786f3f8e0ce0acbc8a1f05c115bed94bfc3799d08f0281b0893"
+    }
+  ]
+}

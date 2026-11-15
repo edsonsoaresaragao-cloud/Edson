@@ -1,0 +1,236 @@
+{
+  "courseNumber": 10,
+  "source": "Ponto do Motor",
+  "sourceFile": "1794148587325-extra-torque-e-sequencia-de-aperto-do-cabecote.pdf",
+  "expectedPageCount": 19,
+  "pageCount": 19,
+  "originalSha256": "7d719099c5684786f3f8e0ce0acbc8a1f05c115bed94bfc3799d08f0281b0893",
+  "originalFile": "original.pdf",
+  "authorization": {
+    "status": "confirmed",
+    "scope": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "statement": "O responsável pela EDSON OFICINA confirmou neste atendimento que possui autorização do titular para reproduzir, adaptar e publicar os oito PDFs das Aulas 03 a 10. Registro da declaração do responsável; não representa verificação independente de contrato.",
+    "confirmedAt": "2026-11-15T15:04:36Z"
+  },
+  "adaptation": "Cabeçalhos originais preservados. Adaptação visual ainda não executada.",
+  "files": [
+    {
+      "number": 1,
+      "image": "pagina-001.jpg",
+      "preview": "preview-001.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "7a5321b837a2ed542e2164e6f06c61185d912bb61d45d5e863f431f22529168a",
+      "previewSha256": "c4902c7dde8ee655db1568cddf16955c6d383e0f6dc19f0c1ab972943760420b",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 2,
+      "image": "pagina-002.jpg",
+      "preview": "preview-002.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "1ebe0a8e6ab722e84fc48655246e9c16398a03a380ff3081cf95caa4cf7d6544",
+      "previewSha256": "95a964ff64832b211dacd06721159e044222ec84d9a6c1e168e3b9dbaef7778d",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 3,
+      "image": "pagina-003.jpg",
+      "preview": "preview-003.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "268b13012ac2f2649f4e47d7f55be23ee33f44c66fff78cf6e43d0893c04d88b",
+      "previewSha256": "75cfbe43129805ab60255cd9c633cf703f146e7b38260656c11e6c6c8073beae",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 4,
+      "image": "pagina-004.jpg",
+      "preview": "preview-004.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "eb200414d6c6527fd89689a8a007304648ef31777551f4018a76e4539f146e26",
+      "previewSha256": "b9c85e0429af43f493f086bf474fe24d9f900e86ed7a580cb2f946cc9e652ec5",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 5,
+      "image": "pagina-005.jpg",
+      "preview": "preview-005.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "2272615b7ff0dbb41f7f4147d28d788008befe900e8222226a6ccb123e9ad14f",
+      "previewSha256": "ab7c90b7882a10892184a131e69abfbb8a95ee45e604bdf168083b01c9a4ccfe",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 6,
+      "image": "pagina-006.jpg",
+      "preview": "preview-006.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "3039edc8db9c63e14c1c74553022fcbda03a677a7e70de0dfc18069b1bbf5a83",
+      "previewSha256": "0ee336decd47ff426fa7dc92a14a601c1b43a65ece61b0e2de0e24bd4087da89",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 7,
+      "image": "pagina-007.jpg",
+      "preview": "preview-007.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "df561406983b840502a0ba0c635857889f823cadda231c3811c2c00a7c5dbce9",
+      "previewSha256": "ffafea54cb448085770b4386384999eb8d48ec609b6e6c5fbeff95b43d538e8b",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 8,
+      "image": "pagina-008.jpg",
+      "preview": "preview-008.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "005d1424af1d9028a3dc0b027fd750c1b2aec9a4dbfcba47411b2664f05372b8",
+      "previewSha256": "cf4dfea5cbbb9c25e3577afead30affcf16aa1abb330a21ad35cc3324996076e",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 9,
+      "image": "pagina-009.jpg",
+      "preview": "preview-009.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "4ac2619e6cb9f7e2fde66aa693964a7d6cd93b8b4b93717db158c6a0c462a842",
+      "previewSha256": "0c273d2d3b91192e33bdab8f90e59942829e6be0a719262c547c3a9af360b148",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 10,
+      "image": "pagina-010.jpg",
+      "preview": "preview-010.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "0be8fad81afdc721076b66dfeaf407ee2b01895442ffc0f1b189a3cc99460874",
+      "previewSha256": "f2020f742bd6161275c323d0d6b68234154c6501c1a009db27a219cf85bba6a6",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 11,
+      "image": "pagina-011.jpg",
+      "preview": "preview-011.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "f23bcf0f407641e07caad74872ba28694daa6945752dea736f61d9c93ead1365",
+      "previewSha256": "841a0f8b2ad23b58c7911019ab478286050c4077600b5aa3ef6346d37c14319a",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 12,
+      "image": "pagina-012.jpg",
+      "preview": "preview-012.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "d15862f805721bb2c44ff31b15824d595c40a12494d19cdaff4937b9b75f9178",
+      "previewSha256": "59a3f5f6e5ec914259420e182a92527a059b74e3d8a6566e9e6947ba7f27f8fe",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 13,
+      "image": "pagina-013.jpg",
+      "preview": "preview-013.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "acb69a3648007ce8acce4dfe1ca026fc3be1097d59c7aceb9342518457fef971",
+      "previewSha256": "5ec3d086bf36a514fdbcd352c8823f58563a12594485e2db11580f6c70d5d8db",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 14,
+      "image": "pagina-014.jpg",
+      "preview": "preview-014.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "d1fa60b2702a5bea9a437b0fa51bcf7f55538133640cbf14a7688e5fbfd05d7d",
+      "previewSha256": "7ed91de0b2ecd9f1623737fcd92c55b7ac88d5e4ea2871d18cce928568aa586e",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 15,
+      "image": "pagina-015.jpg",
+      "preview": "preview-015.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "8f0ccadfc1d080a1e38a1ed43e109a6b24e0163f9803a0a37c432b60d5c8c78e",
+      "previewSha256": "b90780cfaf2eebadeb740a07fad62aa596d860cd3f91bfe3a470efb71dfb03cd",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 16,
+      "image": "pagina-016.jpg",
+      "preview": "preview-016.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "6d08dfc450d6b79de6993b2edcdb44e1901e41a327f49a42170945424e7ec262",
+      "previewSha256": "b8c69a3e1a1b8d0747470894e86683154907196479007afe268d81f5d8c2a513",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 17,
+      "image": "pagina-017.jpg",
+      "preview": "preview-017.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "9660c03277747e965c8a30834a3a0ad319f83f5cc6a103808688822a389b2cf9",
+      "previewSha256": "47f9d56820cc0cbc298ffab16f5a580cf68497c9a29534db129e22d89a6ee195",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 18,
+      "image": "pagina-018.jpg",
+      "preview": "preview-018.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "004e5274d4f4c80702f02b110788a0f6ed4ff25ed3ce9866bcb247b9a1eefac9",
+      "previewSha256": "4f4bb0993d28b27460ac28f443f6b5cd5136989810aa0d8ec256a7c3e34619e9",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    },
+    {
+      "number": 19,
+      "image": "pagina-019.jpg",
+      "preview": "preview-019.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "103fb68a990cdb693d30399dddd866887f74035d390aa63eff37881cf83c10f6",
+      "previewSha256": "bcdd507b8e8c6d75646d3f973f89d7861d5b84340a7ac79b27ecf80b9c17ba61",
+      "identicalToPdfRender": true,
+      "headerModified": false
+    }
+  ]
+}

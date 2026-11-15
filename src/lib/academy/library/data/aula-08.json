@@ -1,0 +1,1069 @@
+{
+  "courseNumber": 8,
+  "expectedPageCount": 14,
+  "pageCount": 14,
+  "sourceFile": "1794148571138-extra-codigos-de-falha-de-sincronismo.pdf",
+  "originalSha256": "0d520597466b8be1c9f097f4398b6c27943875bac0bf23349d5871f85c9e4e58",
+  "technicalReview": "pending",
+  "ocrLanguage": "por+eng",
+  "ocrWarning": "Rascunho automático; números, códigos, unidades, leitura de tabelas e completude ainda exigem conferência visual.",
+  "pages": [
+    {
+      "number": 1,
+      "image": "pagina-001.jpg",
+      "preview": "preview-001.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "973a70d38d549b2eb45dd6870912d1c6c553c6cbb4639bc6a5c02f5b8dc89c58",
+      "previewSha256": "25a6e4973266c157b0e0f330b654f03d62c13ccc796922219545281475278319",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-001",
+      "title": "Códigos de falha de sincronismo: virabrequim x comando",
+      "transcript": [
+        "E PONTO E",
+        "DO MOTOR",
+        "CÓDIGOS DE FALHA DE SINCRONISMO",
+        "VIRABREQUIM X COMANDO",
+        "Do código à causa, na ordem certa de conferência depois da troca de correia ou corrente.",
+        "P0016 a P0019 - P0340 a P0349 - P0335 a P0339 - P0365 a P0369 - P0010 a P0015 - PO300 a P0304",
+        "LE À 4"
+      ],
+      "description": "Capa com motor de distribuição por correia, scanner e duas ampliações de sensores. O scanner mostra P0016, P0341 e P0011.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0016",
+        "P0019",
+        "P0340",
+        "P0349",
+        "P0335",
+        "P0339",
+        "P0365",
+        "P0369",
+        "P0010",
+        "P0015",
+        "P0300",
+        "P0304"
+      ],
+      "teacher": [
+        "O código registra uma condição detectada pela central; por si só não identifica a peça a substituir. Identifique o motor e a definição do código no sistema correto."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas."
+      ]
+    },
+    {
+      "number": 2,
+      "image": "pagina-002.jpg",
+      "preview": "preview-002.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "62fd55fa3a84a424f37510d7aa42f32a35499102b3eb004003dba8155def8592",
+      "previewSha256": "bc83c48ddd4d08826f370f228087663a937db06da13251d8779bf04a8c0e161c",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-002",
+      "title": "Como usar e primeiro filtro",
+      "transcript": [
+        "PONTCO BUMP - CÓDIGOS DE SINCRONISMO",
+        "we DO PÁG. 2/14",
+        "O código pode ser só resto da desmontagem.",
+        "COMO USAR ESTE GUIA >»",
+        "A ey Guarde o congelamento 3 @ A",
+        "wv Leia o código. É denies (eerste: Apague e rode. Veja se volta.",
+        "P001 6 P ( = Freeze frame 5 P001 6",
+        "Código presente | Tedo motor (0) 9 / { Código presente",
+        "Carga do motor (8) 28 4",
+        "Velocidade (km/h) 0",
+        "Conectores dos sensores e",
+        "ay do solenoide do variador",
+        "encaixados",
+        "Chicote sem dano, sem",
+        "ficar preso na tampa",
+        "Sensor no lugar e com",
+        "o espaçamento certo",
+        "Roda fônica ou polia de sinal",
+        "inteira e na posição",
+        "Marcas conferidas de novo",
+        "pelo guia do motor",
+        "Óleo certo e no nível",
+        "(motor com variador ou",
+        "correia no óleo)",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 02/14 - códigos OBD2 genéricos (SAE J2012) - referência geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Quatro telas de scanner ilustram leitura, freeze frame, apagamento e retorno do código. Seis chamadas identificam conector, chicote, sensor, roda de sinal, marcas e nível de óleo.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "freeze frame",
+        "conectores",
+        "chicote"
+      ],
+      "teacher": [
+        "Antes de apagar códigos, registre o freeze frame e as condições observadas. A orientação da fonte para rodar pressupõe segurança mecânica confirmada; não ligue nem rode com suspeita de colisão ou sincronismo inseguro."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas."
+      ]
+    },
+    {
+      "number": 3,
+      "image": "pagina-003.jpg",
+      "preview": "preview-003.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "9ceb4a61c506dc42321d1f0cd5376961b10acf56a35d67ada8171fc2f4917b99",
+      "previewSha256": "14de75b0658f1a3571486e6c0566b7ebdf4419d97bca7139f94b07dad18b69c2",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-003",
+      "title": "Leitura no scanner",
+      "transcript": [
+        "PONTO DO MOTOR. BUMP · CÓDIGOS DE SINCRONISMO. PÁG. 3/14.",
+        "LEITURA NO SCANNER. 4 parâmetros que separam dente fora de sensor.",
+        "Dados em tempo real: 1 DESVIO DO COMANDO; 2 POSIÇÃO DO VARIADOR; 3 SINCRONISMO: SIM / NÃO; 4 ROTAÇÃO NO ARRANQUE.",
+        "Legendas do gráfico: CONSTANTE; OSCILA OU SOME. Ampliações identificadas por 1 e 2.",
+        "01. O QUE OLHAR.",
+        "1. Desvio ou ângulo real do comando contra o esperado.",
+        "2. Posição do variador: comandada x real.",
+        "3. Sinal de sincronismo: sim ou não.",
+        "4. Rotação no arranque: sem rotação = sem sinal do virabrequim.",
+        "REFERÊNCIA GERAL. Um dente na polia do comando costuma aparecer como desvio de vários graus e constante. Sensor com problema costuma dar leitura que oscila ou some.",
+        "Ponto do Motor · Extra Códigos de Sincronismo · 03/14 · códigos OBD2 genéricos (SAE J2012) · referência geral · esquema ilustrativo — confira no seu modelo."
+      ],
+      "description": "Scanner ilustrativo mostra quatro parâmetros e compara uma linha constante com outra que oscila ou desaparece. Ampliações destacam a polia e um sensor.",
+      "review": "verified",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "desvio do comando",
+        "variador",
+        "sincronismo",
+        "rotação"
+      ],
+      "teacher": [
+        "Compare a posição real com a comandada e com os critérios específicos do fabricante. As formas desenhadas são didáticas; não use o desenho para fixar um desvio angular aceitável."
+      ]
+    },
+    {
+      "number": 4,
+      "image": "pagina-004.jpg",
+      "preview": "preview-004.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "e533bb8f45536d68c15720b17791ce50cd278c84da5931fbebfc028e7b2db264",
+      "previewSha256": "1810bf827a27b5f95b8757197c24002bf024f3148eda205b853e6e28f9387076",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-004",
+      "title": "P0016 e P0017: correlação virabrequim x comando",
+      "transcript": [
+        "0; PONTO DO MOTOR BUMP - CODIGOS DE a ae",
+        "P0016",
+        "P0017",
+        "Correlação virabrequim x comando - banco 1",
+        "P0016 - sensor A (admissão) 8 POO17 - sensor B (escape)",
+        "[1 8) O QUE QUER DIZER A mY ads",
+        "RM ) ‘ POLIA DO",
+        "Q A central viu o comando fora da posição ) yu) | COMANDO",
+        "esperada em relação ao virabrequim. ; . SU) TJ",
+        "[15288 POR QUE APARECE DEPOIS DA TROCA",
+        "Dente fora na polia do comando ou do virabrequim",
+        "Correia ou corrente frouxa: tensor mal regulado",
+        "Variador montado fora da marca ou travado",
+        "Roda fônica ou polia de sinal fora da posição",
+        "oa FwWRN =",
+        "Sensor mal assentado ou conector solto",
+        "Conectores e chicote",
+        "Desvio do comando no scanner",
+        "Marcas pelo guia do motor, com 2 voltas 4 mao",
+        "Tensor",
+        "Roda fénica e sensor",
+        "oak wn =",
+        "Variador e óleo",
+        "Desvio constante de vários graus, igual em marcha",
+        "lenta e acelerado, e marcas que não batem no giro É VE —-",
+        "a POLIA DO",
+        "fá VIRABREQUI",
+        "O COMO SABER SE É DENTE FORA",
+        "oe Tu",
+        "E",
+        "Trocar o sensor de fase antes de conferir as marcas.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 04/14 - códigos OBD2 genéricos (SAE J2012) - referencia geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Motor com duas ampliações das marcas da distribuição; uma recebe o rótulo 1 DENTE. A página identifica as polias do comando e do virabrequim.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0016",
+        "P0017",
+        "banco 1"
+      ],
+      "teacher": [
+        "Uma condição de correlação pode ter causas mecânicas, elétricas ou de atuação. A ordem de conferência da fonte começa por conectores e chicote; não conclua que o sensor deve ser trocado sem investigar o conjunto."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas."
+      ]
+    },
+    {
+      "number": 5,
+      "image": "pagina-005.jpg",
+      "preview": "preview-005.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "21c0d112c12392c1ecc9a3f87597c6f4e80262260ba00003c9f220be9ee43ad7",
+      "previewSha256": "e16ddd0cd28a7ee927844ed382cb489c359bec9a1bad062d3d159fd6abc5ee71",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-005",
+      "title": "P0340 a P0344: sensor de fase A",
+      "transcript": [
+        "P0340 A P0344",
+        "TRAVA DO",
+        "CONECTOR",
+        "Sensor de posição do comando A - banco 1",
+        "P0340 - circuito P0341 - faixa / desempemhe À P0342 - sinal baixo",
+        "O QUE QUER DIZER",
+        "A central não recebe, ou recebe",
+        "errado, o sinal do sensor do",
+        "comando A.",
+        "POR QUE APARECE DEPOIS DA TROCA",
+        "Conector solto ou mal encaixado",
+        "Chicote preso na tampa ou pino",
+        "empurrado",
+        "Sensor com folga ou espaçamenta 3",
+        "errado SENSOR",
+        "Alvo do comando danificado ou DE FASE A",
+        "mal montado (=.",
+        "P0341: comando fora de posição",
+        "O QUE CONFERIR, EM ORDEM",
+        "@ Conector e trava",
+        "@ Alimentação, massa e sinal no chicote",
+        "@ Sensor assentado e sem limalha",
+        "®& Alvo do comando",
+        "5 Se P0341: marcas pelo guia do motor",
+        "PONTA DO SENSOR",
+        "E ESPAÇAMENTO",
+        "'",
+        "A ERRO comum",
+        "Sensor novo sem conferir o conector",
+        "solto na desmontagem.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 05/14 - códigos OBD2 genéricos (SAE J2012) - referincia geral - asquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Sensor de fase e seu alvo aparecem com ampliações da trava do conector e da distância na ponta do sensor.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0340",
+        "P0341",
+        "P0342",
+        "P0343",
+        "P0344"
+      ],
+      "teacher": [
+        "Registre o código exato e consulte o circuito do modelo. Posição do sensor, conector, alimentação, massa e sinal exigem verificação própria; não estime espaçamento pela figura."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas.",
+        "Na faixa superior aparecem P0340, P0341, P0342 e P0344; P0343 é citado na nota inferior. Preservar esta diferença da fonte, sem preencher silenciosamente a faixa."
+      ]
+    },
+    {
+      "number": 6,
+      "image": "pagina-006.jpg",
+      "preview": "preview-006.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "814ddce36adff8629be84ff3c7fab7a058f011c4837bf1ee74b46ddc17639737",
+      "previewSha256": "8a3bd886221cb9d50a029fc1f769bf4b9c4886c92d7fb03314a769f824c014d0",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-006",
+      "title": "P0335 a P0339: sensor de rotação",
+      "transcript": [
+        "PONTO BUMP - CÓDIGOS DE SINCRONISMO",
+        "DO MOTOR PÁG. 6/14",
+        "P0335 A P0339",
+        "Sensor",
+        "com limalha",
+        "Sensor de posição do virabrequim (sensor A) ary.",
+        "P0336 - falto À PO337- nba À) PO338 - final alto",
+        "P0335 - circuito",
+        "O QUE QUER DIZER",
+        "O sinal do virabrequim está ausente, a “e h",
+        "fora de faixa ou instável. = a",
+        "A = Conector",
+        "POR QUE APARECE DEPOIS DA TROCA EA",
+        "e rarapolaouasreteção (7",
+        "Conector solto ao tirar a polia ou a proteção i = Zs a A.",
+        "2 Chicote raspando na polia ou na correia i by BAR",
+        "; re ci",
+        "3 Sensor fora da distancia ou sujo de limalha , “",
+        "(dentes faltando) | JH",
+        "4 Roda fônica batida, torta ou com dente quebrado ; ;",
+        "y",
+        "5 Roda fônica fora da posição (quando fica na polia)",
+        "Sensor",
+        "de rotação",
+        "O QUE CONFERIR, EM ORDEM",
+        "@ Sensor: fixação e limalha",
+        "4 Roda fônica: dentes, falha de reférência e folga",
+        "5 Rotação no arranque no scanner",
+        "pCa lee",
+        "Roda fônica batida na desmontagem e sensor ty 4 “ l",
+        "trocado a toa.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 06/14 - codigos OBD2 genéricos (SAE J2012) - referência geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Figura de sensor junto a roda fônica, com ampliações de limalha e dente torto, e chamada da falha de referência.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0335",
+        "P0336",
+        "P0337",
+        "P0338",
+        "P0339"
+      ],
+      "teacher": [
+        "Verifique a integridade do sinal e da roda de referência segundo o veículo. Não presuma que uma falha de referência intencional é um dente quebrado; compare com o padrão do fabricante."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas.",
+        "Algumas letras na faixa de definições de P0336/P0337 e no código final estão deformadas. Não substituir por definição estimada."
+      ]
+    },
+    {
+      "number": 7,
+      "image": "pagina-007.jpg",
+      "preview": "preview-007.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "ec6cdff4ab73162d40493a31b703a7257ff881782af847bb3b1a22ebb3e6f7bc",
+      "previewSha256": "99f808a4abaa23f8941d229802de99eee652ccf1e6a790fa17aaa51605f6288e",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-007",
+      "title": "P0365 a P0369: sensor de fase B",
+      "transcript": [
+        "BUMP - CÓDIGOS DE SINCRONISMO",
+        "PÁG, 7/14",
+        "P0365 A P0369",
+        "SENSOR DE FASE B",
+        "Sensor do comando B - banco 1 - motores com sensor no escape",
+        "P0365 - circuito P0366 - faixa / desempenho P0367 - sinal baiwo P0368 - sinal alto P0369 - intermitente",
+        "[PB O QUE QUER DIZER",
+        "Falha no sinal do sensor do comando B",
+        "(escape), banco 1.",
+        "Sensor do comando A 2 Sensor do comando B",
+        "(lado da admissão) SN = (lado do escape)",
+        "[1728 POR QUE APARECE DEPOIS DA TROCA",
+        "Conector do sensor do escape esquecido",
+        "Chicote encostado no coletor ou derretido",
+        "1",
+        "2",
+        "3 Sensor mal assentado",
+        "4 | Alvo do comando de escape danificado",
+        "5",
+        "P0366: comando de escape fora de posição",
+        "Conector",
+        "Chicote longe do calor",
+        "=",
+        "=",
+        "1",
+        "2",
+        "3 Sensor",
+        "4 Marcas do escape pelo guia do motor",
+        "5",
+        "Compare com P0017",
+        "@ como saver SEE DENTE FORA",
+        "P0366 junto com P0017 e marca do",
+        "escape fora = dente fora no escape.",
+        "Sensor do comando B",
+        "proximo ao protetor térmico",
+        "do coletor de escape",
+        "Conferir só o comando de admissão",
+        "e esquecer o de escape.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 07/14 - códigos OBD2 genéricos (SAE J2012) - referência geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Cabeçote com dois comandos identifica sensor A na admissão e sensor B no escape. Ampliação destaca o conector B próximo ao protetor térmico.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0365",
+        "P0366",
+        "P0367",
+        "P0368",
+        "P0369",
+        "P0017"
+      ],
+      "teacher": [
+        "A identificação A e B desta referência precisa ser confirmada no motor. A investigação inclui chicote exposto a calor e marcas do escape; não limite a inspeção ao comando de admissão."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas."
+      ]
+    },
+    {
+      "number": 8,
+      "image": "pagina-008.jpg",
+      "preview": "preview-008.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "7958dab2c690ae5a3acbbbd60582b9dc53a6971c435800510b41d93c5078731a",
+      "previewSha256": "7fde083878df14590e712a2732302333311f9f2e39a223499a7dee5b4e13357b",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-008",
+      "title": "P0010 e P0013: circuito do atuador",
+      "transcript": [
+        "PONTO DO BUMP - CÓDIGOS DE SINCRONISMO",
+        "MOTOR PÁG. 8/14",
+        "P0010 - POO13",
+        "CIRCUITO DO ATUADOR",
+        "Solenoide do variador - banco 1",
+        "P0010 - atuador do comando A (adimissão);",
+        "circutio clrcuíio",
+        "Falha elétrica no solenoide (válvula de",
+        "controle) do variador.",
+        "[1288 POR QUE APARECE DEPOIS DA TROCA",
+        "1 Conector do solenoide não encaixado",
+        "2 Chicote preso ou rompido ao montar",
+        "a tampa",
+        "3 Conectores de admissão e escape",
+        "invertidos",
+        "4 Pino do conector empurrado ou oxidado",
+        "5 Solenoide com defeito",
+        "Ee) O QUE CONFERIR, EM ORDEM",
+        "Conector e trava",
+        "2 Alimentação e comando no chicote",
+        "(esquema do modelo)",
+        "3 Resistência do solenoide conforme",
+        "o manual",
+        "4 Teste de acionamento pelo scanner,",
+        "se houver",
+        "@ COMO SABER SE É DENTE FORA",
+        "E falha élétrica: dente fora nao gera este Desmontar a distribuição de novo por",
+        "código. Se vier junto com P0011 ou P0016, um código que é só de conector.",
+        "trate os dois.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 08/14 - códigos OBD2 genéricos (SAE J2012) - referênçia geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Solenoide de controle com conector ampliado e multímetro mostrando 7.2 Ω na ilustração.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0010",
+        "P0013",
+        "solenoide",
+        "circuito"
+      ],
+      "teacher": [
+        "A indicação de 7,2 ohms é uma leitura desenhada, não uma especificação universal. A própria fonte manda conferir a resistência no manual e o esquema do modelo antes de testar o circuito."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas.",
+        "A faixa P0010/P0013 contém palavras deformadas; a leitura 7.2 Ω no desenho não é especificação universal."
+      ]
+    },
+    {
+      "number": 9,
+      "image": "pagina-009.jpg",
+      "preview": "preview-009.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "19a97b19fa64d52f7b3bc84d995679eb91f07f712636e2a6f1433c3e6b82e56f",
+      "previewSha256": "1ceaea535850de0b2a01874f3a4b1c3dae189d349f696219e20bdfbeaabbfeaa",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-009",
+      "title": "P0011, P0012, P0014 e P0015: variador",
+      "transcript": [
+        "it] :",
+        "BUMP - CODIGOS DE SINCRONISMO",
+        "4 PONTO DO MOTOR MINHO",
+        "P0011 - PO012",
+        "P0014 - POO1S",
+        "Variador fora da posição comandada - banco 1",
+        "P0011 P0012 P0014 Variador de",
+        "admissão: avanço admissão: atraso fase (tipo palhetas)",
+        "excessivo / desempenho É excessivo",
+        "O comando não chegou ao ângulo",
+        "| que a central pediu ao variador.",
+        "A",
+        "[1288 POR QUE APARECE DEPOIS DA TROCA",
+        "1 Dente fora na engrenagem do variador",
+        "escape: avanço",
+        "excessivo / desempenho À excessivo",
+        "2 Trava do variador não soltou ou Pino de trava",
+        "variador montado travado do variador",
+        "3 Óleo errado ou baixo",
+        "4 Tela ou filtro do solenoide entupido",
+        "5 Solenoide preso",
+        "Na",
+        "Passagees",
+        "de óleo",
+        "=) O QUE CONFERIR, EM ORDEM —",
+        "1 Nívele especificação do óleo",
+        "2 Marcas pelo guia do motor",
+        "3 Posição comandada x real no scanner",
+        "4 Telae solenoide",
+        "5 Variador: trava e folga",
+        "A 4",
+        "| COMO SABER SE É DENTE FORA Solenoide",
+        "de controle",
+        "Desvio fix já em marcha lenta, com o variador do variador",
+        "em repouso = montagem. Desvio só quando z",
+        "o variador é comanddo = óleo, solenoide ou",
+        "| variador.",
+        "| Tela / filtro",
+        "e \" do solenoide",
+        "2",
+        "Completar com óleo fora da",
+        "especificação e liberar o carro.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 09/14 - códigos OBD2 genéricos (SAE J2012) - referéncia geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Corte ilustrativo de variador identifica palhetas, pino de trava, passagens de óleo, solenoide e tela de filtragem.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0011",
+        "P0012",
+        "P0014",
+        "P0015"
+      ],
+      "teacher": [
+        "Distinguir falha de posição de falha de comando requer dados da central, condição do óleo e conferência mecânica. A ilustração não define a especificação de óleo do veículo."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas."
+      ]
+    },
+    {
+      "number": 10,
+      "image": "pagina-010.jpg",
+      "preview": "preview-010.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "7606981945e7b544fffe283d35c121e3262d79f10bfeb47614b3dd0c90a08ed0",
+      "previewSha256": "242c0ad63fa45d0a31837ed020cde9970953f60d5bfcec2563410e8ee34e87a9",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-010",
+      "title": "P0300 a P0304 com correlação",
+      "transcript": [
+        "BUMP - CÓDIGOS DE SINCRONISMO",
+        "P0300 A P0304",
+        "Falha de combustão que aparece junto com o dente fora",
+        "P0300 - aleatória / vários cilindros P0301 - cilindro 1 P0302 - cilindro 2 P0303 - cilindro3 E P0304- cilindro 4",
+        "O QUE QUER DIZER",
+        "Falha de combustão detectada; Lo",
+        "Junto com P0016 ou P0017, aponta ! P0300 aleatória / vários cilindros",
+        "o sincronismo.",
+        "POR QUE APARECE DEPOIS DA TROCA",
+        "si Motor um dente fora",
+        "@ Valvula batida num cilindro",
+        "\\ quim tee Ms me 4 = y e",
+        "Conector de bobina ou bico solto ea : Ne 1",
+        "na desmontagem ald a É",
+        "é Way, mis",
+        "4 Vela ou bobina mexida o Ein Na ~",
+        "O QUE CONFERIR, EM ORDEM",
+        "Conectores de bobinas e bicos",
+        "P0016 sincronismo do comando",
+        "Qual cilindro falha",
+        "Marcas pelo guia do motor",
+        "Compressão do cilindro que falha",
+        "Trocar velas e bobinas sem olhar o código",
+        "de correlação que veio junto.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 10/14 - códigos OBD2 genéricos (SAE J2012) - referência geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Scanner mostra P0300 e P0016. Quatro bobinas são numeradas e uma ampliação mostra um conector.",
+      "review": "pending",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "P0300",
+        "P0301",
+        "P0302",
+        "P0303",
+        "P0304",
+        "P0016",
+        "P0017"
+      ],
+      "teacher": [
+        "Falha de combustão associada a correlação exige investigação conjunta. Não faça teste que movimente o motor antes de verificar a segurança mecânica; uma causa de falha de combustão não se resume a bobina."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas."
+      ]
+    },
+    {
+      "number": 11,
+      "image": "pagina-011.jpg",
+      "preview": "preview-011.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "2cfb41bf0e7e6c61ed29706eac6df37d0a66ff196e5903b28a878080934a7aae",
+      "previewSha256": "63dd430cfcd6152b5b69602afc543e21adb10abf8faeb5148d626f7ec11be8a7",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-011",
+      "title": "Banco 2: motores em V",
+      "transcript": [
+        "PONTODO MOTOR BUMP - CÓDIGOS DE SINCRONISMO",
+        "PÁG. 11/14",
+        "BANCO 2",
+        "SO MOTOR EM V",
+        "No seu motor de 3 ou 4 cilindros em linha, tudo é banco 1.",
+        "P0018 P0019 | P0345 P0346 | P0347",
+        "correlaçán, banco 2, | correlação, banco 2, | sensor do comando À, | faina/",
+        "sensor À sensor B | banco 2: clrcuilo | desempenho",
+        "(1) PB O QUE QUER DIZER",
+        "As mesmos falhas do banco 1, no lado",
+        "oposto ao cilindro 1. Na lista: Amarok 3.0",
+        "V6 TDI (Volkswagen, guia 11).",
+        "[178] POR QUE APARECE DEPOIS DA TROCA",
+        "1 Conector do banco 2 solto",
+        "(mais escondido)",
+        "2 Marcas do banco 2 fora",
+        "3 Corrente do banco 2 com tensão errada",
+        "[18] O QUE CONFERIR, EM ORDEM",
+        "1 Identifique o banco: o lado do cilindro 1",
+        "é o banco 1",
+        "2 Conectores do banco 2",
+        "3 Marcas dos dois bancos pelo guia do motor",
+        "4 Desvio banco 1 x banco 2 no scanner",
+        "@ como saser SE É DENTE FORA",
+        "Só o banco 2 com desvio fixo = distribuição Confundir os bancos: o cilindro 1",
+        "do banco 2. Os dois bancos com desvio = define o banco 1.",
+        "virabrequim, roda fônica ou corrente principal.",
+        "Ponto do Motor - Extra Códigos de Sincronismo - 11/14 - códigos 0802 genéricos (SAE J2012) - reféreficia geral - esquema ilustrativo — confira no seu modelo"
+      ],
+      "description": "Motor em V tem banco 1, banco 2 e cilindro 1 rotulados. Uma ampliação destaca o segundo banco.",
+      "review": "pending",
+      "manufacturer": "Volkswagen",
+      "engine": "Amarok 3.0 V6 TDI",
+      "models": [
+        "Amarok"
+      ],
+      "guide": "11",
+      "part": "",
+      "topics": [
+        "P0018",
+        "P0019",
+        "P0345",
+        "P0346",
+        "P0347",
+        "P0348",
+        "P0349"
+      ],
+      "teacher": [
+        "A própria referência usa o cilindro 1 para identificar o banco 1. Confirme numeração e arquitetura no manual do motor, sem deduzir o lado apenas pela posição na tela."
+      ],
+      "reviewNotes": [
+        "Texto OCR ainda não conferido integralmente contra todas as legendas e tabelas; a inspeção visual foi usada para o índice e as notas.",
+        "Na faixa P0347, a palavra depois de sinal está incompleta/ambígua."
+      ]
+    },
+    {
+      "number": 12,
+      "image": "pagina-012.jpg",
+      "preview": "preview-012.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "f44d3a62cb52b9607ce455d32c2802bc4850096ddf52c0e59c97c55944291ead",
+      "previewSha256": "3e4af626bbe4135358b59f1b39ab305131ab634684fb8703cca37bdd6a45842c",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-012",
+      "title": "Motores com variador de fase",
+      "transcript": [
+        "PONTO DO MOTOR. BUMP · CÓDIGOS DE SINCRONISMO. PÁG. 12/14.",
+        "MOTORES COM VARIADOR DE FASE. Quando o código vem do variador, não da correia ou corrente.",
+        "01. CAUSAS.",
+        "1. Solenoide preso ou sem acionar.",
+        "2. Tela ou filtro de óleo do variador entupido.",
+        "3. Óleo fora da especificação.",
+        "4. Variador travado.",
+        "5. Trava do variador que não soltou na montagem.",
+        "Legendas da figura: 1 SOLENOIDE DO VARIADOR; 2 TELA OU FILTRO DE ÓLEO; 4 VARIADOR DE FASE; 5 TRAVA DO VARIADOR.",
+        "02. MOTORES DA LISTA COM VARIADOR — CONSULTE O GUIA DE CADA UM.",
+        "CHEVROLET: G06 Ecotec 1.8 · G07 Ecotec 1.4T · G08 CSS Prime 1.0 · G10 CSS Prime 1.2T · G11 Ecotec 2.5.",
+        "VOLKSWAGEN: G05 EA211 1.0 MPI · G06 EA211 1.6 MSI · G07 EA211 1.0 TSI · G08 EA211 1.4 TSI · G09 EA888.",
+        "FIAT / JEEP: G06 E.torQ · G12 Hurricane 2.0T.",
+        "FORD: G05 Ti-VCT 1.0 · G06 Dragon 1.5.",
+        "RENAULT / NISSAN: G04 K4M (versões com variador) · G05 F4R · G07 SCe 1.6 · G09 TCe 1.3 · G10 HR16DE · G11 MR20.",
+        "PEUGEOT / CITROËN: G05 PureTech 1.0 · G06 PureTech 1.2 · G07 THP 1.6.",
+        "TOYOTA / HONDA: G02 1ZZ/2ZR · G03 1NZ/2NR · G04 3ZR · G10 K20 · G11 1.5 Turbo.",
+        "HYUNDAI: G01 Kappa 1.0 · G02 Gamma 1.6 · G03 Nu 2.0.",
+        "MultiAir (Fiat/Jeep G08 T200 · G09 T270 · G11 Tigershark): atuador eletro-hidráulico na admissão. Siga o guia do motor.",
+        "Ponto do Motor · Extra Códigos de Sincronismo · 12/14 · códigos OBD2 genéricos (SAE J2012) · referência geral · esquema ilustrativo — confira no seu modelo."
+      ],
+      "description": "Variador, solenoide, tela de óleo e trava aparecem junto a tabela de motores agrupados por fabricante.",
+      "review": "verified",
+      "manufacturer": "Chevrolet; Volkswagen; Fiat; Jeep; Ford; Renault; Nissan; Peugeot; Citroën; Toyota; Honda; Hyundai",
+      "engine": "Ecotec; CSS Prime; EA211; EA888; E.torQ; Hurricane; Ti-VCT; Dragon; K4M; F4R; SCe; TCe; HR16DE; MR20; PureTech; THP; 1ZZ; 2ZR; 1NZ; 2NR; 3ZR; K20; Kappa; Gamma; Nu; T200; T270; Tigershark",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "variador",
+        "óleo",
+        "solenoide",
+        "MultiAir"
+      ],
+      "teacher": [
+        "A lista aponta famílias e guias para consulta; não confirma que toda versão de uma família possui a mesma configuração. Confira o código do motor e o sistema efetivamente instalado."
+      ]
+    },
+    {
+      "number": 13,
+      "image": "pagina-013.jpg",
+      "preview": "preview-013.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "8832e7a87821196fb594d10bcaccda6b12467691e6a86b91d34e43e70bcb352c",
+      "previewSha256": "a6435b36128ffe059e7d766e5bf0876f8a4193e051bc4608fea986c64034abf7",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-013",
+      "title": "Aprendizado e osciloscópio",
+      "transcript": [
+        "PONTO DO MOTOR. BUMP · CÓDIGOS DE SINCRONISMO. PÁG. 13/14.",
+        "APRENDIZADO E OSCILOSCÓPIO. Quando o código volta com tudo certo.",
+        "01. APRENDIZADO E ADAPTAÇÃO.",
+        "1. Algumas centrais pedem aprendizado do sensor de rotação ou adaptação depois da troca.",
+        "2. Sinal típico: o código volta mesmo com marcas, sensores e conectores certos.",
+        "3. Consulte o procedimento de aprendizado no scanner para o seu modelo.",
+        "Legenda da figura: SENSOR DE ROTAÇÃO.",
+        "02. OSCILOSCÓPIO (OPCIONAL).",
+        "1. Canal 1 no sensor de rotação; canal 2 no sensor de fase.",
+        "2. Compare o pulso de fase com a falha de referência da roda fônica.",
+        "3. Pulso deslocado e sempre no mesmo lugar = comando fora de posição.",
+        "4. Pulso que some ou deforma = sensor, chicote ou alvo.",
+        "Gráfico da esquerda: NO PONTO; FALHA DE REFERÊNCIA; ROTAÇÃO; FASE.",
+        "Gráfico da direita: 1 DENTE FORA; FALHA DE REFERÊNCIA; ROTAÇÃO; FASE; DESLOCADO.",
+        "REFERÊNCIA GERAL. Desenho esquemático, não é a forma de onda de um motor específico.",
+        "Ponto do Motor · Extra Códigos de Sincronismo · 13/14 · códigos OBD2 genéricos (SAE J2012) · referência geral · esquema ilustrativo — confira no seu modelo."
+      ],
+      "description": "Dois gráficos esquemáticos comparam os sinais de rotação e fase nos estados NO PONTO e 1 DENTE FORA; o segundo pulso aparece deslocado.",
+      "review": "verified",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "aprendizado",
+        "adaptação",
+        "osciloscópio",
+        "rotação",
+        "fase"
+      ],
+      "teacher": [
+        "O material declara que os gráficos não são formas de onda de um motor específico. Use referências reais do fabricante e procedimento de aprendizado compatível; não tente eliminar um erro mecânico com adaptação."
+      ]
+    },
+    {
+      "number": 14,
+      "image": "pagina-014.jpg",
+      "preview": "preview-014.webp",
+      "width": 1024,
+      "height": 1536,
+      "sourceSha256": "ba1a6416f5970137f11a0db45f221dc07db4de2ed4851072221d8947ce8565f4",
+      "previewSha256": "c886fdb8d6fcf4ad7eeb5646317b7982cecbeb1a3ebfff2d2a3fe7e8467a3734",
+      "identicalToPdfRender": true,
+      "headerModified": false,
+      "id": "aula-08:pagina-014",
+      "title": "Fluxograma final",
+      "transcript": [
+        "PONTO DO MOTOR. BUMP · CÓDIGOS DE SINCRONISMO. PÁG. 14/14.",
+        "FLUXOGRAMA FINAL. Código acendeu depois da troca: siga nesta ordem.",
+        "1. CÓDIGO ACENDEU DEPOIS DA TROCA. Tela do scanner: P0340. CORRIGIU → APAGUE E RODE. OK → PRÓXIMO.",
+        "2. CONECTORES E CHICOTE. CORRIGIU → APAGUE E RODE. OK → PRÓXIMO.",
+        "3. MARCAS (GUIA DO MOTOR). CORRIGIU → APAGUE E RODE. OK → PRÓXIMO.",
+        "4. SENSOR E RODA FÔNICA. CORRIGIU → APAGUE E RODE. OK → PRÓXIMO.",
+        "5. VARIADOR E ÓLEO. CORRIGIU → APAGUE E RODE. OK → PRÓXIMO.",
+        "6. APRENDIZADO. Tela do scanner: REAPRENDIZADO. CORRIGIU → APAGUE E RODE.",
+        "Códigos P1xxx são do fabricante e podem indicar a mesma falha. Veja o significado no scanner para o seu modelo.",
+        "Ponto do Motor · Extra Códigos de Sincronismo · 14/14 · códigos OBD2 genéricos (SAE J2012) · referência geral · esquema ilustrativo — confira no seu modelo."
+      ],
+      "description": "Fluxograma em seis linhas mostra código após troca, conectores e chicote, marcas, sensor e roda fônica, variador e óleo e aprendizado. Cada ramo de correção manda apagar e rodar.",
+      "review": "verified",
+      "manufacturer": "",
+      "engine": "",
+      "models": [],
+      "guide": "",
+      "part": "",
+      "topics": [
+        "conectores",
+        "marcas",
+        "roda fônica",
+        "variador",
+        "aprendizado",
+        "P1xxx"
+      ],
+      "teacher": [
+        "Use o fluxo como organização da investigação, preservando os dados anteriores ao apagamento. O teste de funcionamento ou rodagem só é adequado após confirmar condições seguras do motor e do veículo."
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "a08-scanner",
+      "step": "avaliacao",
+      "pages": [
+        3
+      ],
+      "prompt": "Qual parâmetro é listado na página 3 para comparar posição real e comandada?",
+      "options": [
+        "Posição do variador",
+        "Pressão dos pneus",
+        "Carga da bateria do rádio",
+        "Nível do lavador"
+      ],
+      "correctIndex": 0,
+      "explanation": "A lista da página 3 inclui posição do variador: comandada x real.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-sinc",
+      "step": "avaliacao",
+      "pages": [
+        3
+      ],
+      "prompt": "Como o sinal de sincronismo é apresentado na lista da página 3?",
+      "options": [
+        "Apenas em quilômetros",
+        "Somente em litros",
+        "Em código de cor da correia",
+        "Sim ou não"
+      ],
+      "correctIndex": 3,
+      "explanation": "A página 3 lista sinal de sincronismo: sim ou não.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-real",
+      "step": "avaliacao",
+      "pages": [
+        13
+      ],
+      "prompt": "O aviso da página 13 autoriza usar o gráfico como forma de onda de qualquer motor?",
+      "options": [
+        "Sim; substitui o manual",
+        "Sim; todos os motores têm o mesmo pulso",
+        "Não; é desenho esquemático, sem motor específico",
+        "Sim; é universal"
+      ],
+      "correctIndex": 2,
+      "explanation": "A nota declara: Desenho esquemático, não é a forma de onda de um motor específico.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-can1",
+      "step": "avaliacao",
+      "pages": [
+        13
+      ],
+      "prompt": "Na montagem didática da página 13, qual sinal vai ao canal 1?",
+      "options": [
+        "Sensor do pedal de freio",
+        "Sensor de rotação",
+        "Temperatura interna",
+        "Pressão de combustível"
+      ],
+      "correctIndex": 1,
+      "explanation": "A página 13 indica canal 1 no sensor de rotação e canal 2 no sensor de fase.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-adapt",
+      "step": "avaliacao",
+      "pages": [
+        13
+      ],
+      "prompt": "Qual orientação acompanha a possibilidade de aprendizado após troca?",
+      "options": [
+        "Consultar o procedimento do scanner para o seu modelo",
+        "Adaptar qualquer central aleatoriamente",
+        "Ignorar as marcas mecânicas",
+        "Trocar o sensor sem teste"
+      ],
+      "correctIndex": 0,
+      "explanation": "A terceira orientação da página 13 manda consultar o procedimento de aprendizado para o modelo.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-filter",
+      "step": "avaliacao",
+      "pages": [
+        12
+      ],
+      "prompt": "Qual condição está entre as causas da página 12?",
+      "options": [
+        "Óleo de freio baixo",
+        "Pneu sem calibração",
+        "Desalinhamento de farol",
+        "Tela ou filtro de óleo do variador entupido"
+      ],
+      "correctIndex": 3,
+      "explanation": "A página 12 lista tela ou filtro de óleo do variador entupido.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-list",
+      "step": "avaliacao",
+      "pages": [
+        12
+      ],
+      "prompt": "Como a tabela de motores com variador orienta o uso das aplicações?",
+      "options": [
+        "Escolher somente pela cilindrada",
+        "Usar a foto como gabarito universal",
+        "Consultar o guia de cada um",
+        "Aplicar o mesmo procedimento em todos"
+      ],
+      "correctIndex": 2,
+      "explanation": "O título da tabela manda consultar o guia de cada um.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-flow",
+      "step": "avaliacao",
+      "pages": [
+        14
+      ],
+      "prompt": "Qual etapa do fluxo da página 14 vem depois de conectores e chicote?",
+      "options": [
+        "Teste de ar-condicionado",
+        "Marcas pelo guia do motor",
+        "Troca de todas as peças",
+        "Orçamento de pintura"
+      ],
+      "correctIndex": 1,
+      "explanation": "A terceira linha do fluxo é MARCAS (GUIA DO MOTOR).",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-p1",
+      "step": "avaliacao",
+      "pages": [
+        14
+      ],
+      "prompt": "O que a página 14 informa sobre P1xxx?",
+      "options": [
+        "São códigos do fabricante; conferir o significado no modelo",
+        "São todos uma falha de sensor de fase",
+        "Sempre indicam correia rompida",
+        "Dispensam consulta no scanner"
+      ],
+      "correctIndex": 0,
+      "explanation": "O alerta final diz que P1xxx são do fabricante e pede conferir o significado no scanner para o modelo.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-channel",
+      "step": "avaliacao",
+      "pages": [
+        13
+      ],
+      "prompt": "No exemplo da página 13, qual comparação é feita no osciloscópio?",
+      "options": [
+        "Pressão de pneus com temperatura ambiente",
+        "Luz do painel com volume do rádio",
+        "Nível do tanque com carga do alternador",
+        "Pulso de fase com a falha de referência da roda fônica"
+      ],
+      "correctIndex": 3,
+      "explanation": "A segunda orientação manda comparar o pulso de fase com a falha de referência da roda fônica.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-scanner-practice",
+      "step": "pagina-3",
+      "pages": [
+        3
+      ],
+      "prompt": "Qual parâmetro é listado na página 3 para comparar posição real e comandada?",
+      "options": [
+        "Posição do variador",
+        "Pressão dos pneus",
+        "Carga da bateria do rádio",
+        "Nível do lavador"
+      ],
+      "correctIndex": 0,
+      "explanation": "A lista da página 3 inclui posição do variador: comandada x real.",
+      "review": "verified",
+      "kind": "choice"
+    },
+    {
+      "id": "a08-real-practice",
+      "step": "pagina-13",
+      "pages": [
+        13
+      ],
+      "prompt": "O aviso da página 13 autoriza usar o gráfico como forma de onda de qualquer motor?",
+      "options": [
+        "Sim; substitui o manual",
+        "Sim; todos os motores têm o mesmo pulso",
+        "Não; é desenho esquemático, sem motor específico",
+        "Sim; é universal"
+      ],
+      "correctIndex": 2,
+      "explanation": "A nota declara: Desenho esquemático, não é a forma de onda de um motor específico.",
+      "review": "verified",
+      "kind": "choice"
+    }
+  ],
+  "reviewSource": "work/library-review/review-08-10.json"
+}

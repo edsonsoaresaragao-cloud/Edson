@@ -1,5 +1,6 @@
 {
-  "confirmed": false,
-  "scope": [],
-  "statement": "A autorização dos oito novos documentos aguarda confirmação específica do responsável."
+  "confirmed": true,
+  "scope": [3, 4, 5, 6, 7, 8, 9, 10],
+  "statement": "O responsável pela EDSON OFICINA confirmou neste atendimento que possui autorização do titular para reproduzir, adaptar e publicar os oito PDFs das Aulas 03 a 10. Registro da declaração do responsável; não representa verificação independente de contrato.",
+  "confirmedAt": "2026-11-15T15:04:36Z"
 }

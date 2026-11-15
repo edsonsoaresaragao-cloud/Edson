@@ -9,7 +9,3 @@ test-results/
 backups/
 
 .cache/
-
-# Materiais novos só entram na publicação após autorização e revisão editorial.
-/academy-materials/library/
-/src/lib/academy/library/data/
