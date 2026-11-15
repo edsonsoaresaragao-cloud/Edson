@@ -1,4 +1,5 @@
 import { kindPaths } from "../catalog";
+import { libraryCourses, libraryLessonUrl } from "../academy/library/catalog";
 /** Só caminhos públicos: sem parâmetros, fragmentos, contas, tokens ou códigos de certificado. */
 export const staticCounterPaths = new Set([
   "/",
@@ -16,6 +17,7 @@ export const staticCounterPaths = new Set([
   "/academy/aulas",
   "/academy/aulas/motores-que-batem-valvula",
   "/academy/aulas/conferencia-final",
+  ...libraryCourses.map((course) => libraryLessonUrl(course.slug)),
   "/categorias/ar-condicionado/compressor",
   "/categorias/ignicao/atual",
   "/categorias/direcao-hidraulica-e-eletrica/eps",

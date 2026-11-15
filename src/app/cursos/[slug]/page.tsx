@@ -11,6 +11,10 @@ import { PageHeading } from "@/components/content";
 import Link from "next/link";
 import Image from "next/image";
 import { JsonLd } from "@/components/jsonld";
+import {
+  getLibraryCourse,
+  libraryLessonUrl,
+} from "@/lib/academy/library/catalog";
 export const dynamic = "force-dynamic";
 export default async function Course({
   params,
@@ -20,6 +24,7 @@ export default async function Course({
   const { slug } = await params;
   if (slug === LESSON_SLUG) redirect(LESSON_URL);
   if (slug === CHECKLIST_SLUG) redirect(CHECKLIST_URL);
+  if (getLibraryCourse(slug)) redirect(libraryLessonUrl(slug));
   const c = await db.course.findUnique({
     where: { slug, status: "PUBLISHED" },
     include: {

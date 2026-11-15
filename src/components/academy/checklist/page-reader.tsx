@@ -48,11 +48,21 @@ export function PageReader({
   paragraphs,
   settings,
   onSettingsChange,
+  rates = [0.8, 1, 1.2, 1.4],
+  repeat = false,
+  startLabel = "Ouvir esta página",
+  readingDescription,
+  revealCurrentChunk = false,
 }: {
   page: number;
   paragraphs: string[];
   settings: PageVoiceSettings;
   onSettingsChange: (s: PageVoiceSettings) => void;
+  rates?: readonly number[];
+  repeat?: boolean;
+  startLabel?: string;
+  readingDescription?: string;
+  revealCurrentChunk?: boolean;
 }) {
   const owner = useId();
   const voiceSnapshot = useSyncExternalStore(
@@ -267,7 +277,7 @@ export function PageReader({
           disabled={!canRead}
           onClick={start}
         >
-          <Volume2 size={18} aria-hidden="true" /> Ouvir esta página
+          <Volume2 size={18} aria-hidden="true" /> {startLabel}
         </button>
         <button
           type="button"
@@ -301,6 +311,16 @@ export function PageReader({
         >
           Parar
         </button>
+        {repeat && (
+          <button
+            type="button"
+            className="button secondary"
+            disabled={!canRead}
+            onClick={start}
+          >
+            Repetir
+          </button>
+        )}
       </div>
       <div className="academy-reader-options">
         <label>
@@ -329,7 +349,7 @@ export function PageReader({
               onSettingsChange({ ...settings, rate: Number(e.target.value) })
             }
           >
-            {[0.8, 1, 1.2, 1.4].map((rate) => (
+            {rates.map((rate) => (
               <option key={rate} value={rate}>
                 {String(rate).replace(".", ",")}×
               </option>
@@ -338,8 +358,8 @@ export function PageReader({
         </label>
       </div>
       <p>
-        Leitura integral da página {page}, incluindo os pontos de conferência,
-        avisos e créditos. Ouvir não marca o estudo como concluído.
+        {readingDescription ||
+          `Leitura integral da página ${page}, incluindo os pontos de conferência, avisos e créditos. Ouvir não marca o estudo como concluído.`}
       </p>
       {voiceSnapshot === "unavailable" ? (
         <p>
@@ -365,6 +385,15 @@ export function PageReader({
             : state.notice || `Pronto para ler a página ${page}.`}
       </p>
       {state.error && <p role="alert">{state.error}</p>}
+      {revealCurrentChunk && state.mode !== "idle" && (
+        <div
+          className="academy-current-chunk"
+          role="group"
+          aria-label="Trecho narrado"
+        >
+          <p>{narrationChunks(paragraphs, 180)[state.index - 1]}</p>
+        </div>
+      )}
       <details className="academy-page-transcript">
         <summary>Ver texto que será narrado</summary>
         {paragraphs.map((text, i) => (

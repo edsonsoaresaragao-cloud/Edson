@@ -6,6 +6,11 @@ import nodemailer from "nodemailer";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { db } from "@/lib/db";
 import {
+  isLibraryCourseId,
+  libraryCourses,
+} from "@/lib/academy/library/catalog";
+import { StudyError } from "@/lib/academy/progress";
+import {
   assertOrigin,
   AppError,
   requireAdmin,
@@ -169,6 +174,11 @@ export async function POST(
       return NextResponse.json({ message: "Perfil atualizado." });
     }
     if (action === "enroll") {
+      if (isLibraryCourseId(id))
+        throw new AppError(
+          "Inicie esta aula pela sala de estudo da Academy.",
+          409,
+        );
       const course = await db.course.findUnique({ where: { id } });
       if (!course || course.status !== "PUBLISHED")
         throw new AppError("Curso indisponível.", 404);
@@ -186,6 +196,11 @@ export async function POST(
       });
       if (!lesson || lesson.module.course.status !== "PUBLISHED")
         throw new AppError("Aula indisponível.", 404);
+      if (isLibraryCourseId(lesson.module.courseId))
+        throw new AppError(
+          "Conclua esta etapa pela sala de estudo da Academy.",
+          409,
+        );
       const enrollment = await db.enrollment.findUnique({
         where: {
           userId_courseId: {
@@ -228,6 +243,17 @@ export async function POST(
       });
       if (!enrollment || enrollment.course.status !== "PUBLISHED")
         throw new AppError("Matrícula indisponível.");
+      const libraryCourse = libraryCourses.find((course) => course.id === id);
+      if (libraryCourse) {
+        const { requirePublishedLibraryCourse } =
+          await import("@/lib/academy/library/access");
+        await requirePublishedLibraryCourse(libraryCourse.slug);
+      }
+      if (isLibraryCourseId(id) && enrollment.course.hours <= 0)
+        throw new AppError(
+          "A carga horária deste treinamento aguarda validação do responsável.",
+          409,
+        );
       if (id === CHECKLIST_COURSE_ID && enrollment.course.hours <= 0)
         throw new AppError(
           "A carga horária da Aula 02 aguarda validação do responsável. A emissão não está disponível.",
@@ -691,7 +717,7 @@ export async function POST(
         },
         { status: 400 },
       );
-    if (error instanceof AppError)
+    if (error instanceof AppError || error instanceof StudyError)
       return NextResponse.json(
         { error: error.message },
         { status: error.status },

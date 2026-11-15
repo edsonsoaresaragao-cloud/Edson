@@ -1,0 +1,201 @@
+.root {
+  overflow-wrap: anywhere;
+}
+.preparation {
+  background: #172a3c;
+  color: #edf6ff;
+}
+.preparation :global(.tag) {
+  color: #ffc477;
+  font-size: 0.75rem;
+}
+.filters {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+}
+.filters label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+.filters input,
+.filters select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid #67849a;
+  border-radius: 7px;
+  padding: 9px;
+  color: #edf6ff;
+  background: #102437;
+  font: inherit;
+}
+.results {
+  max-height: 52vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.results button {
+  width: 100%;
+  text-align: left;
+}
+.results small {
+  display: block;
+  font-size: 0.75rem;
+  color: #b9d0e2;
+  line-height: 1.6;
+}
+.results p {
+  font-size: 0.85rem;
+}
+.metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.metadata span {
+  padding: 5px 9px;
+  border: 1px solid #56758b;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+.modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
+}
+.modes button {
+  min-height: 44px;
+}
+.modes button[aria-pressed="true"] {
+  background: #754315;
+  border-color: #ffb259;
+  color: #fff7eb;
+}
+.sourceNote {
+  border-left: 3px solid #f7cd73;
+  padding: 12px 16px;
+  background: #1b2e40;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+.review {
+  padding: 16px;
+  border: 1px solid #c8a35f;
+  border-radius: 9px;
+  background: #352d1c;
+  color: #fff3cc;
+  margin: 18px 0;
+}
+.review p:last-child {
+  margin-bottom: 0;
+}
+.sourceText {
+  white-space: pre-wrap;
+  line-height: 1.8;
+  font-size: 0.9rem;
+}
+.sourceText p {
+  margin-bottom: 12px;
+}
+.teacher {
+  padding: 18px;
+  border: 1px solid #537b91;
+  background: #132b3d;
+  border-radius: 10px;
+  margin: 24px 0;
+}
+.teacher p:last-child {
+  margin-bottom: 0;
+}
+.materialLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.pageControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0;
+}
+.pageControls .button {
+  min-height: 44px;
+}
+.pageSelect {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0;
+}
+.pageSelect input {
+  width: 90px;
+  padding: 9px;
+  border: 1px solid #67849a;
+  border-radius: 7px;
+  background: #102437;
+  color: #edf6ff;
+  min-height: 44px;
+  font: inherit;
+}
+.budget {
+  display: grid;
+  gap: 12px;
+}
+.budget label {
+  display: grid;
+  gap: 6px;
+}
+.budget input,
+.budget textarea,
+.budget select {
+  width: 100%;
+  padding: 10px;
+  min-height: 44px;
+  border: 1px solid #67849a;
+  border-radius: 7px;
+  background: #102437;
+  color: #edf6ff;
+  font: inherit;
+}
+.budget textarea {
+  min-height: 100px;
+}
+.budgetOutput {
+  white-space: pre-wrap;
+  background: #0e2131;
+  padding: 16px;
+  border: 1px solid #45677d;
+  border-radius: 7px;
+}
+.preparation {
+  max-width: 900px;
+  margin: 36px 0;
+}
+.preparation li {
+  margin: 10px 0;
+}
+.preparation p {
+  line-height: 1.8;
+}
+@media (max-width: 600px) {
+  .results {
+    max-height: 38vh;
+  }
+  .pageControls > * {
+    flex: 1;
+  }
+  .metadata {
+    gap: 6px;
+  }
+  .teacher {
+    padding: 12px;
+  }
+  .materialLinks {
+    display: grid;
+    gap: 12px;
+  }
+}

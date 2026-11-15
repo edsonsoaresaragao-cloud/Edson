@@ -6,9 +6,13 @@ import { AcademyLessonCard } from "@/components/academy/lesson-card";
 import { COURSE_ID } from "@/lib/academy/content";
 import { COURSE_ID as CHECKLIST_COURSE_ID } from "@/lib/academy/checklist/content";
 import { ChecklistLessonCard } from "@/components/academy/checklist/lesson-card";
+import { LibraryLessonCards } from "@/components/academy/library/lesson-cards";
+import { isLibraryCourseId } from "@/lib/academy/library/catalog";
+import { getReadyLibrarySlugs } from "@/lib/academy/library/access";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "EDSON OFICINA ACADEMY" };
 export default async function Academy() {
+  const readySlugs = await getReadyLibrarySlugs();
   const courses = await db.course.findMany({
     where: { status: "PUBLISHED" },
     orderBy: { createdAt: "desc" },
@@ -52,7 +56,7 @@ export default async function Academy() {
             >
               <I className="orange" />
               <h3 className="mt-4">{String(title)}</h3>
-              <p>Aulas 01 e 02 disponíveis · Sincronismo e conferência final</p>
+              <p>Sincronismo, diagnóstico e manutenção por etapas de estudo.</p>
               <span className="text-link">Explorar aulas →</span>
             </Link>
           ) : (
@@ -67,8 +71,14 @@ export default async function Academy() {
       <div className="grid three">
         <AcademyLessonCard />
         <ChecklistLessonCard />
+        <LibraryLessonCards readySlugs={readySlugs} />
         {courses
-          .filter((c) => c.id !== COURSE_ID && c.id !== CHECKLIST_COURSE_ID)
+          .filter(
+            (c) =>
+              c.id !== COURSE_ID &&
+              c.id !== CHECKLIST_COURSE_ID &&
+              !isLibraryCourseId(c.id),
+          )
           .map((c) => (
             <Link className="card" href={"/cursos/" + c.slug} key={c.id}>
               <span className="tag">GRATUITO · {c.hours} HORAS</span>

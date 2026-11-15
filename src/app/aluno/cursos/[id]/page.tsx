@@ -7,6 +7,10 @@ import { VideoPlayer, YouTubePlayer } from "@/components/player";
 import Link from "next/link";
 import { COURSE_ID, LESSON_URL } from "@/lib/academy/content";
 import {
+  libraryCourses,
+  libraryLessonUrl,
+} from "@/lib/academy/library/catalog";
+import {
   COURSE_ID as CHECKLIST_COURSE_ID,
   LESSON_URL as CHECKLIST_URL,
 } from "@/lib/academy/checklist/content";
@@ -21,6 +25,8 @@ export default async function Learning({
   const { id } = await params;
   if (id === COURSE_ID) redirect(LESSON_URL);
   if (id === CHECKLIST_COURSE_ID) redirect(CHECKLIST_URL);
+  const libraryCourse = libraryCourses.find((course) => course.id === id);
+  if (libraryCourse) redirect(libraryLessonUrl(libraryCourse.slug));
   const e = await db.enrollment.findUnique({
     where: { userId_courseId: { userId: u.id, courseId: id } },
     include: {

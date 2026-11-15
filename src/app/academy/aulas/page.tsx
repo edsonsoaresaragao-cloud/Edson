@@ -2,8 +2,12 @@ import Link from "next/link";
 import { PageHeading } from "@/components/content";
 import { AcademyLessonCard } from "@/components/academy/lesson-card";
 import { ChecklistLessonCard } from "@/components/academy/checklist/lesson-card";
+import { LibraryLessonCards } from "@/components/academy/library/lesson-cards";
+import { getReadyLibrarySlugs } from "@/lib/academy/library/access";
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Aulas organizadas | EDSON OFICINA Academy" };
-export default function Lessons() {
+export default async function Lessons() {
+  const readySlugs = await getReadyLibrarySlugs();
   return (
     <div className="container page-content">
       <PageHeading
@@ -17,6 +21,7 @@ export default function Lessons() {
       <div className="grid two section">
         <AcademyLessonCard />
         <ChecklistLessonCard />
+        <LibraryLessonCards readySlugs={readySlugs} />
       </div>
     </div>
   );

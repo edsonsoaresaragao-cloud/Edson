@@ -108,6 +108,7 @@ model Lesson {
  questions Question[]
  progress Progress[]
  media Media[]
+ academyAttempts AcademyAttempt[]
 }
 model Question {
  id String @id @default(cuid())
@@ -127,6 +128,7 @@ model Enrollment {
  lastLessonId String?
  lastViewedAt DateTime?
  progress Progress[]
+ academyAttempts AcademyAttempt[]
  @@unique([userId,courseId])
 }
 model Progress {
@@ -138,6 +140,18 @@ model Progress {
  score Int
  completedAt DateTime @default(now())
  @@unique([enrollmentId,lessonId])
+}
+model AcademyAttempt {
+ id String @id @default(cuid())
+ enrollmentId String
+ enrollment Enrollment @relation(fields:[enrollmentId],references:[id],onDelete:Cascade)
+ lessonId String
+ lesson Lesson @relation(fields:[lessonId],references:[id],onDelete:Cascade)
+ answers Json
+ score Int
+ passed Boolean
+ createdAt DateTime @default(now())
+ @@index([enrollmentId,lessonId,createdAt])
 }
 model Certificate {
  id String @id @default(cuid())
